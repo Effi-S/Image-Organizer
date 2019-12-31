@@ -29,7 +29,7 @@ void ImgScanner::scan(const std::wstring& path)
 		if (extension_set.find(extension) != extension_set.end())
 		{
 			try {
-				std::future<void>(std::async(&addImgToDB,  entry));
+                std::async(&addImgToDB,  entry);
 
 				/*file << entry.path().string() << std::endl;*/
 				img_count++;

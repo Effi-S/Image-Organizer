@@ -29,6 +29,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
     ImgOrganizer/SimilarImgFinder.h \

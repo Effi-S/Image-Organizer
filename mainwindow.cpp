@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "COLOR.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,57 +17,44 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionchange_file_triggered()
 {
-    setWindowTitle("Changeing file");
+    ui->statusBar->showMessage("Changeing file");
+
     QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
     QFile dir(foldername);
     m_currDir = foldername;
 
     if(!dir.exists())
+    {
         QMessageBox::warning(this, "Warning", "Cannot Open file");
-
-    setWindowTitle(foldername);
-
-    ui->actionScan->setEnabled(false);
-
-     ImgScanner::scan(foldername.toStdWString());
-
-     ui->actionScan->setEnabled(true);
+        ui->actionScan->setEnabled(true);
+        ui->FolderButton->setText("Folder");
+    }
+    else
+    {
+        ui->FolderButton->setToolTip(m_currDir);
+        ui->FolderButton->setText(m_currDir.split("/").last());
+        ui->statusBar->showMessage("File" + m_currDir);
+    }
 }
 
 void MainWindow::on_actionundo_triggered()
 {
     ui->statusBar->showMessage("undo");
-    //scanning for images
-    std::clock_t start(std::clock());
-    ImgScanner::scan(L"C:\\Users\\effi");
-
-    std::cout << "Time reading images scan took: " << (double)std::clock() - start << std::endl;
-
-    start = std::clock_t(std::clock());
-
-    BitExactImgFinder comp;
-
-    std::cout << "Time BitExactImgFinder took: " << (double)std::clock() - start<<std::endl;
-
-    comp.show();
+    
 }
 void MainWindow::on_actionCopy_triggered()
 {
     ui->statusBar->showMessage("Copy");
-
-   // ui-><widget here> ->copy();
 }
 
 void MainWindow::on_actionPaste_triggered()
 {
     ui->statusBar->showMessage("Paste");
-
 }
 
 void MainWindow::on_actionCut_triggered()
 {
     ui->statusBar->showMessage("Cut");
-
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -83,26 +70,32 @@ void MainWindow::on_actionToggle_Toolbar_triggered()
 void MainWindow::on_actionsave_changes_triggered()
 {
     ui->statusBar->showMessage("Save Changes");
-
 }
 
 void MainWindow::on_actionScan_triggered()
 {
-
-    ui->statusBar->showMessage("Scanning ..  ");
-
     //scanning for images
+    //TODO: place in thread
+    ui->statusBar->showMessage("Scanning " + m_currDir + "...");
+
+    ui->actionScan->setEnabled(false);
+
+    ImgScanner::scan(m_currDir.toStdWString());
+
     std::clock_t start(std::clock());
 
-    std::cout << "Time reading images scan took: " << double(std::clock()) - start << std::endl;
+    std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start << std::endl;
 
     start = std::clock_t(std::clock());
 
     BitExactImgFinder comp;
 
-    std::cout << "Time BitExactImgFinder took: " << double(std::clock()) - start<<std::endl;
+    std::cout <<ORANGE<<"Time BitExactImgFinder took: " <<GREEN<< double(std::clock()) - start <<REG<<std::endl;
 
-    ui->statusBar->showMessage("Done Scanning");
+    ui->statusBar->showMessage( "Done Scanning");
+
+    ui->actionScan->setEnabled(false);
+
     comp.show();
 
 }
