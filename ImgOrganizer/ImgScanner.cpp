@@ -21,6 +21,8 @@ void ImgScanner::scan(const std::wstring& path)
 	uint img_count = 0;
 	uint faild_count = 0;
 
+    IMG_DB().empty();
+
 	std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", "bmp" });
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))

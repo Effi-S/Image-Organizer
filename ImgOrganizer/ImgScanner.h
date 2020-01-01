@@ -20,6 +20,7 @@ class ImgScanner
 public:
 	
 	static void scan(const std::wstring& path = L"C:\\");
+
 	static IMG_DataBase &IMG_DB();
 	
 	

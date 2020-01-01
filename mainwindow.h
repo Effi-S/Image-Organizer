@@ -22,6 +22,37 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class ScanThread : public QThread
+{
+public:
+    ScanThread(QString& dir):m_dir(dir){}
+
+private:
+    QString m_dir;
+    Q_OBJECT
+    void run() override {
+
+        QString result;
+        try {
+            ImgScanner::scan(m_dir.toStdWString());
+        } catch (...) {
+           std::cout<<"scan failed!"<<std::endl;
+        }
+        try {
+            BitExactImgFinder comp;
+
+            comp.show();
+        } catch (...) {
+                std::cout<<"BitExact failed!"<<std::endl;
+        }
+
+        emit resultReady(result);
+    }
+signals:
+    void resultReady(const QString &s);
+};
+
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,9 +84,11 @@ private slots:
 
     void on_FolderButton_clicked();
 
+
 private:
     Ui::MainWindow *ui;
     QString m_currDir ="";
+    ScanThread *m_scanThread;
 
 
 };

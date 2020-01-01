@@ -72,23 +72,29 @@ void MainWindow::on_actionsave_changes_triggered()
     ui->statusBar->showMessage("Save Changes");
 }
 
+
 void MainWindow::on_actionScan_triggered()
 {
+
     //scanning for images
-    //TODO: place in thread
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
 
     ui->actionScan->setEnabled(false);
 
-    ImgScanner::scan(m_currDir.toStdWString());
+    //sending to thread
+    m_scanThread = new ScanThread(m_currDir);
+    connect(m_scanThread, &ScanThread::resultReady, this, &MainWindow::windowHandle);
+    connect(m_scanThread, &ScanThread::finished, m_scanThread, &QObject::deleteLater);
+    m_scanThread->start();
 
+    //
     std::clock_t start(std::clock());
 
     std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start << std::endl;
+    //
 
     start = std::clock_t(std::clock());
 
-    BitExactImgFinder comp;
 
     std::cout <<ORANGE<<"Time BitExactImgFinder took: " <<GREEN<< double(std::clock()) - start <<REG<<std::endl;
 
@@ -96,7 +102,7 @@ void MainWindow::on_actionScan_triggered()
 
     ui->actionScan->setEnabled(false);
 
-    comp.show();
+
 
 }
 
