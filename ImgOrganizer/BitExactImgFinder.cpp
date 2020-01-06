@@ -26,7 +26,8 @@ void BitExactImgFinder::makeSet()
 {
 	m_algo = cv::img_hash::PHash::create();
 
-	for (auto& x : ImgScanner::IMG_DB())
+    ImgScanner scanner;
+    for (const auto& x : scanner)
 	{
 		cv::Mat im = *(x.first);
 		cv::Mat imHash;

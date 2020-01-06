@@ -15,6 +15,7 @@
 #include <ImgOrganizer/BitExactImgFinder.h>
 #include <ImgOrganizer/SimilarImgFinder.h>
 #include <ImgOrganizer/ImgScanner.h>
+#include "COLOR.h"
 
 
 

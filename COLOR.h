@@ -1,7 +1,7 @@
 #pragma once
 
 
- #define  REG         "\033[0m"
+ #define  RESET         "\033[0m"
  #define  BLACK         "\033[30m"             /* Black */
  #define  RED           "\033[31m"             /* Red */
  #define  GREEN         "\033[32m"             /* Green */

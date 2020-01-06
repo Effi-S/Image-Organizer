@@ -28,10 +28,9 @@ void SimilarImgFinder::show()
 }
 
 void SimilarImgFinder::makeSet()
-{
-	
+{  
 
-	for (auto& x : ImgScanner::IMG_DB())
+    for (auto &x : ImgScanner())
 	{
 		cv::Mat im = *x.first;
 		cv::Mat imHash;

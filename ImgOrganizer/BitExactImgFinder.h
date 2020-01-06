@@ -4,12 +4,13 @@
 #include<opencv2/img_hash/average_hash.hpp>
 #include <opencv2/img_hash/phash.hpp>
 #include "ImgScanner.h"
+#include "COLOR.h"
 
 class BitExactImgFinder 
 {
 	const int BITS = 16;
 	using HashKey = std::string;
-	using ImgInfo = std::pair<cv::Mat, std::string>;
+	using ImgInfo = std::pair<cv::Mat, std::shared_ptr<std::string>>;
 	using MatchMap = std::unordered_map<HashKey, std::vector<ImgInfo>>;
 
 public:
