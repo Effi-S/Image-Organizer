@@ -7,7 +7,6 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
 ImgScanner::IMG_DB().push_back(std::make_pair(cv::Ptr<cv::Mat>(
 		std::make_shared<cv::Mat>(cv::imread(entry.path().string()))),
 		std::make_shared<std::string>(entry.path().string())));
-
 	
 }
 
@@ -23,7 +22,8 @@ void ImgScanner::scan(const std::wstring& path)
 	uint img_count = 0;
 	uint faild_count = 0;
 
-    IMG_DB().empty();
+    IMG_DB().clear();
+
 
 	std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", "bmp" });
 
@@ -50,11 +50,9 @@ void ImgScanner::scan(const std::wstring& path)
 				faild_count++;
 			}
 		}
-		
 	}
 
-	file <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl
-		<< "Time it took: " << (double)std::clock() - start <<std::endl << "Number of fails:" << faild_count;
+    file <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< faild_count<<std::endl <<RESET<<std::endl;
 }
 
 

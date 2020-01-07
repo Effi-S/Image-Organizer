@@ -14,6 +14,7 @@
 #include "COLOR.h"
 #include <iterator>
 
+
 namespace fs = std::filesystem;
 using ImgInfo = std::pair<cv::Ptr<const cv::Mat>, std::shared_ptr<std::string>> ;
 using IMG_DataBase = std::vector<ImgInfo>;

@@ -7,7 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->commandLinkButton->setEnabled(false);
     ui->progressBar->setVisible(false);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +40,7 @@ void MainWindow::on_actionchange_file_triggered()
         ui->FolderButton->setText(m_currDir.split("/").last());
         ui->statusBar->showMessage("File" + m_currDir);
     }
+    ui->commandLinkButton->setEnabled(true);
 }
 
 void MainWindow::on_actionundo_triggered()
@@ -77,7 +81,7 @@ void MainWindow::on_actionsave_changes_triggered()
 
 void MainWindow::on_actionScan_triggered()
 {
-
+    ui->commandLinkButton->setEnabled(false);
     ui->progressBar->setVisible(true);
     //scanning for images
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
@@ -85,30 +89,18 @@ void MainWindow::on_actionScan_triggered()
     ui->actionScan->setEnabled(false);
 
     //sending to thread
-    m_scanThread = new ScanThread(m_currDir);
-    connect(m_scanThread, &ScanThread::resultReady, this, &MainWindow::windowHandle);
-    connect(m_scanThread, &ScanThread::finished, m_scanThread, &QObject::deleteLater);
+    m_scanThread = std::make_unique<ScanThread>(m_currDir);
+    connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
+    //connect(m_scanThread.get(), &ScanThread::finished, m_scanThread, &QObject::deleteLater);
+    connect(m_scanThread.get() , &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
     m_scanThread->start();
 
-    //
-    std::clock_t start(std::clock());
-    ui->progressBar->setValue(50);
-
-    std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
-    //
-
-    start = std::clock_t(std::clock());
-
-
-    std::cout <<ORANGE<<"Time BitExactImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<<std::endl;
 
     ui->statusBar->showMessage( "Done Scanning:" + m_currDir);
-
-    ui->actionScan->setEnabled(false);
-
     ui->progressBar->setValue(100);
     ui->progressBar->reset();
     ui->progressBar->setVisible(false);
+
 
 }
 

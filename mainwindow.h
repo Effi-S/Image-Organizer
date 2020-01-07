@@ -22,35 +22,38 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-
 class ScanThread : public QThread
 {
+    Q_OBJECT
 public:
     ScanThread(QString& dir):m_dir(dir){}
 
+signals:
+    void resultReady(const QString &s);
+    void scanDone(bool);
+
 private:
     QString m_dir;
-    Q_OBJECT
-    void run() override {
 
+    void run() override {      
+        std::clock_t start(std::clock());
         QString result;
         try {
-            ImgScanner::scan(m_dir.toStdWString());
+           ImgScanner::scan(m_dir.toStdWString());
+           std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
         } catch (...) {
            std::cout<<"scan failed!"<<std::endl;
         }
         try {
             BitExactImgFinder comp;
-
+            std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
             comp.show();
         } catch (...) {
-                std::cout<<"BitExact failed!"<<std::endl;
+                std::cout<<"ImgFinder failed!"<<std::endl;
         }
 
-        emit resultReady(result);
+        emit scanDone(true);
     }
-signals:
-    void resultReady(const QString &s);
 };
 
 
@@ -89,7 +92,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString m_currDir ="";
-    ScanThread *m_scanThread;
+    std::unique_ptr<ScanThread> m_scanThread;
+
 
 
 };
