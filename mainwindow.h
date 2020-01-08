@@ -40,6 +40,7 @@ private:
     void run() override {      
         std::clock_t start(std::clock());
         QString result;
+        emit scanPercent(14);
         try {
            ImgScanner::scan(m_dir.toStdWString());
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;

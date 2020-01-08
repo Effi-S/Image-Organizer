@@ -18,9 +18,11 @@
 namespace fs = std::filesystem;
 using ImgInfo = std::pair<cv::Ptr<const cv::Mat>, std::shared_ptr<std::string>> ;
 using IMG_DataBase = std::vector<ImgInfo>;
+const int MAX_ENTRIES = 20000;
 
 class ImgScanner
 {
+
 public:
 	static void scan(const std::wstring& path = L"C:\\");
 

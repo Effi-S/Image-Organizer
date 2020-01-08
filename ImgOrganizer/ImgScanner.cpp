@@ -3,7 +3,7 @@
 
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	
-	
+
 ImgScanner::IMG_DB().push_back(std::make_pair(cv::Ptr<cv::Mat>(
 		std::make_shared<cv::Mat>(cv::imread(entry.path().string()))),
 		std::make_shared<std::string>(entry.path().string())));
@@ -21,7 +21,6 @@ void ImgScanner::scan(const std::wstring& path)
 
 	uint img_count = 0;
 	uint faild_count = 0;
-
     IMG_DB().clear();
 
 
@@ -29,14 +28,17 @@ void ImgScanner::scan(const std::wstring& path)
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
 	{
+        if( img_count >= MAX_ENTRIES){
+            file<<RED<<"MEMORY LMIIT REACHED!!!" <<RESET <<std::endl;
+            break;
+        }
 		std::string extension = entry.path().extension().string();
 		if (extension_set.find(extension) != extension_set.end())
 		{
 			try {
                 std::async(&addImgToDB, entry);
 				//addImgToDB(entry);
-
-				file <<BOLDYELLOW<<"#"<<img_count<<": "<< entry.path().string() <<RESET<< std::endl;
+                //file <<BOLDYELLOW<<"#"<<img_count<<": "<< entry.path().string() <<RESET<< std::endl;
 				img_count++;
 			}
 			catch (cv::Exception & e)

@@ -92,15 +92,16 @@ void MainWindow::on_actionsave_changes_triggered()
 void MainWindow::on_actionScan_triggered()
 {
     ui->commandLinkButton->setEnabled(false);
+    ui->FolderButton->setEnabled(false);
     ui->actionScan->setEnabled(false);
     ui->progressBar->setVisible(true);
-    //scanning for images
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
 
     //sending to thread
     m_scanThread = std::make_unique<ScanThread>(m_currDir);
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
     connect(m_scanThread.get() , &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
+    connect(m_scanThread.get() , &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
     connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){ ui->progressBar->setVisible(false); });
