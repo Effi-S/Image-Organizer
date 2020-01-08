@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->progressBar->setVisible(false);
 
     QLabel *imageLabel = new QLabel;
-    QImage image("C:\\Users\\effi\\Desktop\\temp\\Player_01.png");
+    QImage image("C:\\Users\\effi\\Desktop\\temp\\alzNR2mD_700wp_0.webp");
     imageLabel->setPixmap(QPixmap::fromImage(image));
 
     ui->scrollArea_exact_tab->setBackgroundRole(QPalette::Dark);
@@ -92,25 +92,20 @@ void MainWindow::on_actionsave_changes_triggered()
 void MainWindow::on_actionScan_triggered()
 {
     ui->commandLinkButton->setEnabled(false);
+    ui->actionScan->setEnabled(false);
     ui->progressBar->setVisible(true);
     //scanning for images
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
 
-    ui->actionScan->setEnabled(false);
-
     //sending to thread
     m_scanThread = std::make_unique<ScanThread>(m_currDir);
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
-    //connect(m_scanThread.get(), &ScanThread::finished, m_scanThread, &QObject::deleteLater);
     connect(m_scanThread.get() , &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
-    //connect(m_scanThread.get(), &ScanThread::scanDone, ui->statusBar, &QStatusBar::showMessage );
+    connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
+    connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
+    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){ ui->progressBar->setVisible(false); });
     m_scanThread->start();
-    ui->statusBar->showMessage( "Done Scanning:" + m_currDir);
-
     //
-    ui->progressBar->setValue(100);
-    ui->progressBar->reset();
-    ui->progressBar->setVisible(false);
 
 
 }

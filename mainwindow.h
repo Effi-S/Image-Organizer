@@ -31,6 +31,8 @@ public:
 signals:
     void resultReady(const QString &s);
     void scanDone(bool);
+    void scanStatus(QString s, int = 0);
+    void scanPercent(int);
 
 private:
     QString m_dir;
@@ -41,18 +43,21 @@ private:
         try {
            ImgScanner::scan(m_dir.toStdWString());
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+             emit scanPercent(50);
         } catch (...) {
            std::cout<<"scan failed!"<<std::endl;
         }
         try {
             BitExactImgFinder comp;
             std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+            emit scanPercent(100);
             comp.show();
         } catch (...) {
                 std::cout<<"ImgFinder failed!"<<std::endl;
         }
 
-        emit scanDone(true);
+        emit scanDone(true);        
+        emit scanStatus("Done scanning:" + m_dir);
     }
 };
 
