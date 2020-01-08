@@ -264,7 +264,7 @@ padding: 5px;
       <property name="movable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_exact">
        <attribute name="icon">
         <iconset resource="Images.qrc">
          <normaloff>:/new/prefix1/images/exact.png</normaloff>:/new/prefix1/images/exact.png</iconset>
@@ -276,24 +276,27 @@ padding: 5px;
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QScrollBar" name="horizontalScrollBar_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QScrollArea" name="scrollArea_exact_tab">
+            <property name="widgetResizable">
+             <bool>true</bool>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_3">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>782</width>
+               <height>456</height>
+              </rect>
+             </property>
+            </widget>
            </widget>
           </item>
          </layout>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tab_similar">
        <attribute name="icon">
         <iconset resource="Images.qrc">
          <normaloff>:/new/prefix1/images/Similar.png</normaloff>:/new/prefix1/images/Similar.png</iconset>
@@ -303,26 +306,11 @@ padding: 5px;
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QScrollBar" name="horizontalScrollBar">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="verticalLayout_2"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tab_advanced">
        <attribute name="icon">
         <iconset resource="Images.qrc">
          <normaloff>:/new/prefix1/images/search.png</normaloff>:/new/prefix1/images/search.png</iconset>
@@ -366,7 +354,7 @@ padding: 5px;
      <x>0</x>
      <y>0</y>
      <width>862</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
