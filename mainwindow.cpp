@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QLabel>
+#include <QList>
 #include <QScrollArea>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -10,20 +12,62 @@ MainWindow::MainWindow(QWidget *parent)
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
     ui->progressBar->setVisible(false);
+    ui->splitter->setSizes(QList<int>() << 200 << 80); //setting offset of splitter
+    m_fileModel = std::make_unique<QFileSystemModel>(this);
+    m_fileModel->setReadOnly(false);
+    m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase| QDir::Name );
+    ui->treeView->setModel(m_fileModel.get());
+//    QLabel *imageLabel1 = new QLabel;
+//    QLabel *imageLabel2 = new QLabel;
+//    QImage image1("C:\\Users\\effi\\Desktop\\temp\\temp\\collage_mixed.png");
+//    QImage image2("C:\\Users\\effi\\Desktop\\temp\\temp\\collage_ordered.png");
+//    imageLabel1->setPixmap(QPixmap::fromImage(image1));
+//    imageLabel2->setPixmap(QPixmap::fromImage(image2));
 
-    QLabel *imageLabel = new QLabel;
-    QImage image("C:\\Users\\effi\\Desktop\\temp\\alzNR2mD_700wp_0.webp");
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+//    ui->scrollArea_similar_tab->setBackgroundRole(QPalette::Midlight);
+//    ui->label->setPixmap((QPixmap::fromImage(image1)));
+//    ui->label_2->setPixmap((QPixmap::fromImage(image2)));
 
-    ui->scrollArea_exact_tab->setBackgroundRole(QPalette::Dark);
-    ui->scrollArea_exact_tab->setWidget(imageLabel);
+//    ui->scrollArea_exact_tab->setBackgroundRole(QPalette::Dark);
+
+
+
+//   ui->exact_list->setDragEnabled(true);
+//   ui->exact_list->setAcceptDrops(true);
+//   ui->exact_list->setDropIndicatorShown(true);
+//   ui->exact_list->setDefaultDropAction(Qt::MoveAction);
+
+
+//    ui->exact_list->setStyleSheet
+//       ("QListView { font-size: 20pt; font-weight: bold; }"
+//        "QListView::item { background-color: #E74C3C; padding: 10%;"
+//        "border: 1px solid #C0392B; }"
+//        "QListView::item::hover { background-color: #C0392B }");
+
+
+
+
+//    ui->exact_list->addAction(m_addAction.get());
+//    ui->exact_list->addAction(m_removeAction.get());
+
+    connect(m_addAction.get(), &QAction::triggered , this, &MainWindow::on_addImage);
+    connect(m_removeAction.get(), &QAction::triggered, this, &MainWindow::on_removeImage);
+
+//    ui->exact_list->model()->insertRow(ui->exact_list->model()->rowCount());
+//    QModelIndex oIndex = ui->exact_list->model()->index(
+//                   ui->exact_list->model()->rowCount() - 1, 0);
+
+//      ui->exact_list->edit(oIndex);
+
+//  ui->scrollArea_exact_tab->mode1()(imageLabel2);
+//    ui->scrollArea_exact_tab->setWidget(imageLabel1);
 
 
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+
 }
 
 
@@ -121,5 +165,21 @@ void MainWindow::on_FolderButton_clicked(){
 
     on_actionchange_file_triggered();
 
+}
+
+void MainWindow::on_addImage()
+{
+//    ui->exact_list->model()->insertRow(ui->exact_list->model()->rowCount());
+//        QModelIndex oIndex = ui->exact_list->model()->index(
+//                    ui->exact_list->model()->rowCount() - 1, 0);
+
+//        ui->exact_list->edit(oIndex);
+}
+
+void MainWindow::on_removeImage()
+{
+
+//    QModelIndex oIndex = ui->exact_list->currentIndex();
+//        ui->exact_list->model()->removeRow(oIndex.row());
 }
 

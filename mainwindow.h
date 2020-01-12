@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QtGui>
 #include <QtCore>
+#include <QFileSystemModel>
 
 
 #include <opencv2/opencv.hpp>
@@ -40,16 +41,22 @@ private:
     void run() override {      
         std::clock_t start(std::clock());
         QString result;
-        emit scanPercent(14);
+        emit scanPercent(10);
+
         try {
+            emit scanPercent(20);
            ImgScanner::scan(m_dir.toStdWString());
+           emit scanPercent(30);
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
-             emit scanPercent(50);
+             emit scanPercent(40);
         } catch (...) {
            std::cout<<"scan failed!"<<std::endl;
         }
         try {
+            emit scanPercent(50);
+            emit scanPercent(60);
             BitExactImgFinder comp;
+            emit scanPercent(70);
             std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
             emit scanPercent(100);
             comp.show();
@@ -94,13 +101,18 @@ private slots:
 
     void on_FolderButton_clicked();
 
+public slots:
+    void on_addImage();
+    void on_removeImage();
 
-private:
-    Ui::MainWindow *ui;
+
+private:    
     QString m_currDir ="";
+    std::unique_ptr<Ui::MainWindow> ui;
     std::unique_ptr<ScanThread> m_scanThread;
-
-
+    std::unique_ptr<QAction>m_addAction = nullptr;
+    std::unique_ptr<QAction>m_removeAction = nullptr;
+    std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
 };
 #endif // MAINWINDOW_H
