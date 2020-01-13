@@ -277,7 +277,7 @@ padding: 5px;
           <property name="movable">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="tab_exact_2">
+          <widget class="QWidget" name="tab_exact">
            <attribute name="icon">
             <iconset resource="Images.qrc">
              <normaloff>:/new/prefix1/images/exact.png</normaloff>:/new/prefix1/images/exact.png</iconset>
@@ -287,29 +287,11 @@ padding: 5px;
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_11">
-              <item>
-               <widget class="QScrollArea" name="scrollArea_exact_tab_2">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="scrollAreaWidgetContents_4">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>501</width>
-                   <height>448</height>
-                  </rect>
-                 </property>
-                </widget>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QColumnView" name="exact_columnView"/>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab_similar_2">
+          <widget class="QWidget" name="tab_similar">
            <attribute name="icon">
             <iconset resource="Images.qrc">
              <normaloff>:/new/prefix1/images/Similar.png</normaloff>:/new/prefix1/images/Similar.png</iconset>
@@ -317,57 +299,9 @@ padding: 5px;
            <attribute name="title">
             <string>Simiar Images</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_12">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_13">
-              <item>
-               <widget class="QScrollArea" name="scrollArea_similar_tab_2">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="scrollAreaWidgetContents_5">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>501</width>
-                   <height>448</height>
-                  </rect>
-                 </property>
-                 <widget class="QLabel" name="label_3">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>281</width>
-                    <height>491</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>test-image</string>
-                  </property>
-                 </widget>
-                 <widget class="QLabel" name="label_4">
-                  <property name="geometry">
-                   <rect>
-                    <x>300</x>
-                    <y>10</y>
-                    <width>261</width>
-                    <height>491</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>test-image2</string>
-                  </property>
-                 </widget>
-                </widget>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <layout class="QVBoxLayout" name="verticalLayout_12"/>
           </widget>
-          <widget class="QWidget" name="tab_advanced_2">
+          <widget class="QWidget" name="tab_advanced">
            <attribute name="icon">
             <iconset resource="Images.qrc">
              <normaloff>:/new/prefix1/images/search.png</normaloff>:/new/prefix1/images/search.png</iconset>
@@ -375,29 +309,7 @@ padding: 5px;
            <attribute name="title">
             <string>Advcanced Search</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_14">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_15">
-              <item>
-               <widget class="QScrollArea" name="scrollArea_advanced_tab_2">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="scrollAreaWidgetContents_6">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>501</width>
-                   <height>448</height>
-                  </rect>
-                 </property>
-                </widget>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <layout class="QVBoxLayout" name="verticalLayout_14"/>
           </widget>
          </widget>
          <widget class="QTreeView" name="treeView">
@@ -414,11 +326,6 @@ padding: 5px;
      </widget>
     </item>
    </layout>
-   <zorder>progressBar</zorder>
-   <zorder>FolderButton</zorder>
-   <zorder>SettingsButton</zorder>
-   <zorder>commandLinkButton</zorder>
-   <zorder>body_widget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

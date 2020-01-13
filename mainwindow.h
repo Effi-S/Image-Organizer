@@ -17,12 +17,13 @@
 #include <ImgOrganizer/SimilarImgFinder.h>
 #include <ImgOrganizer/ImgScanner.h>
 #include "COLOR.h"
-
+#include <QColumnView>
 
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
 class ScanThread : public QThread
 {
     Q_OBJECT
@@ -56,6 +57,7 @@ private:
             emit scanPercent(50);
             emit scanPercent(60);
             BitExactImgFinder comp;
+            //SimilarImgFinder comp;
             emit scanPercent(70);
             std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
             emit scanPercent(100);
@@ -102,7 +104,7 @@ private slots:
     void on_FolderButton_clicked();
 
 public slots:
-    void on_addImage();
+    void on_addImageGroup(const QStringList &);
     void on_removeImage();
 
 
@@ -110,9 +112,11 @@ private:
     QString m_currDir ="";
     std::unique_ptr<Ui::MainWindow> ui;
     std::unique_ptr<ScanThread> m_scanThread;
-    std::unique_ptr<QAction>m_addAction = nullptr;
-    std::unique_ptr<QAction>m_removeAction = nullptr;
+
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
+
+
+    QStandardItemModel m_exact_model;
 
 };
 #endif // MAINWINDOW_H

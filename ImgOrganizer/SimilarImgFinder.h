@@ -10,8 +10,9 @@ class SimilarImgFinder
 {
 	const int BITS = 42;
 
+    using ImgInfo = std::pair<cv::Mat, std::string>;
 	using HashKey = std::string;
-	using HashValue = std::pair<cv::Mat, std::list<cv::Mat>>;
+    using HashValue = std::pair<cv::Mat, std::list<ImgInfo>>;
 
 public:
 	SimilarImgFinder() { makeSet(); }

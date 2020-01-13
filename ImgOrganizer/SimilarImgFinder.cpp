@@ -17,7 +17,7 @@ void SimilarImgFinder::show()
 			if (limit >= 10)break;
 			windows.push_back(temp);
 			cv::namedWindow(temp, cv::WINDOW_GUI_EXPANDED);
-			cv::imshow(temp, img);
+            cv::imshow(temp, img.first);
 			temp += "a";
 		}
 		cv::waitKey(0);
@@ -56,9 +56,10 @@ void SimilarImgFinder::makeSet()
 		auto it = m_matches.find(k);
 
 		if (it == m_matches.end())
-			m_matches.emplace( k, HashValue(imHash, std::list<cv::Mat>()));
+            m_matches.emplace( k, HashValue(imHash, std::list<ImgInfo>()));
 
-		m_matches.at(k).second.push_back(*x.first);
+
+        m_matches.at(k).second.push_back(ImgInfo( im , *x.second));
 	}
 
 	if (m_matches.size() <= 1)return;
