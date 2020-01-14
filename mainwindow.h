@@ -75,7 +75,18 @@ private:
                 }
                 else
                 {
-                    std::cout<<"hererererererere\n";
+                SimilarImgFinder comp;
+
+                std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+
+                comp.show();
+                for(auto i: comp.getGroups())
+                    {
+                        QStringList l;
+                        for(auto mem: i)
+                            l.append(mem.c_str());
+                        emit sendImgGroup(l);
+                     }
                 }
 
         } catch (...) {
@@ -132,8 +143,9 @@ private:
 
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
-    int m_cur_job = 0;
+    int m_cur_model= 0;
     QStandardItemModel m_exact_model;
+    QStandardItemModel m_similar_model;
 
 };
 #endif // MAINWINDOW_H

@@ -263,7 +263,7 @@ padding: 5px;
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="iconSize">
            <size>
@@ -299,7 +299,11 @@ padding: 5px;
            <attribute name="title">
             <string>Simiar Images</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_12"/>
+           <layout class="QVBoxLayout" name="verticalLayout_12">
+            <item>
+             <widget class="QColumnView" name="similar_columnView"/>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tab_advanced">
            <attribute name="icon">

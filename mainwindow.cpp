@@ -28,10 +28,13 @@ MainWindow::MainWindow(QWidget *parent)
     QModelIndex index = m_fileModel->index(sPath, 0); // this line is not in the video.
     ui->treeView->setRootIndex(index); // this line is not in the video.
 
-    //exact clumn view  + model
-    QColumnView temp;
+    //exact clumn view  + model   
     ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
     ui->exact_columnView->setModel(&m_exact_model);
+
+    // group model view + model
+    ui->similar_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
+    ui->similar_columnView->setModel(&m_similar_model);
 
 }
 
@@ -113,15 +116,16 @@ void MainWindow::on_actionScan_triggered()
     ui->progressBar->setVisible(true);
     ui->tabWidget->setEnabled(false);
 
-    m_cur_job = ui->tabWidget->currentIndex();
+    m_cur_model = ui->tabWidget->currentIndex();
 
     //making thread
-    m_scanThread = std::make_unique<ScanThread>(m_currDir, m_cur_job);
+    m_scanThread = std::make_unique<ScanThread>(m_currDir, m_cur_model);
 
-    if(m_cur_job == 0)
-        m_exact_model.clear();
-
-
+    switch(m_cur_model)
+    {
+    case 0: m_exact_model.clear();break;
+    case 1: m_similar_model.clear();break;
+    }
 
     //connecting thread
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
@@ -163,8 +167,12 @@ void MainWindow::on_addImageGroup(QStringList path_list)
         QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
         group->appendRow(child);
     }
-    if(m_cur_job == 0)
-        m_exact_model.appendRow(group);
+    switch(m_cur_model)
+    {
+    case 0: m_exact_model.appendRow(group); break;
+    case 1 : m_similar_model.appendRow(group); break;
+    }
+
 
 }
 
