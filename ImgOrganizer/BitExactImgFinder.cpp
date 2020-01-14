@@ -4,21 +4,10 @@ void BitExactImgFinder::show()
 {
 	for (const auto& x : m_matches)
 	{
-		if (x.second.size() < 2)continue;
-		std::string wind1 = "pic1window";
-
-		std::string temp = "-";
-		std::vector<std::string> windows;
+        std::vector<std::string> group;
 		for (auto& img : x.second)
-		{
-			windows.push_back(temp);
-			cv::namedWindow(temp, cv::WINDOW_GUI_EXPANDED);
-			cv::imshow(temp, img.first);
-			temp += "-";
-		}
-		cv::waitKey(0);
-		for (auto window : windows)
-			cv::destroyWindow(window);
+            group.push_back(img.second->c_str());
+        m_stringGroups.push_back(group);
 	}
 }
 

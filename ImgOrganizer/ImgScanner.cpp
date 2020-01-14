@@ -21,6 +21,7 @@ void ImgScanner::scan(const std::wstring& path)
 
 	uint img_count = 0;
 	uint faild_count = 0;
+
     IMG_DB().clear();
 
 
@@ -29,12 +30,13 @@ void ImgScanner::scan(const std::wstring& path)
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
 	{
         if( img_count >= MAX_ENTRIES){
-            file<<RED<<"MEMORY LMIIT REACHED!!!" <<RESET <<std::endl;
+            std::cout<<RED<<"MEMORY LMIIT REACHED!!!" <<RESET <<std::endl;
             break;
         }
 		std::string extension = entry.path().extension().string();
 		if (extension_set.find(extension) != extension_set.end())
 		{
+
 			try {
                 std::async(&addImgToDB, entry);
 				//addImgToDB(entry);
@@ -43,18 +45,18 @@ void ImgScanner::scan(const std::wstring& path)
 			}
 			catch (cv::Exception & e)
 			{
-				file << RED <<"cv error:"<< e.what() << RESET << std::endl;
+                std::cout << RED <<"cv error:"<< e.what() << RESET << std::endl;
 				faild_count++;
 				break;
 			}
 			catch (...) {
-				file << RED << "unknown error"<< RESET << std::endl;
+                std::cout << RED << "unknown error"<< RESET << std::endl;
 				faild_count++;
 			}
 		}
 	}
 
-    file <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< faild_count<<std::endl <<RESET<<std::endl;
+    std::cout <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< faild_count<<std::endl <<RESET<<std::endl;
 }
 
 

@@ -16,6 +16,7 @@ class SimilarImgFinder
 
 public:
 	SimilarImgFinder() { makeSet(); }
+    std::vector<std::vector<std::string>> getGroups(){return m_stringGroups;}
 	void show();
 private:
 
@@ -24,5 +25,6 @@ private:
 	std::map<HashKey, HashValue > m_matches;
 
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo = cv::img_hash::BlockMeanHash::create(0);
+    std::vector<std::vector<std::string>> m_stringGroups;
 };
 

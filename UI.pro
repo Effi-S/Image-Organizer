@@ -30,7 +30,6 @@ SOURCES += \
 
 HEADERS += \
     COLOR.h \
-    ImgOrganizer/AbstractImgFinder.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
     ImgOrganizer/SimilarImgFinder.h \

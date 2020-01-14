@@ -6,16 +6,17 @@
 #include "ImgScanner.h"
 #include "COLOR.h"
 
-class BitExactImgFinder 
+class BitExactImgFinder
 {
 	const int BITS = 16;
 	using HashKey = std::string;
 	using ImgInfo = std::pair<cv::Mat, std::shared_ptr<std::string>>;
-	using MatchMap = std::unordered_map<HashKey, std::vector<ImgInfo>>;
+    using MatchMap = std::unordered_map<HashKey, std::vector<ImgInfo>>;
 
 public:
-	BitExactImgFinder() { makeSet();} 
-	void show();
+    BitExactImgFinder() { makeSet();}
+    std::vector<std::vector<std::string>> getGroups(){return m_stringGroups;}
+    void show();
 private:
 	
 	void makeSet();
@@ -23,6 +24,8 @@ private:
 	MatchMap m_matches;
 
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo;
+
+    std::vector<std::vector<std::string>> m_stringGroups;
 
 };
 

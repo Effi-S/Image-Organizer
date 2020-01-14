@@ -16,9 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
 
+    //file model + tree view
     QString sPath = "~/";
     m_fileModel = std::make_unique<QFileSystemModel>(this);
-
     m_fileModel->setReadOnly(false);
     m_fileModel->setFilter( QDir::AllDirs);
     m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase| QDir::Name );
@@ -28,9 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
     QModelIndex index = m_fileModel->index(sPath, 0); // this line is not in the video.
     ui->treeView->setRootIndex(index); // this line is not in the video.
 
+    //exact clumn view  + model
     QColumnView temp;
     ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
-
+    ui->exact_columnView->setModel(&m_exact_model);
 
 }
 
@@ -104,23 +105,37 @@ void MainWindow::on_actionsave_changes_triggered()
 
 void MainWindow::on_actionScan_triggered()
 {
+
+    //disabaling buttons
     ui->commandLinkButton->setEnabled(false);
     ui->FolderButton->setEnabled(false);
     ui->actionScan->setEnabled(false);
     ui->progressBar->setVisible(true);
-    ui->statusBar->showMessage("Scanning " + m_currDir + "...");
+    ui->tabWidget->setEnabled(false);
 
-    //sending to thread
-    m_scanThread = std::make_unique<ScanThread>(m_currDir);
+    m_cur_job = ui->tabWidget->currentIndex();
+
+    //making thread
+    m_scanThread = std::make_unique<ScanThread>(m_currDir, m_cur_job);
+
+    if(m_cur_job == 0)
+        m_exact_model.clear();
+
+
+
+    //connecting thread
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
-    connect(m_scanThread.get() , &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
-    connect(m_scanThread.get() , &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
+    connect(m_scanThread.get(), &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
+    connect(m_scanThread.get(), &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
     connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){ ui->progressBar->setVisible(false); });
-    m_scanThread->start();
-    //
+    connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
+    //sending to thread
+    ui->statusBar->showMessage("Scanning " + m_currDir + "...");
+    m_scanThread->start();
+    ui->tabWidget->setEnabled(true);
 
 }
 
@@ -136,17 +151,20 @@ void MainWindow::on_FolderButton_clicked(){
 
 }
 
-void MainWindow::on_addImageGroup(const QStringList & path_list)
+void MainWindow::on_addImageGroup(QStringList path_list)
 {
-    auto first = path_list.cbegin();
 
-    QStandardItem *group = new QStandardItem(QIcon(*first) ,*first);
+    auto first = path_list.cbegin();
+    auto name = first->split("/").last();
+    QStandardItem *group = new QStandardItem(QIcon(*first) ,name);
+
     for(;first != path_list.cend(); ++first)
     {
         QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
         group->appendRow(child);
     }
-    m_exact_model.appendRow(group);
+    if(m_cur_job == 0)
+        m_exact_model.appendRow(group);
 
 }
 
