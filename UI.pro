@@ -32,6 +32,7 @@ HEADERS += \
     COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
+    ImgOrganizer/ScanThread.h \
     ImgOrganizer/SimilarImgFinder.h \
     mainwindow.h
 
