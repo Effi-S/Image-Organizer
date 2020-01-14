@@ -9,5 +9,6 @@
         <file>images/undo2.png</file>
         <file>images/settings.png</file>
         <file>images/search.png</file>
+        <file>images/delete.png</file>
     </qresource>
 </RCC>

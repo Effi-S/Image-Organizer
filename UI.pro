@@ -24,12 +24,13 @@ LIBS += "C:/opencv/build/install/x64/vc16/lib/*.lib"
 SOURCES += \
     ImgOrganizer/BitExactImgFinder.cpp \
     ImgOrganizer/ImgScanner.cpp \
-    ImgOrganizer/SimilarImgFinder.cpp \  
+    ImgOrganizer/SimilarImgFinder.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     COLOR.h \
+    ImgOrganizer/AbstractImgFinder.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
     ImgOrganizer/SimilarImgFinder.h \
