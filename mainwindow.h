@@ -42,23 +42,22 @@ private:
     void run() override {      
         std::clock_t start(std::clock());
         QString result;
-        emit scanPercent(10);
+
 
         try {
-            emit scanPercent(20);
+            emit scanPercent(10);
            ImgScanner::scan(m_dir.toStdWString());
-           emit scanPercent(30);
+
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
-             emit scanPercent(40);
+
         } catch (...) {
            std::cout<<"scan failed!"<<std::endl;
         }
         try {
-            emit scanPercent(50);
-            emit scanPercent(60);
+
             BitExactImgFinder comp;
             //SimilarImgFinder comp;
-            emit scanPercent(70);
+
             std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
             emit scanPercent(100);
             comp.show();

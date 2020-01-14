@@ -13,11 +13,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
     ui->progressBar->setVisible(false);
-    ui->splitter->setSizes(QList<int>() << 200 << 75); //setting offset of splitter
+    ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
+
+
+    QString sPath = "~/";
     m_fileModel = std::make_unique<QFileSystemModel>(this);
+
     m_fileModel->setReadOnly(false);
+    m_fileModel->setFilter( QDir::AllDirs);
     m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase| QDir::Name );
+    m_fileModel->setRootPath(sPath);
     ui->treeView->setModel(m_fileModel.get());
+
+    QModelIndex index = m_fileModel->index(sPath, 0); // this line is not in the video.
+    ui->treeView->setRootIndex(index); // this line is not in the video.
 
     QColumnView temp;
     ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
