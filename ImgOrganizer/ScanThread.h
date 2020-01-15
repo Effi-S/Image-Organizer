@@ -51,7 +51,7 @@ private:
                     {
                         QStringList l;
                         for(auto mem: i)
-                            l.append(mem.c_str());
+                            l << mem.c_str();
                         emit sendImgGroup(l);
                      }
                 }

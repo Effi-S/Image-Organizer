@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
     ui->exact_columnView->setModel(new QStandardItemModel);
 
+
     // group model view + model
     ui->similar_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
     ui->similar_columnView->setModel(new QStandardItemModel);
@@ -162,8 +163,9 @@ void MainWindow::on_addImageGroup(QStringList path_list)
 
     auto first = path_list.cbegin();
 
-    QStandardItem *group = new QStandardItem(1,1);
-    group->setIcon(QIcon(*first));
+    QStandardItem *group = new QStandardItem(QIcon(*first),
+                                             QVariant(path_list.length()).toString());
+
     group->setCheckable(true);
 
     for(;first != path_list.cend(); ++first)
