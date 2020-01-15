@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>862</width>
-    <height>677</height>
+    <width>744</width>
+    <height>549</height>
    </rect>
   </property>
   <property name="font">
@@ -232,6 +232,9 @@ padding: 5px;
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="handleWidth">
+          <number>8</number>
+         </property>
          <widget class="QTabWidget" name="tabWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -263,7 +266,7 @@ padding: 5px;
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="iconSize">
            <size>
@@ -285,9 +288,24 @@ padding: 5px;
            <attribute name="title">
             <string>Exact Match</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_10">
+           <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QColumnView" name="exact_columnView"/>
+             <widget class="QSplitter" name="splitter_2">
+              <property name="lineWidth">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>8</number>
+              </property>
+              <property name="childrenCollapsible">
+               <bool>true</bool>
+              </property>
+              <widget class="QListView" name="exact_groupView"/>
+              <widget class="QListView" name="exact_itemView"/>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -299,9 +317,18 @@ padding: 5px;
            <attribute name="title">
             <string>Simiar Images</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_12">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QColumnView" name="similar_columnView"/>
+             <widget class="QSplitter" name="splitter_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>8</number>
+              </property>
+              <widget class="QListView" name="similar_groupView"/>
+              <widget class="QListView" name="simlar_itemView"/>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -313,7 +340,6 @@ padding: 5px;
            <attribute name="title">
             <string>Advcanced Search</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_14"/>
           </widget>
          </widget>
          <widget class="QTreeView" name="treeView">
@@ -336,7 +362,7 @@ padding: 5px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>862</width>
+     <width>744</width>
      <height>21</height>
     </rect>
    </property>

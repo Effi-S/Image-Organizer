@@ -15,6 +15,8 @@ QT_END_NAMESPACE
 #include <QFileSystemModel>
 #include <QColumnView>
 #include <QList>
+#include <QListView>
+
 
 #include <opencv2/opencv.hpp>
 #include "ImgOrganizer/BitExactImgFinder.h"
@@ -22,10 +24,7 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/ImgScanner.h"
 #include "ImgOrganizer/ScanThread.h"
 #include "COLOR.h"
-
-
-
-
+#include <QGraphicsView>
 
 class MainWindow : public QMainWindow
 {
@@ -60,6 +59,11 @@ private slots:
 
     void on_tabWidget_currentChanged(int);
 
+    void on_exact_groupView_clicked(QModelIndex index);
+    void on_similar_groupView_clicked(QModelIndex index);
+
+
+
 public slots:
     void on_addImageGroup(QStringList);
     void on_removeImage();
@@ -73,6 +77,9 @@ private:
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
     QStandardItemModel * m_curr_model;
+    QStandardItemModel * m_curr_match_model;
+
+    void initView(QListView *, QString);
 
 
 };

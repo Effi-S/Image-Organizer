@@ -17,22 +17,20 @@ MainWindow::MainWindow(QWidget *parent)
     m_fileModel = std::make_unique<QFileSystemModel>(this);
     m_fileModel->setReadOnly(false);
     m_fileModel->setFilter( QDir::AllDirs);
-    m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase| QDir::Name );
+    m_fileModel->sort(QDir::DirsFirst |QDir::NoDotAndDotDot| QDir::IgnoreCase| QDir::Name );
     m_fileModel->setRootPath(sPath);
     ui->treeView->setModel(m_fileModel.get());
-
-    QModelIndex index = m_fileModel->index(sPath, 0); // this line is not in the video.
-    ui->treeView->setRootIndex(index); // this line is not in the video.
-
-    //exact clumn view  + model   
-    ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
-    ui->exact_columnView->setModel(new QStandardItemModel);
+    QModelIndex index = m_fileModel->index(sPath, 0);
+    ui->treeView->setRootIndex(index);
 
 
-    // group model view + model
-    ui->similar_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
-    ui->similar_columnView->setModel(new QStandardItemModel);
-    on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//must be after model creation to prevent null on startup
+    initView(ui->exact_groupView, "Groups");
+    initView(ui->exact_itemView, "Images");
+    initView(ui->similar_groupView, "Groups");
+    initView(ui->simlar_itemView, "Images");
+
+    on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//MUST be after models creation to prevent null on startup
+
 }
 
 MainWindow::~MainWindow()
@@ -153,9 +151,33 @@ void MainWindow::on_FolderButton_clicked(){
 void MainWindow::on_tabWidget_currentChanged(int i)
 {
     switch(i){
-    case 0:m_curr_model = static_cast<QStandardItemModel *>(ui->exact_columnView->model());break;
-    case 1:m_curr_model = static_cast<QStandardItemModel *>(ui->similar_columnView->model());break;
+    case 0:m_curr_model = static_cast<QStandardItemModel *>(ui->exact_groupView->model());break;
+    case 1:m_curr_model = static_cast<QStandardItemModel *>(ui->similar_groupView->model());break;
     }
+
+    switch(i)
+    {
+    case 0:m_curr_match_model = static_cast<QStandardItemModel *>(ui->exact_itemView->model());break;
+    case 1:m_curr_match_model = static_cast<QStandardItemModel *>(ui->simlar_itemView->model());break;
+    }
+}
+
+void MainWindow::on_exact_groupView_clicked(QModelIndex index)
+{
+    QStandardItem * group = m_curr_model->item(index.row());
+    m_curr_match_model->clear();
+
+    std::cout<<RED <<group->rowCount() <<" = rows"<< group->columnCount() << " = colls"<<std::endl;
+    for(int i=0 ;i< group->rowCount(); ++i)
+    {
+        auto temp =  new QStandardItem(group->child(i)->icon(), group->child(i)->text() );
+        m_curr_match_model->appendRow(temp);
+    }
+}
+
+void MainWindow::on_similar_groupView_clicked(QModelIndex index)
+{
+    on_exact_groupView_clicked(index);
 }
 
 void MainWindow::on_addImageGroup(QStringList path_list)
@@ -177,7 +199,6 @@ void MainWindow::on_addImageGroup(QStringList path_list)
             child->setCheckState(Qt::Checked);
         group->appendRow(child);
     }
-
     m_curr_model->appendRow(group);
 
 }
@@ -186,6 +207,21 @@ void MainWindow::on_removeImage()
 {
 
 //    QModelIndex oIndex = ui->exact_list->currentIndex();
-//        ui->exact_list->model()->removeRow(oIndex.row());
+    //        ui->exact_list->model()->removeRow(oIndex.row());
+}
+
+void MainWindow::initView(QListView * view, QString header)
+{
+    //exact clumn view  + model
+    view->setIconSize(QSize(64,64));
+    auto mod = new QStandardItemModel;
+    mod->appendRow(new QStandardItem(header));
+    view->setModel(mod);
+    view->setDragEnabled(true);
+    view->setDragEnabled(true);
+    view->setAcceptDrops(true);
+    view->setDropIndicatorShown(true);
+    view->setDefaultDropAction(Qt::MoveAction);
+
 }
 
