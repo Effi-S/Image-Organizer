@@ -29,15 +29,17 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    mainwindow.h \
     COLOR.h \
+    ImgOrganizer/AbstractImgFinder.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
     ImgOrganizer/ScanThread.h \
-    ImgOrganizer/SimilarImgFinder.h \
-    mainwindow.h
+    ImgOrganizer/SimilarImgFinder.h
 
 FORMS += \
     mainwindow.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

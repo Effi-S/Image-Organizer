@@ -1,6 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <QMainWindow>
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
 #include <QFile>
 #include <QTextStream>
 #include <QFileDialog>
@@ -8,20 +13,19 @@
 #include <QtGui>
 #include <QtCore>
 #include <QFileSystemModel>
-
+#include <QColumnView>
+#include <QList>
 
 #include <opencv2/opencv.hpp>
-#include <ImgOrganizer/BitExactImgFinder.h>
-#include <ImgOrganizer/SimilarImgFinder.h>
-#include <ImgOrganizer/ImgScanner.h>
+#include "ImgOrganizer/BitExactImgFinder.h"
+#include "ImgOrganizer/SimilarImgFinder.h"
+#include "ImgOrganizer/ImgScanner.h"
 #include "ImgOrganizer/ScanThread.h"
 #include "COLOR.h"
-#include <QColumnView>
 
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+
+
 
 class MainWindow : public QMainWindow
 {
@@ -54,6 +58,8 @@ private slots:
 
     void on_FolderButton_clicked();
 
+    void on_tabWidget_currentChanged(int);
+
 public slots:
     void on_addImageGroup(QStringList);
     void on_removeImage();
@@ -66,9 +72,9 @@ private:
 
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
-    int m_cur_model= 0;
-    QStandardItemModel m_exact_model;
-    QStandardItemModel m_similar_model;
+    QStandardItemModel * m_curr_model;
+
 
 };
-#endif // MAINWINDOW_H
+
+#endif

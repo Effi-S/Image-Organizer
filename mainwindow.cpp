@@ -1,9 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QLabel>
-#include <QList>
-
-#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,12 +26,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     //exact clumn view  + model   
     ui->exact_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
-    ui->exact_columnView->setModel(&m_exact_model);
+    ui->exact_columnView->setModel(new QStandardItemModel);
 
     // group model view + model
     ui->similar_columnView->setIconSize(QSize(64,64)); //TODO : finish implementing view
-    ui->similar_columnView->setModel(&m_similar_model);
-
+    ui->similar_columnView->setModel(new QStandardItemModel);
+    on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//must be after model creation to prevent null on startup
 }
 
 MainWindow::~MainWindow()
@@ -116,16 +112,14 @@ void MainWindow::on_actionScan_triggered()
     ui->progressBar->setVisible(true);
     ui->tabWidget->setEnabled(false);
 
-    m_cur_model = ui->tabWidget->currentIndex();
+
 
     //making thread
-    m_scanThread = std::make_unique<ScanThread>(m_currDir, m_cur_model);
+    m_scanThread = std::make_unique<ScanThread>(m_currDir, ui->tabWidget->currentIndex());
 
-    switch(m_cur_model)
-    {
-    case 0: m_exact_model.clear();break;
-    case 1: m_similar_model.clear();break;
-    }
+
+    m_curr_model->clear();
+
 
     //connecting thread
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
@@ -155,24 +149,30 @@ void MainWindow::on_FolderButton_clicked(){
 
 }
 
+void MainWindow::on_tabWidget_currentChanged(int i)
+{
+    switch(i){
+    case 0:m_curr_model = static_cast<QStandardItemModel *>(ui->exact_columnView->model());break;
+    case 1:m_curr_model = static_cast<QStandardItemModel *>(ui->similar_columnView->model());break;
+    }
+}
+
 void MainWindow::on_addImageGroup(QStringList path_list)
 {
 
     auto first = path_list.cbegin();
     auto name = first->split("/").last();
+
     QStandardItem *group = new QStandardItem(QIcon(*first) ,name);
 
     for(;first != path_list.cend(); ++first)
     {
-        QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+        name = first->split("/").last();
+        QStandardItem *child = new QStandardItem(QIcon(*first) ,name);
         group->appendRow(child);
     }
-    switch(m_cur_model)
-    {
-    case 0: m_exact_model.appendRow(group); break;
-    case 1 : m_similar_model.appendRow(group); break;
-    }
 
+    m_curr_model->appendRow(group);
 
 }
 
