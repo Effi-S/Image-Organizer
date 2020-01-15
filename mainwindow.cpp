@@ -161,14 +161,18 @@ void MainWindow::on_addImageGroup(QStringList path_list)
 {
 
     auto first = path_list.cbegin();
-    auto name = first->split("/").last();
 
-    QStandardItem *group = new QStandardItem(QIcon(*first) ,name);
+    QStandardItem *group = new QStandardItem(1,1);
+    group->setIcon(QIcon(*first));
+    group->setCheckable(true);
 
     for(;first != path_list.cend(); ++first)
     {
-        name = first->split("/").last();
-        QStandardItem *child = new QStandardItem(QIcon(*first) ,name);
+        QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+        child->setToolTip(*first);
+        child->setCheckable(true);
+        if(first!=path_list.cbegin())
+            child->setCheckState(Qt::Checked);
         group->appendRow(child);
     }
 
