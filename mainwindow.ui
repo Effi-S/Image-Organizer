@@ -229,6 +229,9 @@ padding: 5px;
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QSplitter" name="splitter">
+         <property name="midLineWidth">
+          <number>1</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -294,6 +297,9 @@ padding: 5px;
               <property name="lineWidth">
                <number>1</number>
               </property>
+              <property name="midLineWidth">
+               <number>1</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -320,13 +326,20 @@ padding: 5px;
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QSplitter" name="splitter_3">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="handleWidth">
                <number>8</number>
               </property>
-              <widget class="QListView" name="similar_groupView"/>
+              <widget class="QListView" name="similar_groupView">
+               <property name="midLineWidth">
+                <number>1</number>
+               </property>
+              </widget>
               <widget class="QListView" name="simlar_itemView"/>
              </widget>
             </item>
@@ -342,7 +355,7 @@ padding: 5px;
            </attribute>
           </widget>
          </widget>
-         <widget class="QTreeView" name="treeView">
+         <widget class="MyTreeView" name="treeView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -504,6 +517,13 @@ padding: 5px;
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyTreeView</class>
+   <extends>QTreeView</extends>
+   <header>mytreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>FolderButton</tabstop>
   <tabstop>commandLinkButton</tabstop>

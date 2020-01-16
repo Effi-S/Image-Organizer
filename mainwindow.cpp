@@ -17,11 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_fileModel = std::make_unique<QFileSystemModel>(this);
     m_fileModel->setReadOnly(false);
     m_fileModel->setFilter( QDir::AllDirs);
-    m_fileModel->sort(QDir::DirsFirst |QDir::NoDotAndDotDot| QDir::IgnoreCase| QDir::Name );
+    m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase | QDir::NoDotAndDotDot|  QDir::Name );
     m_fileModel->setRootPath(sPath);
+
     ui->treeView->setModel(m_fileModel.get());
     QModelIndex index = m_fileModel->index(sPath, 0);
-    ui->treeView->setRootIndex(index);
+    ui->treeView->setRootIndex(index);;
+
 
 
     initView(ui->exact_groupView, "Groups");
@@ -37,6 +39,21 @@ MainWindow::~MainWindow()
 {
 
 }
+
+//const QClipboard *clipboard = QApplication::clipboard();
+//   const QMimeData *mimeData = clipboard->mimeData();
+
+//   if (mimeData->hasImage()) {
+//       setPixmap(qvariant_cast<QPixmap>(mimeData->imageData()));
+//   } else if (mimeData->hasHtml()) {
+//       setText(mimeData->html());
+//       setTextFormat(Qt::RichText);
+//   } else if (mimeData->hasText()) {
+//       setText(mimeData->text());
+//       setTextFormat(Qt::PlainText);
+//   } else {
+//       setText(tr("Cannot display data"));
+//   }
 
 
 void MainWindow::on_actionchange_file_triggered()
@@ -167,10 +184,12 @@ void MainWindow::on_exact_groupView_clicked(QModelIndex index)
     QStandardItem * group = m_curr_model->item(index.row());
     m_curr_match_model->clear();
 
-    std::cout<<RED <<group->rowCount() <<" = rows"<< group->columnCount() << " = colls"<<std::endl;
     for(int i=0 ;i< group->rowCount(); ++i)
     {
         auto temp =  new QStandardItem(group->child(i)->icon(), group->child(i)->text() );
+
+        temp->setDragEnabled(true);
+        temp->setDragEnabled(true);
         m_curr_match_model->appendRow(temp);
     }
 }
@@ -193,8 +212,11 @@ void MainWindow::on_addImageGroup(QStringList path_list)
     for(;first != path_list.cend(); ++first)
     {
         QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+
         child->setToolTip(*first);
         child->setCheckable(true);
+        child->setDragEnabled(true);
+        child->setDropEnabled(true);
         if(first!=path_list.cbegin())
             child->setCheckState(Qt::Checked);
         group->appendRow(child);
@@ -221,7 +243,7 @@ void MainWindow::initView(QListView * view, QString header)
     view->setDragEnabled(true);
     view->setAcceptDrops(true);
     view->setDropIndicatorShown(true);
-    view->setDefaultDropAction(Qt::MoveAction);
+    view->setDefaultDropAction(Qt::CopyAction);
 
 }
 

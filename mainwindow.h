@@ -12,6 +12,7 @@ QT_END_NAMESPACE
 #include <QMessageBox>
 #include <QtGui>
 #include <QtCore>
+#include <QTreeView>
 #include <QFileSystemModel>
 #include <QColumnView>
 #include <QList>
@@ -25,6 +26,7 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/ScanThread.h"
 #include "COLOR.h"
 #include <QGraphicsView>
+
 
 class MainWindow : public QMainWindow
 {

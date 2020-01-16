@@ -25,10 +25,12 @@ SOURCES += \
     ImgOrganizer/BitExactImgFinder.cpp \
     ImgOrganizer/ImgScanner.cpp \
     ImgOrganizer/SimilarImgFinder.cpp \
+    MyTreeView.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    MyTreeView.h \
     mainwindow.h \
     COLOR.h \
     ImgOrganizer/AbstractImgFinder.h \
