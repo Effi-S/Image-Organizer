@@ -32,7 +32,7 @@ private:
 
         try {
            emit scanPercent(10);
-           ImgScanner::scan(m_dir.toStdWString());
+           ImgScanner::scan(m_dir.toStdString());
 
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 

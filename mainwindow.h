@@ -24,7 +24,8 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/SimilarImgFinder.h"
 #include "ImgOrganizer/ImgScanner.h"
 #include "ImgOrganizer/ScanThread.h"
-#include "COLOR.h"
+#include "ImgOrganizer/COLOR.h"
+#include "MyStandardItem.h"
 #include <QGraphicsView>
 
 
@@ -78,8 +79,8 @@ private:
 
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
-    QStandardItemModel * m_curr_model;
-    QStandardItemModel * m_curr_match_model;
+    MyStandardItemModel * m_curr_model;
+    MyStandardItemModel * m_curr_match_model;
 
     void initView(QListView *, QString);
 

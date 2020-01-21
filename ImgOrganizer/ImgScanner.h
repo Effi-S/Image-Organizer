@@ -24,7 +24,7 @@ class ImgScanner
 {
 
 public:
-	static void scan(const std::wstring& path = L"C:\\");
+	static void scan(std::string path = "C:\\");
 
     auto end(){
         return ImgScanner::IMG_DB().end();

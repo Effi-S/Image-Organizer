@@ -11,7 +11,7 @@ ImgScanner::IMG_DB().push_back(std::make_pair(cv::Ptr<cv::Mat>(
 }
 
 
-void ImgScanner::scan(const std::wstring& path)
+void ImgScanner::scan(std::string path)
 {
 	typedef std::basic_ofstream<std::string::value_type> myFstream;
     myFstream file("C:/Users/effi/Desktop/temp/t.txt", std::ios_base::app);

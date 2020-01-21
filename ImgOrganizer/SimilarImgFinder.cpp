@@ -72,22 +72,27 @@ void SimilarImgFinder::makeSet()
 
 	if (m_matches.size() <= 1)return;
 	
-	auto next = m_matches.begin();
-	next++;
-	for (auto it = m_matches.begin(); next != m_matches.end() ;++next)
+	
+	for (auto it = m_matches.begin(); it != m_matches.end(); ++it)
 	{
-		cv::Mat hash1(it->second.first);
-		cv::Mat hash2(next->second.first);
+		bool first = true;
+		for (auto next = it; next != m_matches.end(); ++next)
+		{
+			if (first)
+			{
+				first = false;
+				continue;
+			}
+			cv::Mat hash1(it->second.first);
+			cv::Mat hash2(next->second.first);
 
-		auto matches = m_algo->compare(hash1,hash2);
-		if (matches <= 35)
-		{			
-			next->second.second.splice(next->second.second.end(), it->second.second);
-			m_matches.erase(it++);  
+			auto matches = m_algo->compare(hash1, hash2);
+			if (matches <= 12)
+			{
+				next->second.second.splice(next->second.second.end(), it->second.second);
+				m_matches.erase(it++);
+			}
 		}
-		else		
-			++it;
-		
 	}
 
 }

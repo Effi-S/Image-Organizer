@@ -13,7 +13,7 @@ void BitExactImgFinder::show()
 
 void BitExactImgFinder::makeSet()
 {
-	m_algo = cv::img_hash::PHash::create();
+	m_algo = cv::img_hash::BlockMeanHash::create(0);
 
     ImgScanner scanner;
     for (const auto& x : scanner)

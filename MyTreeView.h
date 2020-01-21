@@ -2,10 +2,11 @@
 #ifndef MYTREEVIEW_H
 #define MYTREEVIEW_H
 #include <QTreeView>
-#include "COLOR.h"
+#include "ImgOrganizer/COLOR.h"
 #include <iostream>
 #include "qevent.h"
 #include "qmimedata.h"
+#include <QStandardItem>
 
 
 QT_BEGIN_NAMESPACE

@@ -37,6 +37,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+//    const QMimeData *clip = QApplication::clipboard()->mimeData();
+//    if (clip->)
+//    {
+
+//    }
+
 
 }
 
@@ -168,14 +174,14 @@ void MainWindow::on_FolderButton_clicked(){
 void MainWindow::on_tabWidget_currentChanged(int i)
 {
     switch(i){
-    case 0:m_curr_model = static_cast<QStandardItemModel *>(ui->exact_groupView->model());break;
-    case 1:m_curr_model = static_cast<QStandardItemModel *>(ui->similar_groupView->model());break;
+    case 0:m_curr_model = static_cast<MyStandardItemModel *>(ui->exact_groupView->model());break;
+    case 1:m_curr_model = static_cast<MyStandardItemModel *>(ui->similar_groupView->model());break;
     }
 
     switch(i)
     {
-    case 0:m_curr_match_model = static_cast<QStandardItemModel *>(ui->exact_itemView->model());break;
-    case 1:m_curr_match_model = static_cast<QStandardItemModel *>(ui->simlar_itemView->model());break;
+    case 0:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->exact_itemView->model());break;
+    case 1:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->simlar_itemView->model());break;
     }
 }
 
@@ -236,7 +242,7 @@ void MainWindow::initView(QListView * view, QString header)
 {
     //exact clumn view  + model
     view->setIconSize(QSize(64,64));
-    auto mod = new QStandardItemModel;
+    auto mod = new MyStandardItemModel;
     mod->appendRow(new QStandardItem(header));
     view->setModel(mod);
     view->setDragEnabled(true);

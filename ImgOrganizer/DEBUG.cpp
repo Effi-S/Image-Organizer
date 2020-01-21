@@ -22,15 +22,24 @@
 
 
 #define BIT_EXACT 1
-#define SIMILAR 0
+#define SIMILAR 1
 
 
-int main(){	
+int main(int argc, char** argv){	
+
 	//scanning for images
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	ImgScanner::scan(L"C:\\Users\\effi");
+	std::string path = argv[1];
+	
+	ImgScanner::scan(path);
+
+	path.append("output.txt");
+	std::cout << path <<std::endl;
+
+	typedef std::basic_ofstream<std::string::value_type> myFstream;
+	myFstream out_file(path, std::ios_base::app);
 	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 
@@ -42,9 +51,17 @@ int main(){
 
 	BitExactImgFinder comp;
 
-	std::cout << GREEN << "Time BitExactImgFinder took: " << RESET << double(std::clock()) - start<<std::endl;
+	out_file << GREEN << "Time BitExactImgFinder took: " << RESET << double(std::clock()) - start<<std::endl;
 
 	comp.show();
+	for (auto i : comp.getGroups())
+		for (auto x : i)
+			if (i.size() >= 2)
+			{
+			out_file << x << std::endl;
+			std::cout << x << std::endl;
+			}
+				
 
 #endif // BIT_EXACT
 
@@ -56,10 +73,17 @@ int main(){
 
 	SimilarImgFinder comp2;
 
-	std::cout <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
+	out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
 
 	comp2.show();
 
+	for (auto i : comp2.getGroups())
+		for (auto x : i)
+			if (i.size() >= 2)
+			{
+				out_file << x << std::endl;
+				std::cout << x << std::endl;
+			}
 #endif
 
 	return 0;

@@ -1,8 +1,9 @@
 #pragma once
 #include <unordered_map>
 #include <opencv2/opencv.hpp>
-#include<opencv2/img_hash/average_hash.hpp>
-#include <opencv2/img_hash/phash.hpp>
+//#include <opencv2/img_hash/average_hash.hpp>
+//#include <opencv2/img_hash/phash.hpp>
+#include <opencv2/img_hash/block_mean_hash.hpp>
 #include "ImgScanner.h"
 #include "COLOR.h"
 
