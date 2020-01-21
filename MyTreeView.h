@@ -20,7 +20,7 @@ class MyTreeView : public QTreeView{
     Q_OBJECT
 public:
     MyTreeView(QWidget *parent = nullptr);
-
+    bool CopyFile(const QString& sourceFile, const QString& destinationDir);
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
