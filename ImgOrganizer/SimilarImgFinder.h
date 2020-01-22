@@ -17,11 +17,12 @@ class SimilarImgFinder
 public:
 	SimilarImgFinder() { makeSet(); }
     std::vector<std::vector<std::string>> getGroups(){return m_stringGroups;}
-	void show();
+    int getGroupsSize() {return m_groupSize;}
+    void show();
 private:
 
 	void makeSet();
-
+    int m_groupSize;
 	std::map<HashKey, HashValue > m_matches;
 
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo = cv::img_hash::BlockMeanHash::create(0);

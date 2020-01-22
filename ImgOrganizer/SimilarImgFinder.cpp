@@ -7,7 +7,12 @@ void SimilarImgFinder::show()
     {
         std::vector<std::string> group;
         for (auto& img : x.second.second)
+        {
             group.push_back(img.second.c_str());
+            m_groupSize++;
+        }
+
+
         m_stringGroups.push_back(group);
     }
 

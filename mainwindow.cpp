@@ -16,15 +16,14 @@ MainWindow::MainWindow(QWidget *parent)
     QString sPath = "~/";
     m_fileModel = std::make_unique<QFileSystemModel>(this);
     m_fileModel->setReadOnly(false);
-    m_fileModel->setFilter( QDir::AllDirs);
-    m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase | QDir::NoDotAndDotDot|  QDir::Name );
+    m_fileModel->setFilter(QDir::NoDotAndDotDot| QDir::AllDirs | QDir::AllEntries);
+    m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name );
     m_fileModel->setRootPath(sPath);
 
     ui->treeView->setModel(m_fileModel.get());
     QModelIndex index = m_fileModel->index(sPath, 0);
-    ui->treeView->setRootIndex(index);;
 
-
+    ui->treeView->setRootIndex(index);
 
     initView(ui->exact_groupView, "Groups");
     initView(ui->exact_itemView, "Images");
@@ -32,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     initView(ui->simlar_itemView, "Images");
 
     on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//MUST be after models creation to prevent null on startup
+
 
 }
 

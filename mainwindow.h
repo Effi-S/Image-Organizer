@@ -65,8 +65,6 @@ private slots:
     void on_exact_groupView_clicked(QModelIndex index);
     void on_similar_groupView_clicked(QModelIndex index);
 
-
-
 public slots:
     void on_addImageGroup(QStringList);
     void on_removeImage();

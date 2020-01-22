@@ -31,7 +31,6 @@ private:
 
 
         try {
-           emit scanPercent(10);
            ImgScanner::scan(m_dir.toStdString());
 
            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
@@ -57,17 +56,27 @@ private:
                 }
                 else
                 {
+
                 SimilarImgFinder comp;
 
                 std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
                 comp.show();
+                int count = 0;
+                int size = comp.getGroupsSize();
                 for(auto i: comp.getGroups())
-                    {
+                    {                 
                         QStringList l;
                         for(auto mem: i)
+                        {
                             l.append(mem.c_str());
+                            count++;
+
+                        }
+                        int pr = (100*count)/size;
+                        emit scanPercent(pr);
                         emit sendImgGroup(l);
+                        emit scanStatus("Found: "+ QString::number(count) +"images.");
                      }
                 }
 
@@ -77,6 +86,6 @@ private:
 
         emit scanPercent(100);
         emit scanDone(true);
-        emit scanStatus("Done scanning:" + m_dir);
+
     }
 };
