@@ -4,6 +4,7 @@
 
 #endif // SCANTHREAD_H
 #include <QThread>
+#include "ImgOrganizer/ImgFinderBase.h"
 #include "BitExactImgFinder.h"
 #include "SimilarImgFinder.h"
 
@@ -41,12 +42,12 @@ private:
         try {
             if(m_type == 0 )
             {
-                BitExactImgFinder comp;
+                ImgFinderBase * comp = new BitExactImgFinder;
 
                 std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
-                comp.show();
-                for(auto i: comp.getGroups())
+                comp->makeGroups();
+                for(auto i: comp->getGroups())
                     {
                         QStringList l;
                         for(auto mem: i)
@@ -56,25 +57,22 @@ private:
                 }
                 else
                 {
-
-                SimilarImgFinder comp;
+                ImgFinderBase * comp  = new SimilarImgFinder;
 
                 std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
-                comp.show();
+                comp->makeGroups();
                 int count = 0;
-                int size = comp.getGroupsSize();
-                for(auto i: comp.getGroups())
+                for(auto i: comp->getGroups())
                     {                 
                         QStringList l;
                         for(auto mem: i)
                         {
                             l.append(mem.c_str());
-                            count++;
 
                         }
-                        int pr = (100*count)/size;
-                        emit scanPercent(pr);
+                        //int pr = (100*comp->numOfImages())/int(ImgScanner::size());
+                        //emit scanPercent(pr);
                         emit sendImgGroup(l);
                         emit scanStatus("Found: "+ QString::number(count) +"images.");
                      }

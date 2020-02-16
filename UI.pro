@@ -22,6 +22,7 @@ LIBS += "C:/opencv/build/install/x64/vc16/lib/*.lib"
 
 
 SOURCES += \
+    ImgOrganizer/ImgFinderBase.cpp \
     ImgOrganizer/BitExactImgFinder.cpp \
     ImgOrganizer/ImgScanner.cpp \
     ImgOrganizer/SimilarImgFinder.cpp \
@@ -35,7 +36,7 @@ HEADERS += \
     MyTreeView.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
-    ImgOrganizer/AbstractImgFinder.h \
+    ImgOrganizer/ImgFinderBase.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/ImgScanner.h \
     ImgOrganizer/ScanThread.h \

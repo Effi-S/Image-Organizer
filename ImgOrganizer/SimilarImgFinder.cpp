@@ -1,20 +1,20 @@
 #include "SimilarImgFinder.h"
+#include "ImgFinderBase.h"
 
-
-void SimilarImgFinder::show()
+void SimilarImgFinder::makeGroups()
 {
-    for (const auto& x : m_matches)
-    {
-        std::vector<std::string> group;
-        for (auto& img : x.second.second)
-        {
-            group.push_back(img.second.c_str());
-            m_groupSize++;
-        }
-
-
-        m_stringGroups.push_back(group);
-    }
+	for (const auto& x : m_matches)
+	{
+		std::vector<std::string> group;
+		for (auto& img : x.second.second)
+		{
+			group.push_back(img.second.c_str());
+			
+		}
+		addGroup(group);
+	}
+	doneAddingGroups();
+}
 
 //	for (const auto& x : m_matches)
 //	{
@@ -38,7 +38,7 @@ void SimilarImgFinder::show()
 //			cv::destroyWindow(window);
 
 //	}
-}
+
 
 void SimilarImgFinder::makeSet()
 {  
@@ -92,7 +92,7 @@ void SimilarImgFinder::makeSet()
 			cv::Mat hash2(next->second.first);
 
 			auto matches = m_algo->compare(hash1, hash2);
-			if (matches <= 12)
+            if (matches <= 30)
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);

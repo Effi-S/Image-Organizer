@@ -1,7 +1,7 @@
 #include "ImgScanner.h"
 #include "BitExactImgFinder.h"
 #include "SimilarImgFinder.h"
-
+#include "ImgFinderBase.h"
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -31,7 +31,7 @@ int main(int argc, char** argv){
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	std::string path = argv[1];
+	std::string path =/* (argc > 0) ? argv[1] :*/ "C:\\Users\\effi\\Desktop";
 	
 	ImgScanner::scan(path);
 
@@ -49,12 +49,13 @@ int main(int argc, char** argv){
 
 	start = std::clock_t(std::clock());
 
-	BitExactImgFinder comp;
+	ImgFinderBase * comp = new BitExactImgFinder;
 
 	out_file << GREEN << "Time BitExactImgFinder took: " << RESET << double(std::clock()) - start<<std::endl;
 
-	comp.show();
-	for (auto i : comp.getGroups())
+	comp->makeGroups();
+	
+	for (auto i : comp->getGroups())
 		for (auto x : i)
 			if (i.size() >= 2)
 			{
@@ -71,13 +72,13 @@ int main(int argc, char** argv){
 
 	start = std::clock_t(std::clock());
 
-	SimilarImgFinder comp2;
+	ImgFinderBase* comp2 = new SimilarImgFinder;
 
 	out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
 
-	comp2.show();
+	comp2->getGroups();
 
-	for (auto i : comp2.getGroups())
+	for (auto i : comp2->getGroups())
 		for (auto x : i)
 			if (i.size() >= 2)
 			{

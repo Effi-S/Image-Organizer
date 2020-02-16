@@ -1,12 +1,13 @@
 #pragma once
 #include <map>
+#include "ImgFinderBase.h"
 #include <opencv2/opencv.hpp>
 #include<opencv2/img_hash/block_mean_hash.hpp>
 #include <opencv2/img_hash/phash.hpp>
 #include <opencv2/img_hash/color_moment_hash.hpp>
 #include "ImgScanner.h"
 
-class SimilarImgFinder
+class SimilarImgFinder : public ImgFinderBase
 {
 	const int BITS = 42;
 
@@ -16,16 +17,15 @@ class SimilarImgFinder
 
 public:
 	SimilarImgFinder() { makeSet(); }
-    std::vector<std::vector<std::string>> getGroups(){return m_stringGroups;}
-    int getGroupsSize() {return m_groupSize;}
-    void show();
+    void makeGroups() override;
+	
 private:
 
 	void makeSet();
-    int m_groupSize;
+   
 	std::map<HashKey, HashValue > m_matches;
 
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo = cv::img_hash::BlockMeanHash::create(0);
-    std::vector<std::vector<std::string>> m_stringGroups;
+    
 };
 

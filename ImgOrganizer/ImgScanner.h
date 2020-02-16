@@ -26,12 +26,9 @@ class ImgScanner
 public:
 	static void scan(std::string path = "C:\\");
 
-    auto end(){
-        return ImgScanner::IMG_DB().end();
-    }
-     auto begin(){
-        return ImgScanner::IMG_DB().begin();
-    }
+    auto end(){        return ImgScanner::IMG_DB().end();}
+     auto begin(){	   return ImgScanner::IMG_DB().begin();}
+    static auto size() {	   return ImgScanner::IMG_DB().size(); }
 
 	friend void addImgToDB( const std::filesystem::directory_entry& entry);
 

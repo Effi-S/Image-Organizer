@@ -1,4 +1,4 @@
-#!bin/bash 
+#!/bin/bash
 cd ~/Documents/QT/UI/ImgOrganizer/x64/Release
 x="C:\Users\effi\Desktop\testing\proj_tests"
 for i in $(ls C:/Users/effi/Desktop/testing/proj_tests)

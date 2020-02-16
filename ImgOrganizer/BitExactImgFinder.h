@@ -1,4 +1,5 @@
 #pragma once
+#include "ImgFinderBase.h"
 #include <unordered_map>
 #include <opencv2/opencv.hpp>
 //#include <opencv2/img_hash/average_hash.hpp>
@@ -7,7 +8,7 @@
 #include "ImgScanner.h"
 #include "COLOR.h"
 
-class BitExactImgFinder
+class BitExactImgFinder : public ImgFinderBase 
 {
 	const int BITS = 16;
 	using HashKey = std::string;
@@ -15,9 +16,10 @@ class BitExactImgFinder
     using MatchMap = std::unordered_map<HashKey, std::vector<ImgInfo>>;
 
 public:
+	
     BitExactImgFinder() { makeSet();}
-    std::vector<std::vector<std::string>> getGroups(){return m_stringGroups;}
-    void show();
+	
+    void makeGroups() override;
 private:
 	
 	void makeSet();
@@ -26,7 +28,6 @@ private:
 
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo;
 
-    std::vector<std::vector<std::string>> m_stringGroups;
-
+  
 };
 

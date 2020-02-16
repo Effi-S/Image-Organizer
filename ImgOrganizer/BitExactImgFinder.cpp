@@ -1,14 +1,16 @@
 #include "BitExactImgFinder.h"
 
-void BitExactImgFinder::show()
+
+void BitExactImgFinder::makeGroups()
 {
 	for (const auto& x : m_matches)
 	{
         std::vector<std::string> group;
 		for (auto& img : x.second)
             group.push_back(img.second->c_str());
-        m_stringGroups.push_back(group);
+       addGroup(group);
 	}
+	doneAddingGroups();
 }
 
 void BitExactImgFinder::makeSet()
