@@ -50,7 +50,7 @@ private:
         try {
             emit scanStatus("searching for images.");
             ImgScanner::scan(m_dir.toStdString());
-            dbSize = ImgScanner::size();
+            dbSize = int(ImgScanner::size());
             emit scanStatus("Found: "+ QString::number(dbSize) +"images.");
             std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
@@ -63,6 +63,8 @@ private:
             std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
             innerThread t(comp);
             t.start();
+           dbSize = (dbSize)?dbSize : 1;
+
             while (t.isRunning()) {
                 for(auto i: comp->getGroups())
                 {
@@ -72,7 +74,7 @@ private:
                         l.append(mem.c_str());
 
                     }
-                    dbSize = (dbSize)?dbSize : 1;
+
                     int pr = (100*int(comp->numOfImages()))/dbSize;
                     emit scanPercent(pr);
                     emit sendImgGroup(l);

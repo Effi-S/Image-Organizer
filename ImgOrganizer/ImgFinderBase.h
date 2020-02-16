@@ -14,7 +14,7 @@ public:
 protected:
 	void doneAddingGroups() { m_done = false; }
 	void addGroup(std::vector<std::string>& group);
-	void imgAdded() { m_num_of_images++; }
+
 private:
 	uint32_t m_num_of_images = 0;
 	std::mutex m_mutex;	

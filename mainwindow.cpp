@@ -150,6 +150,7 @@ void MainWindow::on_actionScan_triggered()
     connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){ ui->progressBar->setVisible(false); });
+    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){  });
     connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
     //sending to thread
