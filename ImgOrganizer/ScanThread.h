@@ -8,14 +8,29 @@
 #include "BitExactImgFinder.h"
 #include "SimilarImgFinder.h"
 
+class innerThread : public QThread
+{
+    Q_OBJECT
+public:
+    innerThread(ImgFinderBase * comp)
+        :m_comp(comp){}
+signals:
+    void resultReady(const QString &s);
+private:
+    ImgFinderBase * m_comp;
+    void run() override {
+        m_comp->makeGroups();
+    }
+};
+
 class ScanThread : public QThread
 {
     Q_OBJECT
 public:
     ScanThread(QString& dir , int type)
         :m_dir(dir), m_type(type){}
-
 signals:
+
     void resultReady(const QString &s);
     void scanDone(bool);
     void scanStatus(QString s, int = 0);
@@ -29,60 +44,47 @@ private:
     void run() override {
         std::clock_t start(std::clock());
         QString result;
+        int dbSize = 1;
 
 
         try {
-           ImgScanner::scan(m_dir.toStdString());
-
-           std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+            emit scanStatus("searching for images.");
+            ImgScanner::scan(m_dir.toStdString());
+            dbSize = ImgScanner::size();
+            emit scanStatus("Found: "+ QString::number(dbSize) +"images.");
+            std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
         } catch (...) {
-           std::cout<<"scan failed!"<<std::endl;
+            std::cout<<"scan failed!"<<std::endl;
         }
         try {
-            if(m_type == 0 )
-            {
-                ImgFinderBase * comp = new BitExactImgFinder;
-
-                std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
-
-                comp->makeGroups();
+            ImgFinderBase * comp;
+              (m_type)?comp = new SimilarImgFinder:comp = new BitExactImgFinder;
+            std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+            innerThread t(comp);
+            t.start();
+            while (t.isRunning()) {
                 for(auto i: comp->getGroups())
-                    {
-                        QStringList l;
-                        for(auto mem: i)
-                            l << mem.c_str();
-                        emit sendImgGroup(l);
-                     }
-                }
-                else
                 {
-                ImgFinderBase * comp  = new SimilarImgFinder;
+                    QStringList l;
+                    for(auto mem: i)
+                    {
+                        l.append(mem.c_str());
 
-                std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+                    }
+                    dbSize = (dbSize)?dbSize : 1;
+                    int pr = (100*int(comp->numOfImages()))/dbSize;
+                    emit scanPercent(pr);
+                    emit sendImgGroup(l);
 
-                comp->makeGroups();
-                int count = 0;
-                for(auto i: comp->getGroups())
-                    {                 
-                        QStringList l;
-                        for(auto mem: i)
-                        {
-                            l.append(mem.c_str());
-
-                        }
-                        //int pr = (100*comp->numOfImages())/int(ImgScanner::size());
-                        //emit scanPercent(pr);
-                        emit sendImgGroup(l);
-                        emit scanStatus("Found: "+ QString::number(count) +"images.");
-                     }
                 }
 
+            }
+
         } catch (...) {
-                std::cout<<"ImgFinder failed!"<<std::endl;
+            std::cout<<"ImgFinder failed!"<<std::endl;
         }
 
-        emit scanPercent(100);
         emit scanDone(true);
 
     }
