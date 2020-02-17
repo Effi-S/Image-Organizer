@@ -21,14 +21,16 @@ class MyTreeView : public QTreeView{
 public:
     MyTreeView(QWidget *parent = nullptr);
     bool CopyFile(const QString& sourceFile, const QString& destinationDir);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     //void mousePressEvent(QMouseEvent *event) override;
 
-
+    void keyPressEvent(QKeyEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
+private:
 
 };
 

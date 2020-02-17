@@ -12,7 +12,6 @@ public:
 	uint32_t numOfImages() { return m_num_of_images; }
 
 protected:
-	void doneAddingGroups() { m_done = false; }
 	void addGroup(std::vector<std::string>& group);
 
 private:

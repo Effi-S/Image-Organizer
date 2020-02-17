@@ -34,6 +34,7 @@ SOURCES += \
 HEADERS += \
     MyStandardItem.h \
     MyTreeView.h \
+    Mylistwidget.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
     ImgOrganizer/ImgFinderBase.h \

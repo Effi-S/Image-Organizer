@@ -10,7 +10,6 @@ void BitExactImgFinder::makeGroups()
             group.push_back(img.second->c_str());
        addGroup(group);
 	}
-	doneAddingGroups();
 }
 
 void BitExactImgFinder::makeSet()

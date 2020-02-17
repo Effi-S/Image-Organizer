@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     QModelIndex index = m_fileModel->index(sPath, 0);
 
     ui->treeView->setRootIndex(index);
-
     initView(ui->exact_groupView, "Groups");
     initView(ui->exact_itemView, "Images");
     initView(ui->similar_groupView, "Groups");
@@ -149,7 +148,9 @@ void MainWindow::on_actionScan_triggered()
     connect(m_scanThread.get(), &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
     connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
-    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){ ui->progressBar->setVisible(false); });
+    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){
+        ui->progressBar->setVisible(false);
+        m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);});
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){  });
     connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
@@ -157,6 +158,7 @@ void MainWindow::on_actionScan_triggered()
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
     m_scanThread->start();
     ui->tabWidget->setEnabled(true);
+
 
 }
 
@@ -169,6 +171,14 @@ void MainWindow::on_commandLinkButton_released(){
 void MainWindow::on_FolderButton_clicked(){
 
     on_actionchange_file_triggered();
+
+}
+
+void MainWindow::on_editFsButton_released()
+{
+
+    QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
+
 
 }
 
@@ -199,6 +209,7 @@ void MainWindow::on_exact_groupView_clicked(QModelIndex index)
         temp->setDragEnabled(true);
         m_curr_match_model->appendRow(temp);
     }
+
 }
 
 void MainWindow::on_similar_groupView_clicked(QModelIndex index)
@@ -214,11 +225,10 @@ void MainWindow::on_addImageGroup(QStringList path_list)
     QStandardItem *group = new QStandardItem(QIcon(*first),
                                              QVariant(path_list.length()).toString());
 
-    group->setCheckable(true);
-
     for(;first != path_list.cend(); ++first)
-    {
+    { 
         QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+
 
         child->setToolTip(*first);
         child->setCheckable(true);
@@ -226,9 +236,10 @@ void MainWindow::on_addImageGroup(QStringList path_list)
         child->setDropEnabled(true);
         if(first!=path_list.cbegin())
             child->setCheckState(Qt::Checked);
-        group->appendRow(child);
+        group->appendRow(std::move(child));
     }
-    m_curr_model->appendRow(group);
+    //group->setCheckable(true);
+    m_curr_model->appendRow(std::move(group));
 
 }
 
@@ -247,10 +258,13 @@ void MainWindow::initView(QListView * view, QString header)
     mod->appendRow(new QStandardItem(header));
     view->setModel(mod);
     view->setDragEnabled(true);
+    view->setWrapping(true);
+    view->setResizeMode(QListView::Adjust);
     view->setDragEnabled(true);
     view->setAcceptDrops(true);
     view->setDropIndicatorShown(true);
     view->setDefaultDropAction(Qt::CopyAction);
+
 
 }
 

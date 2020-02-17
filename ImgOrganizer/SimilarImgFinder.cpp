@@ -7,13 +7,10 @@ void SimilarImgFinder::makeGroups()
 	{
 		std::vector<std::string> group;
 		for (auto& img : x.second.second)
-		{
 			group.push_back(img.second.c_str());
-			
-		}
 		addGroup(group);
 	}
-	doneAddingGroups();
+	
 }
 
 //	for (const auto& x : m_matches)

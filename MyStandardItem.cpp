@@ -2,8 +2,6 @@
 
 QMimeData* MyStandardItemModel::mimeData(const QModelIndexList &indexes) const
 {
-    // Need to have the base function create the initial mimeData.
-    // It apparently puts something in there that makes Qt call dropMimeData().
     QMimeData* mimeData = QStandardItemModel::mimeData(indexes);
 
     // The raw data that will be placed in the mimeData.
@@ -16,7 +14,7 @@ QMimeData* MyStandardItemModel::mimeData(const QModelIndexList &indexes) const
          // The first item encoded will be the number of pointers to expect.
          ds << quint32(indexes.size());
 
-         // Now for each index get a pointer to the standardItem, and write
+         // for each index gets a pointer to the standardItem, and write
          // into the datastream.
          for (int i = 0; i < indexes.size(); i++)
          {

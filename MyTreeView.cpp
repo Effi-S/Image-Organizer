@@ -45,6 +45,22 @@ void MyTreeView::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
+
+void MyTreeView::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key::Key_Delete )
+    {
+        QModelIndex index = this->currentIndex();
+        QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
+        if(data)
+        {
+            if(data->isDir(index))return;
+            remove(data->filePath(index).toStdString().c_str());
+        }
+
+    }
+}
+
 void MyTreeView::dropEvent(QDropEvent *event)
 {
 
