@@ -34,6 +34,45 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+template<typename T, typename T2>
+void func(QObject *object, T *view, T2* model)
+{
+    if (object == view)
+   {
+
+          QModelIndex index = view->currentIndex();
+          auto item = model->itemFromIndex(index);
+          remove(item->text().toStdString().c_str());
+          view->reset();
+
+   }
+}
+
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (!( event->type() == QEvent::KeyPress)) return false;
+
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_Delete)
+        {
+            func(object, ui->simlar_itemView, m_curr_match_model);
+            func(object, ui->exact_itemView, m_curr_match_model);
+
+//             if (object == ui->simlar_itemView)
+//            {
+
+//                   QModelIndex index = ui->simlar_itemView->currentIndex();
+//                   auto item = m_curr_match_model->itemFromIndex(index);
+//                   remove(item->text().toStdString().c_str());
+//                   ui->simlar_itemView->reset();
+
+//            }
+
+
+        }
+        return true;
+}
+
 MainWindow::~MainWindow()
 {
 //    const QMimeData *clip = QApplication::clipboard()->mimeData();
@@ -253,18 +292,19 @@ void MainWindow::on_removeImage()
 void MainWindow::initView(QListView * view, QString header)
 {
     //exact clumn view  + model
+
     view->setIconSize(QSize(64,64));
     auto mod = new MyStandardItemModel;
     mod->appendRow(new QStandardItem(header));
     view->setModel(mod);
     view->setDragEnabled(true);
     view->setWrapping(true);
-    view->setResizeMode(QListView::Adjust);
+    //view->setResizeMode(QListView::Adjust);
     view->setDragEnabled(true);
     view->setAcceptDrops(true);
     view->setDropIndicatorShown(true);
     view->setDefaultDropAction(Qt::CopyAction);
-
+    view->installEventFilter(this);
 
 }
 
