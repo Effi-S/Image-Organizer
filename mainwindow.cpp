@@ -258,26 +258,31 @@ void MainWindow::on_similar_groupView_clicked(QModelIndex index)
 void MainWindow::on_addImageGroup(QStringList path_list)
 {
 
-    auto first = path_list.cbegin();
+   static addImgThread thread(path_list, &m_curr_model);
+   thread.setList(path_list);
 
-    QStandardItem *group = new QStandardItem(QIcon(*first),
-                                             QVariant(path_list.length()).toString());
+   thread.start();
 
-    for(;first != path_list.cend(); ++first)
-    { 
-        QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+//    auto first = path_list.cbegin();
+
+//    QStandardItem *group = new QStandardItem(QIcon(*first),
+//                                             QVariant(path_list.length()).toString());
+
+//    for(;first != path_list.cend(); ++first)
+//    {
+//        QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
 
 
-        child->setToolTip(*first);
-        child->setCheckable(true);
-        child->setDragEnabled(true);
-        child->setDropEnabled(true);
-        if(first!=path_list.cbegin())
-            child->setCheckState(Qt::Checked);
-        group->appendRow(std::move(child));
-    }
-    //group->setCheckable(true);
-    m_curr_model->appendRow(std::move(group));
+//        child->setToolTip(*first);
+//        child->setCheckable(true);
+//        child->setDragEnabled(true);
+//        child->setDropEnabled(true);
+//        if(first!=path_list.cbegin())
+//            child->setCheckState(Qt::Checked);
+//        group->appendRow(std::move(child));
+//    }
+//    //group->setCheckable(true);
+//    m_curr_model->appendRow(std::move(group));
 
 }
 
@@ -297,7 +302,7 @@ void MainWindow::initView(QListView * view, QString header)
     mod->appendRow(new QStandardItem(header));
     view->setModel(mod);
     view->setDragEnabled(true);
-    view->setWrapping(true);
+    //view->setWrapping(true);
     //view->setResizeMode(QListView::Adjust);
     view->setDragEnabled(true);
     view->setAcceptDrops(true);

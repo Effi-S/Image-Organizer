@@ -165,12 +165,14 @@
     <ClCompile Include="ImgFinderBase.cpp" />
     <ClCompile Include="ImgScanner.cpp" />
     <ClCompile Include="DEBUG.cpp" />
+    <ClCompile Include="ImgSearch.cpp" />
     <ClCompile Include="SimilarImgFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitExactImgFinder.h" />
     <ClInclude Include="ImgFinderBase.h" />
     <ClInclude Include="ImgScanner.h" />
+    <ClInclude Include="ImgSearch.h" />
     <ClInclude Include="SimilarImgFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

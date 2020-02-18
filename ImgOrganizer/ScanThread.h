@@ -3,7 +3,9 @@
 #define SCANTHREAD_H
 
 #endif // SCANTHREAD_H
+#include <QMutex>
 #include <QThread>
+#include <MyStandardItem.h>
 #include "ImgOrganizer/ImgFinderBase.h"
 #include "BitExactImgFinder.h"
 #include "SimilarImgFinder.h"
@@ -45,7 +47,6 @@ private:
         std::clock_t start(std::clock());
         QString result;
         int dbSize = 1;
-
 
         try {
             emit scanStatus("searching for images.");
@@ -90,4 +91,49 @@ private:
         emit scanDone(true);
 
     }
+};
+
+class addImgThread : public QThread
+{
+    Q_OBJECT
+public:
+    addImgThread(QStringList pl, MyStandardItemModel ** model ):m_path_list(pl),m_model(model){};
+    void setList(const QStringList & l) {
+
+        m_mutex.lock();
+        m_path_list = l;
+        m_mutex.unlock();
+    }
+protected:
+
+    void run() override
+        {
+        m_mutex.lock();
+
+            auto first = m_path_list.cbegin();
+
+            QStandardItem *group = new QStandardItem(QIcon(*first),
+                                                     QVariant(m_path_list.length()).toString());
+
+            for(;first != m_path_list.cend(); ++first)
+            {
+                QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
+
+
+                child->setToolTip(*first);
+                child->setCheckable(true);
+                child->setDragEnabled(true);
+                child->setDropEnabled(true);
+                if(first!=m_path_list.cbegin())
+                    child->setCheckState(Qt::Checked);
+                group->appendRow(std::move(child));
+            }
+            //group->setCheckable(true);
+            (*m_model)->appendRow(std::move(group));
+      m_mutex.unlock();
+    }
+
+QStringList m_path_list;
+MyStandardItemModel ** m_model;
+QMutex m_mutex;
 };
