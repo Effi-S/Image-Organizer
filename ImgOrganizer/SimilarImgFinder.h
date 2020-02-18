@@ -3,8 +3,7 @@
 #include "ImgFinderBase.h"
 #include <opencv2/opencv.hpp>
 #include<opencv2/img_hash/block_mean_hash.hpp>
-#include <opencv2/img_hash/phash.hpp>
-#include <opencv2/img_hash/color_moment_hash.hpp>
+//#include <opencv2/img_hash/color_moment_hash.hpp>
 #include "ImgScanner.h"
 
 class SimilarImgFinder : public ImgFinderBase

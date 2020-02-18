@@ -1,5 +1,6 @@
 #include "ImgScanner.h"
 #include "BitExactImgFinder.h"
+#include "ImgSearch.h"
 #include "SimilarImgFinder.h"
 #include "ImgFinderBase.h"
 #define RESET   "\033[0m"
@@ -21,8 +22,9 @@
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 
-#define BIT_EXACT 1
-#define SIMILAR 1
+#define BIT_EXACT 0
+#define SIMILAR 0
+#define SEARCH 1
 
 
 int main(int argc, char** argv){	
@@ -31,7 +33,7 @@ int main(int argc, char** argv){
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	std::string path =/* (argc > 0) ? argv[1] :*/ "C:\\Users\\effi\\Desktop";
+	std::string path = (argc > 1) ? argv[1] : "C:\\Users\\effi\\Desktop";
 	
 	ImgScanner::scan(path);
 
@@ -85,6 +87,22 @@ int main(int argc, char** argv){
 				out_file << x << std::endl;
 				std::cout << x << std::endl;
 			}
+#endif
+#if SEARCH
+	ImgSearch searcher;
+	char choice = 'y';
+	do{
+	std::cout << ORANGE << "Enter img Path : ";
+	std::string searchPath;
+	
+	std::cin >> searchPath;
+	searcher.searchFor(searchPath);
+	/*	std::cout << "  " << searchPath << std::endl;
+		for (auto x : searcher.searchFor(searchPath))
+			std::cout << RED << x << std::endl;*/
+		std::cout << "Continue? y/n:" <<RESET;
+		std::cin >> choice;
+	} while (choice != 'n');
 #endif
 
 	return 0;

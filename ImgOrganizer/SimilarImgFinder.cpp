@@ -39,7 +39,7 @@ void SimilarImgFinder::makeGroups()
 
 void SimilarImgFinder::makeSet()
 {  
-
+	//creating list 
     for (auto &x : ImgScanner())
 	{
 		cv::Mat im = *x.first;
@@ -74,7 +74,7 @@ void SimilarImgFinder::makeSet()
 
 	if (m_matches.size() <= 1)return;
 	
-	
+//reducing list where neccessary
 	for (auto it = m_matches.begin(); it != m_matches.end(); ++it)
 	{
 		bool first = true;
