@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
+    ui->searchingLabel->setVisible(false);
     ui->progressBar->setVisible(false);
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
@@ -43,9 +44,19 @@ void func(QObject *object, T *view, T2* model)
           QModelIndex index = view->currentIndex();
           auto item = model->itemFromIndex(index);
           remove(item->text().toStdString().c_str());
-          view->reset();
+          model->removeRow(index.row());
 
    }
+    //             if (object == ui->simlar_itemView)
+    //            {
+
+    //                   QModelIndex index = ui->simlar_itemView->currentIndex();
+    //                   auto item = m_curr_match_model->itemFromIndex(index);
+    //                   remove(item->text().toStdString().c_str());
+    //                  m_curr_match_model->removeRow(index.row());
+
+    //            }
+
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
@@ -57,17 +68,6 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
         {
             func(object, ui->simlar_itemView, m_curr_match_model);
             func(object, ui->exact_itemView, m_curr_match_model);
-
-//             if (object == ui->simlar_itemView)
-//            {
-
-//                   QModelIndex index = ui->simlar_itemView->currentIndex();
-//                   auto item = m_curr_match_model->itemFromIndex(index);
-//                   remove(item->text().toStdString().c_str());
-//                   ui->simlar_itemView->reset();
-
-//            }
-
 
         }
         return true;
@@ -169,7 +169,6 @@ void MainWindow::on_actionScan_triggered()
     ui->commandLinkButton->setEnabled(false);
     ui->FolderButton->setEnabled(false);
     ui->actionScan->setEnabled(false);
-    ui->progressBar->setVisible(true);
     ui->tabWidget->setEnabled(false);
 
 
@@ -177,11 +176,12 @@ void MainWindow::on_actionScan_triggered()
     //making thread
     m_scanThread = std::make_unique<ScanThread>(m_currDir, ui->tabWidget->currentIndex());
 
-
+    ui->searchingLabel->setVisible(true);
     m_curr_model->clear();
 
-
     //connecting thread
+    connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar,
+            [=](int){ui->searchingLabel->setVisible(false); ui->progressBar->setVisible(true);});
     connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
     connect(m_scanThread.get(), &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
     connect(m_scanThread.get(), &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
@@ -190,7 +190,6 @@ void MainWindow::on_actionScan_triggered()
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){
         ui->progressBar->setVisible(false);
         m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);});
-    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){  });
     connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
     //sending to thread
