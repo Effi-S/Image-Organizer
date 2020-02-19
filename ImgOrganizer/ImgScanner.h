@@ -30,7 +30,7 @@ public:
      auto begin(){	   return ImgScanner::IMG_DB().begin();}
     static auto size() {	   return ImgScanner::IMG_DB().size(); }
 
-	friend void addImgToDB( const std::filesystem::directory_entry& entry);
+    friend void addImgToDB( const std::filesystem::directory_entry& entry);
 
 private:  
     static IMG_DataBase &IMG_DB();

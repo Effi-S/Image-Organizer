@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
 
+
     //file model + tree view
     QString sPath = "~/";
     m_fileModel = std::make_unique<QFileSystemModel>(this);

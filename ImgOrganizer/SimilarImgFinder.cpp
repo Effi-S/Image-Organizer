@@ -89,7 +89,7 @@ void SimilarImgFinder::makeSet()
 			cv::Mat hash2(next->second.first);
 
 			auto matches = m_algo->compare(hash1, hash2);
-            if (matches <= 30)
+            if (matches <= 12)
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);

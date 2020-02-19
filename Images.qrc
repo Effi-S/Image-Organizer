@@ -10,5 +10,6 @@
         <file>images/settings.png</file>
         <file>images/search.png</file>
         <file>images/delete.png</file>
+        <file>images/splitter-handle.png</file>
     </qresource>
 </RCC>

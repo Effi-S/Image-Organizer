@@ -3,11 +3,29 @@
 
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	
+    cv::Mat img;
+
+    try {
+        static std::mutex tex;
+        std::lock_guard<std::mutex> lk(tex);
+
+        img = cv::imread(entry.path().string());
+        if (img.empty())return;
+        auto tmp = "tmp.jpg";
+        cv::imwrite(tmp, img);
+        img = cv::imread(tmp);
+    } catch (std::exception & e) {
+        std::cout<<RED<<"imread error for file "<<entry.path()<<" "<<RESET<<std::endl;
+        std::cout<<ORANGE<<"imread error:"<<e.what()<<" "<<RESET<<std::endl;
+        return;
+    }
+
+
 
 ImgScanner::IMG_DB().push_back(std::make_pair(cv::Ptr<cv::Mat>(
-		std::make_shared<cv::Mat>(cv::imread(entry.path().string()))),
+        std::make_shared<cv::Mat>(img)),
 		std::make_shared<std::string>(entry.path().string())));
-	
+
 }
 
 
@@ -25,14 +43,14 @@ void ImgScanner::scan(std::string path)
     IMG_DB().clear();
 
 
-	std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", "bmp" });
+    std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", "bmp" });
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
 	{
-        if( img_count >= MAX_ENTRIES){
-            std::cout<<RED<<"MEMORY LMIIT REACHED!!!" <<RESET <<std::endl;
-            break;
-        }
+//        if( img_count >= MAX_ENTRIES){
+//            std::cout<<RED<<"MEMORY LMIIT REACHED!!!" <<RESET <<std::endl;
+//            break;
+//        }
 		std::string extension = entry.path().extension().string();
 		if (extension_set.find(extension) != extension_set.end())
 		{
