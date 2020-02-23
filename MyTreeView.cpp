@@ -49,7 +49,7 @@ void MyTreeView::addFolder()
     QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
     if(!data || !data->isDir(index))return;
 
-        std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
+    data->mkdir(index, "New File");
 
 }
 
@@ -59,7 +59,11 @@ void MyTreeView::removeFolder()
     QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
     if(!data || !data->isDir(index))return;
 
-    std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
+    data->rmdir(index);
+
+//    std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
+
+
 
 }
 
