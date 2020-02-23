@@ -14,6 +14,7 @@ class QDragEnterEvent;
 class QDropEvent;
 class QDragMoveEvent;
 class QMouseEvent;
+
 QT_END_NAMESPACE
 
 class MyTreeView : public QTreeView{
@@ -21,14 +22,18 @@ class MyTreeView : public QTreeView{
 public:
     MyTreeView(QWidget *parent = nullptr);
     bool CopyFile(const QString& sourceFile, const QString& destinationDir);
+public slots:
+    void ShowContextMenu(const QPoint &pos);
+    void addFolder();
+    void removeFolder();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
-    //void mousePressEvent(QMouseEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+
 
 private:
 

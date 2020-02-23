@@ -32,77 +32,181 @@
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QPushButton" name="FolderButton">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+    <item row="4" column="0" colspan="3">
+     <widget class="QWidget" name="body_widget" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="mouseTracking">
-       <bool>true</bool>
-      </property>
-      <property name="whatsThis">
-       <string>Choose Folder to Scan</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton{
-background-color: #C0C0C0;
-border: 3px solid gray;
-padding: 5px;
-}
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="styleSheet">
+          <string notr="true">QSplitter::handle {
+ background-color: rgb(180, 180, 180);
+	
+	image: url(:/new/prefix1/images/splitter-handle.png);
 
-QPushButton:pressed {
-background-color: #A9A9A9;
-border: 3px solid gray;
-padding: 5px;
 }
-</string>
-      </property>
-      <property name="text">
-       <string>Folder</string>
-      </property>
-      <property name="icon">
-       <iconset resource="Images.qrc">
-        <normaloff>:/new/prefix1/images/directory.png</normaloff>:/new/prefix1/images/directory.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
+QSplitter::handle:hover {
+ background-color: rgb(255, 255, 255)
+}</string>
+         </property>
+         <property name="midLineWidth">
+          <number>1</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>8</number>
+         </property>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::North</enum>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="documentMode">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="tab_exact">
+           <attribute name="icon">
+            <iconset resource="Images.qrc">
+             <normaloff>:/new/prefix1/images/exact.png</normaloff>:/new/prefix1/images/exact.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Exact Match</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QSplitter" name="splitter_2">
+              <property name="styleSheet">
+               <string notr="true">QSplitter::handle {
+ background-color: rgb(180, 180, 180);
+	image: url(:/new/prefix1/images/splitter-handle.png);
+
+}
+QSplitter::handle:hover {
+ background-color: rgb(255, 255, 255)
+}</string>
+              </property>
+              <property name="lineWidth">
+               <number>1</number>
+              </property>
+              <property name="midLineWidth">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>8</number>
+              </property>
+              <property name="childrenCollapsible">
+               <bool>true</bool>
+              </property>
+              <widget class="QListView" name="exact_groupView"/>
+              <widget class="QListView" name="exact_itemView"/>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_similar">
+           <attribute name="icon">
+            <iconset resource="Images.qrc">
+             <normaloff>:/new/prefix1/images/Similar.png</normaloff>:/new/prefix1/images/Similar.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Simiar Images</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QSplitter" name="splitter_3">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>8</number>
+              </property>
+              <widget class="QListView" name="similar_groupView">
+               <property name="midLineWidth">
+                <number>1</number>
+               </property>
+              </widget>
+              <widget class="QListView" name="simlar_itemView"/>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_advanced">
+           <attribute name="icon">
+            <iconset resource="Images.qrc">
+             <normaloff>:/new/prefix1/images/search.png</normaloff>:/new/prefix1/images/search.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Advcanced Search</string>
+           </attribute>
+          </widget>
+         </widget>
+         <widget class="MyTreeView" name="treeView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="5" column="2">
-     <widget class="QPushButton" name="editFsButton">
+    <item row="2" column="0">
+     <widget class="QLabel" name="searchingLabel">
       <property name="text">
-       <string>edit File system</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Delete Image</string>
+       <string>Searching for images..</string>
       </property>
      </widget>
     </item>
@@ -235,185 +339,70 @@ padding: 5px;
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="3">
-     <widget class="QWidget" name="body_widget" native="true">
+    <item row="5" column="2">
+     <widget class="QPushButton" name="editFsButton">
+      <property name="text">
+       <string>edit File system</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="FolderButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QSplitter" name="splitter">
-         <property name="styleSheet">
-          <string notr="true">QSplitter::handle {
- background-color: rgb(180, 180, 180);
-	image: url(:/new/prefix1/images/splitter-handle.png);
-
-}
-QSplitter::handle:hover {
- background-color: #999;
-}</string>
-         </property>
-         <property name="midLineWidth">
-          <number>1</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="handleWidth">
-          <number>8</number>
-         </property>
-         <widget class="QTabWidget" name="tabWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Arial</family>
-            <pointsize>14</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="mouseTracking">
-           <bool>false</bool>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="tabPosition">
-           <enum>QTabWidget::North</enum>
-          </property>
-          <property name="tabShape">
-           <enum>QTabWidget::Rounded</enum>
-          </property>
-          <property name="currentIndex">
-           <number>1</number>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-          <property name="documentMode">
-           <bool>true</bool>
-          </property>
-          <property name="movable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="tab_exact">
-           <attribute name="icon">
-            <iconset resource="Images.qrc">
-             <normaloff>:/new/prefix1/images/exact.png</normaloff>:/new/prefix1/images/exact.png</iconset>
-           </attribute>
-           <attribute name="title">
-            <string>Exact Match</string>
-           </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QSplitter" name="splitter_2">
-              <property name="styleSheet">
-               <string notr="true">QSplitter::handle {
- background-color: #777
-}
-QSplitter::handle:hover {
- background-color: #999
-}</string>
-              </property>
-              <property name="lineWidth">
-               <number>1</number>
-              </property>
-              <property name="midLineWidth">
-               <number>1</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="handleWidth">
-               <number>8</number>
-              </property>
-              <property name="childrenCollapsible">
-               <bool>true</bool>
-              </property>
-              <widget class="QListView" name="exact_groupView"/>
-              <widget class="QListView" name="exact_itemView"/>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab_similar">
-           <attribute name="icon">
-            <iconset resource="Images.qrc">
-             <normaloff>:/new/prefix1/images/Similar.png</normaloff>:/new/prefix1/images/Similar.png</iconset>
-           </attribute>
-           <attribute name="title">
-            <string>Simiar Images</string>
-           </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QSplitter" name="splitter_3">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="handleWidth">
-               <number>8</number>
-              </property>
-              <widget class="QListView" name="similar_groupView">
-               <property name="midLineWidth">
-                <number>1</number>
-               </property>
-              </widget>
-              <widget class="QListView" name="simlar_itemView"/>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab_advanced">
-           <attribute name="icon">
-            <iconset resource="Images.qrc">
-             <normaloff>:/new/prefix1/images/search.png</normaloff>:/new/prefix1/images/search.png</iconset>
-           </attribute>
-           <attribute name="title">
-            <string>Advcanced Search</string>
-           </attribute>
-          </widget>
-         </widget>
-         <widget class="MyTreeView" name="treeView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QPushButton" name="deleteGroupButton">
-      <property name="text">
-       <string>Delete Group</string>
+      <property name="minimumSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="searchingLabel">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>14</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="whatsThis">
+       <string>Choose Folder to Scan</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+background-color: #C0C0C0;
+border: 3px solid gray;
+padding: 5px;
+}
+
+QPushButton:pressed {
+background-color: #A9A9A9;
+border: 3px solid gray;
+padding: 5px;
+}
+</string>
+      </property>
       <property name="text">
-       <string>Searching for images..</string>
+       <string>Folder</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Images.qrc">
+        <normaloff>:/new/prefix1/images/directory.png</normaloff>:/new/prefix1/images/directory.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
       </property>
      </widget>
     </item>

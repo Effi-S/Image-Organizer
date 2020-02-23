@@ -3,6 +3,8 @@
 #include <QLabel>
 #include <QFileSystemModel>
 #include <filesystem>
+#include <QMenu>
+#include <QAction>
 
 MyTreeView::MyTreeView(QWidget *parent)
     :QTreeView(parent){
@@ -10,6 +12,13 @@ MyTreeView::MyTreeView(QWidget *parent)
         setAcceptDrops(true);
         setDropIndicatorShown(true);
         setDefaultDropAction(Qt::CopyAction);
+
+
+
+        this->setContextMenuPolicy(Qt::CustomContextMenu);
+
+        connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+                this, SLOT(ShowContextMenu(const QPoint &)));
     }
 
 bool MyTreeView::CopyFile(const QString& sourceFile, const QString& destinationDir)
@@ -18,6 +27,40 @@ bool MyTreeView::CopyFile(const QString& sourceFile, const QString& destinationD
     QString destinationFile = destinationDir + QDir::separator() + fileInfo.fileName();
     bool result = QFile::copy(sourceFile, destinationFile);
     return result;
+}
+
+void MyTreeView::ShowContextMenu(const QPoint &pos)
+{
+   QMenu contextMenu(tr("Context menu"), this);
+
+   QAction action1("New Folder", this);
+   QAction action2("Remove Folder", this);
+   connect(&action1, SIGNAL(triggered()), this, SLOT(addFolder()));
+   connect(&action2, SIGNAL(triggered()), this, SLOT(removeFolder()));
+   contextMenu.addAction(&action1);
+   contextMenu.addAction(&action2);
+
+   contextMenu.exec(mapToGlobal(pos));
+}
+
+void MyTreeView::addFolder()
+{
+    QModelIndex index = this->currentIndex();
+    QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
+    if(!data || !data->isDir(index))return;
+
+        std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
+
+}
+
+void MyTreeView::removeFolder()
+{
+    QModelIndex index = this->currentIndex();
+    QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
+    if(!data || !data->isDir(index))return;
+
+    std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
+
 }
 
 void MyTreeView::dragEnterEvent(QDragEnterEvent *event)
@@ -39,11 +82,13 @@ void MyTreeView::dragMoveEvent(QDragMoveEvent *event)
      || event->mimeData()->hasFormat("application/x-qstandarditemmodeldatalist")
      ||  event->mimeData()->hasFormat("Qt/QStandardItemArray")) {
         event->acceptProposedAction();
-    } else {
+    }    else {
         std::cout<<RED<<"DragMove Event ignored"<<RESET<<std::endl;
         event->ignore();
     }
 }
+
+
 
 
 void MyTreeView::keyPressEvent(QKeyEvent *event)

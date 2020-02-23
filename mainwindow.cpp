@@ -106,6 +106,7 @@ void MainWindow::on_actionchange_file_triggered()
     ui->statusBar->showMessage("Changeing file");
 
     QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
+
     QFile dir(foldername);
     m_currDir = foldername;
 
@@ -215,8 +216,7 @@ void MainWindow::on_FolderButton_clicked(){
 
 void MainWindow::on_editFsButton_released()
 {
-
-    QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
+   QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
 
 
 }

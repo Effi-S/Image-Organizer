@@ -21,7 +21,9 @@ signals:
 private:
     ImgFinderBase * m_comp;
     void run() override {
+        auto start = double(std::clock());
         m_comp->makeGroups();
+        std::cout <<ORANGE<< "ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
     }
 };
 
@@ -52,6 +54,7 @@ private:
             emit scanStatus("searching for images.");
             ImgScanner::scan(m_dir.toStdString());
             dbSize = int(ImgScanner::size());
+
             emit scanStatus("Found: "+ QString::number(dbSize) +"images.");
             std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
@@ -61,12 +64,13 @@ private:
         try {
             ImgFinderBase * comp;
               (m_type)?comp = new SimilarImgFinder:comp = new BitExactImgFinder;
-            std::cout <<ORANGE<< "Time scan + ImgFinder took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
-            innerThread t(comp);
-            t.start();
+
+           innerThread t(comp);
+           t.start();
            dbSize = (dbSize)?dbSize : 1;
 
-            while (t.isRunning()) {
+
+            while (!t.isFinished() || comp->getGroups().size()>0) {
                 for(auto i: comp->getGroups())
                 {
                     QStringList l;
@@ -127,12 +131,15 @@ protected:
                 if(first!=m_path_list.cbegin())
                     child->setCheckState(Qt::Checked);
                 group->appendRow(std::move(child));
+                m_images++;
+
             }
-            //group->setCheckable(true);
+            group->setCheckable(true);
             (*m_model)->appendRow(std::move(group));
       m_mutex.unlock();
+      std::cout<<RED<<"SUM : " << m_images<<std::endl<<RESET;
     }
-
+int m_images=0;
 QStringList m_path_list;
 MyStandardItemModel ** m_model;
 QMutex m_mutex;

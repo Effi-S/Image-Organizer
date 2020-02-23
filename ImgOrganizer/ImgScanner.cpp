@@ -6,8 +6,8 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
     cv::Mat img;
 
     try {
-        static std::mutex tex;
-        std::lock_guard<std::mutex> lk(tex);
+        static std::mutex mutex;
+        std::lock_guard<std::mutex> lk(mutex);
 
         img = cv::imread(entry.path().string());
         if (img.empty())return;
@@ -15,7 +15,7 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
         cv::imwrite(tmp, img);
         img = cv::imread(tmp);
     } catch (std::exception & e) {
-        std::cout<<RED<<"imread error for file "<<entry.path()<<" "<<RESET<<std::endl;
+        std::cout<<RED<<"imread error for file "<<entry.path().c_str()<<"\n "<<RESET<<std::endl;
         std::cout<<ORANGE<<"imread error:"<<e.what()<<" "<<RESET<<std::endl;
         return;
     }
@@ -27,7 +27,6 @@ ImgScanner::IMG_DB().push_back(std::make_pair(cv::Ptr<cv::Mat>(
 		std::make_shared<std::string>(entry.path().string())));
 
 }
-
 
 void ImgScanner::scan(std::string path)
 {
