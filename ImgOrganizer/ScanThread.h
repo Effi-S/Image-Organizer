@@ -69,31 +69,22 @@ private:
            t.start();
            dbSize = (dbSize)?dbSize : 1;
 
-
-            while (!t.isFinished() || comp->getGroups().size()>0) {
-                for(auto i: comp->getGroups())
-                {
-                    QStringList l;
-                    for(auto mem: i)
-                    {
-                        l.append(mem.c_str());
-
-                    }
+         while (!t.isFinished() || comp->getGroups().size()>0) {
+             for(auto i: comp->getGroups())
+               {
+                  QStringList l;
+                  for(auto mem: i)
+                      l.append(mem.c_str());
 
                     int pr = (100*int(comp->numOfImages()))/dbSize;
                     emit scanPercent(pr);
                     emit sendImgGroup(l);
-
                 }
-
             }
-
         } catch (...) {
             std::cout<<"ImgFinder failed!"<<std::endl;
         }
-
         emit scanDone(true);
-
     }
 };
 
@@ -103,13 +94,11 @@ class addImgThread : public QThread
 public:
     addImgThread(QStringList pl, MyStandardItemModel ** model ):m_path_list(pl),m_model(model){};
     void setList(const QStringList & l) {
-
         m_mutex.lock();
         m_path_list = l;
         m_mutex.unlock();
     }
 protected:
-
     void run() override
         {
         m_mutex.lock();
@@ -123,7 +112,6 @@ protected:
             {
                 QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
 
-
                 child->setToolTip(*first);
                 child->setCheckable(true);
                 child->setDragEnabled(true);
@@ -132,7 +120,6 @@ protected:
                     child->setCheckState(Qt::Checked);
                 group->appendRow(std::move(child));
                 m_images++;
-
             }
             group->setCheckable(true);
             (*m_model)->appendRow(std::move(group));

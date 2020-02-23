@@ -204,21 +204,10 @@ void MainWindow::on_actionScan_triggered()
 
 void MainWindow::on_commandLinkButton_released(){
     on_actionScan_triggered();
-
-
 }
 
 void MainWindow::on_FolderButton_clicked(){
-
     on_actionchange_file_triggered();
-
-}
-
-void MainWindow::on_editFsButton_released()
-{
-   QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
-
-
 }
 
 void MainWindow::on_tabWidget_currentChanged(int i)

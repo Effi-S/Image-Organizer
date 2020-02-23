@@ -7,8 +7,6 @@
 #include <iostream>
 class QMimeData;
 
-
-
 class MyStandardItemModel : public QStandardItemModel
 {
 public:
@@ -16,9 +14,6 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
-
-
 };
-
 
 #endif // MYSTANDARDITEM_H

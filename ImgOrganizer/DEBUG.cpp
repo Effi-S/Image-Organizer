@@ -24,7 +24,7 @@
 
 #define BIT_EXACT 0
 #define SIMILAR 0
-#define SEARCH 1
+#define SEARCH 0
 
 
 int main(int argc, char** argv){	
@@ -33,7 +33,7 @@ int main(int argc, char** argv){
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	std::string path = (argc > 1) ? argv[1] : "C:\\Users\\effi\\Desktop";
+	std::string path = (argc > 1) ? argv[1] : "C:\\";
 	
 	ImgScanner::scan(path);
 
@@ -44,6 +44,7 @@ int main(int argc, char** argv){
 	myFstream out_file(path, std::ios_base::app);
 	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
+	std::cout << GREEN << "Found: " << RESET << ImgScanner::size() << std::endl;
 
 
 #if BIT_EXACT  

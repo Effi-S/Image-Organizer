@@ -41,6 +41,6 @@ void BitExactImgFinder::makeSet()
 		if (it == m_matches.end())
 			m_matches.emplace(k, std::vector<ImgInfo>());
 
-		m_matches.at(k).push_back(ImgInfo(im, x.second));
+		m_matches.at(k).push_back(ImgInfo(im, x.second.get()));
 	}
 }

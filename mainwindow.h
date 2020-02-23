@@ -62,10 +62,7 @@ private slots:
     void on_commandLinkButton_released();
 
     void on_FolderButton_clicked();
-    void on_editFsButton_released();
-    void on_keyPressedEvent(){
-        std::cout<<RED<<"--------"<<std::endl;
-    };
+
 
     void on_tabWidget_currentChanged(int);
 
