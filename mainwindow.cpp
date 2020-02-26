@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     initView(ui->exact_groupView, "Groups");
     initView(ui->exact_itemView, "Images");
     initView(ui->similar_groupView, "Groups");
-    initView(ui->simlar_itemView, "Images");
+    initView(ui->similar_itemView, "Images");
 
     on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//MUST be after models creation to prevent null on startup
 
@@ -67,7 +67,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         if (ke->key() == Qt::Key_Delete)
         {
-            func(object, ui->simlar_itemView, m_curr_match_model);
+            func(object, ui->similar_itemView, m_curr_match_model);
             func(object, ui->exact_itemView, m_curr_match_model);
 
         }
@@ -220,7 +220,7 @@ void MainWindow::on_tabWidget_currentChanged(int i)
     switch(i)
     {
     case 0:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->exact_itemView->model());break;
-    case 1:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->simlar_itemView->model());break;
+    case 1:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->similar_itemView->model());break;
     }
 }
 

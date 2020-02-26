@@ -227,8 +227,8 @@ QSplitter::handle:hover {
               <property name="handleWidth">
                <number>8</number>
               </property>
-              <widget class="QListView" name="simlar_itemView"/>
-              <widget class="QListView" name="similar_groupView">
+              <widget class="QListView" name="similar_groupView"/>
+              <widget class="QListView" name="similar_itemView">
                <property name="midLineWidth">
                 <number>1</number>
                </property>
