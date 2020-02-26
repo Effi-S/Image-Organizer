@@ -1,28 +1,37 @@
 ﻿#include "ImgScanner.h"
 
+cv::Mat imread(const std::filesystem::directory_entry& entry)
+{
+	cv::Mat img;
 
+	img = cv::imread(entry.path().string(), cv::IMREAD_GRAYSCALE);
+	if (entry.path().extension() == ".jpg")
+	{
+		auto tmp = "tmp.jpg";
+		cv::imwrite(tmp, img);
+		img = cv::imread(tmp, cv::IMREAD_GRAYSCALE);
+	}
+	return std::move(img);
+}
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	
-    cv::Mat img;
-
     try {
         static std::mutex mutex;
         std::lock_guard<std::mutex> lk(mutex);
+		cv::Mat img = imread(entry);
 
-        img = cv::imread(entry.path().string(), cv::IMREAD_GRAYSCALE);
-        if (img.empty())return;
-        auto tmp = "tmp.jpg";
-        cv::imwrite(tmp, img);
-        img = cv::imread(tmp, cv::IMREAD_GRAYSCALE);
+		if(!img.empty())
+		ImgScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
+			std::make_shared<cv::Mat>(img)),
+			std::make_unique<std::string>(entry.path().string())));
+       
     } catch (std::exception & e) {
         std::cout<<RED<<"imread error for file "<<entry.path().c_str()<<"\n "<<RESET<<std::endl;
 		std::cout << ORANGE << "imread error:" << e.what() << " " << RESET << std::endl;
         return;
     }
 
-ImgScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
-        std::make_shared<cv::Mat>(img)),
-		std::make_unique<std::string>(entry.path().string())));
+
 
 }
 
