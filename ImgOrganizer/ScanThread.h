@@ -92,7 +92,8 @@ class addImgThread : public QThread
 {
     Q_OBJECT
 public:
-    addImgThread(QStringList pl, MyStandardItemModel ** model ):m_path_list(pl),m_model(model){};
+    addImgThread( MyStandardItemModel ** model )
+        :m_model(model){};
     void setList(const QStringList & l) {
         m_mutex.lock();
         m_path_list = l;

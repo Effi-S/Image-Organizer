@@ -150,7 +150,6 @@ void MyTreeView::dropEvent(QDropEvent *event)
          for (int i = 0; i < numItems; i++)
          {
              QString source_path = stdItems[i]->text();
-             std::cout<<"copying "<<source_path.toStdString() <<" to "<<target_path.toStdString() <<std::endl;
              CopyFile(source_path,target_path);
          }
 
@@ -170,7 +169,6 @@ void MyTreeView::dropEvent(QDropEvent *event)
           {
               QString source_path = urlList.at(i).path();
               source_path.remove(0, 1);  //removing slash from begining of path
-              std::cout<<"copying "<<source_path.toStdString() <<" to "<<target_path.toStdString() <<std::endl;
               CopyFile(source_path ,target_path);
 
           }

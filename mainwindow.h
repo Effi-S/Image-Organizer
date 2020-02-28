@@ -85,7 +85,7 @@ private:
 
     void initView(QListView *, QString);
 
-
+   std::unique_ptr<addImgThread> m_ImgAddingthread = std::make_unique<addImgThread>(&m_curr_model);
 };
 
 #endif

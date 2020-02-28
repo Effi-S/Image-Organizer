@@ -76,30 +76,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
 MainWindow::~MainWindow()
 {
-//    const QMimeData *clip = QApplication::clipboard()->mimeData();
-//    if (clip->)
-//    {
-
-//    }
-
-
 }
-
-//const QClipboard *clipboard = QApplication::clipboard();
-//   const QMimeData *mimeData = clipboard->mimeData();
-
-//   if (mimeData->hasImage()) {
-//       setPixmap(qvariant_cast<QPixmap>(mimeData->imageData()));
-//   } else if (mimeData->hasHtml()) {
-//       setText(mimeData->html());
-//       setTextFormat(Qt::RichText);
-//   } else if (mimeData->hasText()) {
-//       setText(mimeData->text());
-//       setTextFormat(Qt::PlainText);
-//   } else {
-//       setText(tr("Cannot display data"));
-//   }
-
 
 void MainWindow::on_actionchange_file_triggered()
 {
@@ -173,8 +150,6 @@ void MainWindow::on_actionScan_triggered()
     ui->actionScan->setEnabled(false);
     ui->tabWidget->setEnabled(false);
 
-
-
     //making thread
     m_scanThread = std::make_unique<ScanThread>(m_currDir, ui->tabWidget->currentIndex());
 
@@ -191,13 +166,14 @@ void MainWindow::on_actionScan_triggered()
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
     connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){
         ui->progressBar->setVisible(false);
+        ui->tabWidget->setEnabled(true);
         m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);});
     connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
     //sending to thread
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
     m_scanThread->start();
-    ui->tabWidget->setEnabled(true);
+
 
 
 }
@@ -234,7 +210,6 @@ void MainWindow::on_exact_groupView_clicked(QModelIndex index)
         auto temp =  new QStandardItem(group->child(i)->icon(), group->child(i)->text() );
 
         temp->setDragEnabled(true);
-        temp->setDragEnabled(true);
         m_curr_match_model->appendRow(temp);
     }
 
@@ -247,11 +222,9 @@ void MainWindow::on_similar_groupView_clicked(QModelIndex index)
 
 void MainWindow::on_addImageGroup(QStringList path_list)
 {
+   m_ImgAddingthread->setList(path_list);
 
-   static addImgThread thread(path_list, &m_curr_model);
-   thread.setList(path_list);
-
-   thread.start();
+   m_ImgAddingthread->start();
 
 //    auto first = path_list.cbegin();
 
