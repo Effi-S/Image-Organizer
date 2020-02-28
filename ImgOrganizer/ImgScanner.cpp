@@ -5,7 +5,7 @@ cv::Mat imread(const std::filesystem::directory_entry& entry)
 	cv::Mat img;
 
 	img = cv::imread(entry.path().string(), cv::IMREAD_GRAYSCALE);
-	if (entry.path().extension() == ".jpg")
+	if (entry.path().extension() == ".jpg" && !img.empty())
 	{
 		auto tmp = "tmp.jpg";
 		cv::imwrite(tmp, img);

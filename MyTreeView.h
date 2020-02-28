@@ -7,6 +7,7 @@
 #include "qevent.h"
 #include "qmimedata.h"
 #include <QStandardItem>
+#include <QDrag>
 
 
 QT_BEGIN_NAMESPACE
@@ -24,10 +25,12 @@ public:
     bool CopyFile(const QString& sourceFile, const QString& destinationDir);
 public slots:
     void ShowContextMenu(const QPoint &pos);
+    ///virtual void startDrag(Qt::DropActions supportedActions) override{}
     void addFolder();
     void removeFolder();
 
 protected:
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
 

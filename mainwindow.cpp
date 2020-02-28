@@ -299,6 +299,7 @@ void MainWindow::initView(QListView * view, QString header)
     view->setDropIndicatorShown(true);
     view->setDefaultDropAction(Qt::CopyAction);
     view->installEventFilter(this);
+    view->setSelectionMode(QAbstractItemView::MultiSelection);
 
 }
 

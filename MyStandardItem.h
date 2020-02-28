@@ -14,6 +14,8 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
+protected:
+
 };
 
 #endif // MYSTANDARDITEM_H

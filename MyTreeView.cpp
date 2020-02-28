@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <QMenu>
 #include <QAction>
+#include <QCursor>
 
 MyTreeView::MyTreeView(QWidget *parent)
     :QTreeView(parent){
@@ -12,8 +13,7 @@ MyTreeView::MyTreeView(QWidget *parent)
         setAcceptDrops(true);
         setDropIndicatorShown(true);
         setDefaultDropAction(Qt::CopyAction);
-
-
+        setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         this->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -47,36 +47,45 @@ void MyTreeView::addFolder()
 {
     QModelIndex index = this->currentIndex();
     QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
-    if(!data || !data->isDir(index))return;
-
-    data->mkdir(index, "New File");
-
+    if(data)
+    if(data->isDir(index))
+    data->mkdir(index, "New Folder");
+    else
+    {
+        index = index.parent();
+        if(data->isDir(index))
+        data->mkdir(index, "New Folder");
+    }
 }
 
 void MyTreeView::removeFolder()
 {
     QModelIndex index = this->currentIndex();
     QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
-    if(!data || !data->isDir(index))return;
 
-    data->rmdir(index);
+    if(!data )return;
+
+    if(data->isDir(index))
+        data->rmdir(index);
 
 //    std::cout<<RED<<data->filePath(index).toStdString().c_str()<<RESET<<std::endl;
-
-
 
 }
 
 void MyTreeView::dragEnterEvent(QDragEnterEvent *event)
 {
 
-    if (event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist")) {
+     if (event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist")) {
             event->acceptProposedAction();
+
+    } else if (event->mimeData()->hasFormat("text/uri-list")) {
+       event->acceptProposedAction();
 
     } else {
         std::cout<<RED<<"Drag enter Event ignored"<<RESET<<std::endl;
         event->ignore();
     }
+
 }
 
 void MyTreeView::dragMoveEvent(QDragMoveEvent *event)
@@ -86,10 +95,14 @@ void MyTreeView::dragMoveEvent(QDragMoveEvent *event)
      || event->mimeData()->hasFormat("application/x-qstandarditemmodeldatalist")
      ||  event->mimeData()->hasFormat("Qt/QStandardItemArray")) {
         event->acceptProposedAction();
-    }    else {
+    } else if(event->mimeData()->hasUrls()){
+        event->acceptProposedAction();
+    }else {
         std::cout<<RED<<"DragMove Event ignored"<<RESET<<std::endl;
         event->ignore();
     }
+
+    setCurrentIndex(indexAt(mapFromGlobal(QCursor::pos())));
 }
 
 
@@ -103,7 +116,8 @@ void MyTreeView::keyPressEvent(QKeyEvent *event)
         QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
         if(data)
         {
-            if(data->isDir(index))return;
+            if(data->isDir(index))removeFolder();
+            else
             remove(data->filePath(index).toStdString().c_str());
         }
 
@@ -134,6 +148,31 @@ void MyTreeView::dropEvent(QDropEvent *event)
 
          // Add items to the target index if requested,
          for (int i = 0; i < numItems; i++)
-            CopyFile(stdItems[i]->text(),target_path);
+         {
+             QString source_path = stdItems[i]->text();
+             std::cout<<"copying "<<source_path.toStdString() <<" to "<<target_path.toStdString() <<std::endl;
+             CopyFile(source_path,target_path);
+         }
+
+     }
+     else if (event->mimeData()->hasUrls())
+        {
+
+         QFileSystemModel * model = static_cast<QFileSystemModel *>(this ->model());
+
+         if(!model )return;
+
+         QString target_path = model->filePath(currentIndex());
+         QList<QUrl> urlList = event->mimeData()->urls();
+
+          // move the paths of the files
+          for (int i = 0; i < urlList.size() ; ++i)
+          {
+              QString source_path = urlList.at(i).path();
+              source_path.remove(0, 1);  //removing slash from begining of path
+              std::cout<<"copying "<<source_path.toStdString() <<" to "<<target_path.toStdString() <<std::endl;
+              CopyFile(source_path ,target_path);
+
+          }
      }
 }

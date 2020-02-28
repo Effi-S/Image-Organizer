@@ -33,7 +33,7 @@ int main(int argc, char** argv){
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	std::string path = (argc > 1) ? argv[1] : "C:\\";
+	std::string path = (argc > 1) ? argv[1] : "C:\\Users\\effi\\Desktop";
 	
 	ImgScanner::scan(path);
 
