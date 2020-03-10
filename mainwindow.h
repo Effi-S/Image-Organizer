@@ -71,7 +71,6 @@ private slots:
 
 public slots:
     void on_addImageGroup(QStringList);
-    void on_removeImage();
 
 private:    
     QString m_currDir ="";
@@ -83,7 +82,7 @@ private:
     MyStandardItemModel * m_curr_model;
     MyStandardItemModel * m_curr_match_model;
 
-    void initView(QListView *, QString);
+    void initView(QListView *,const QString &);
 
    std::unique_ptr<addImgThread> m_ImgAddingthread = std::make_unique<addImgThread>(&m_curr_model);
 };

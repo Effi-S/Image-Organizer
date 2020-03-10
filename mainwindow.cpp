@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QStandardItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -141,6 +142,7 @@ void MainWindow::on_actionsave_changes_triggered()
     ui->statusBar->showMessage("Save Changes");
 }
 
+
 void MainWindow::on_actionScan_triggered()
 {
 
@@ -164,18 +166,32 @@ void MainWindow::on_actionScan_triggered()
     connect(m_scanThread.get(), &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
     connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
     connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
-    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=](){
+    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=]()
+    {
+
+
+
         ui->progressBar->setVisible(false);
         ui->tabWidget->setEnabled(true);
-        m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);});
+        m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);
+
+        //outputing size
+        int size =0;
+        for(int i=0 ; i< m_curr_model->rowCount();++i)
+        {
+           on_exact_groupView_clicked(m_curr_model->index(i,0));
+           size += m_curr_match_model->rowCount();
+
+        }
+
+        std::cout<<ORANGE<<"size = "<<RESET<<size<<std::endl;
+    });
+
     connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
 
     //sending to thread
     ui->statusBar->showMessage("Scanning " + m_currDir + "...");
     m_scanThread->start();
-
-
-
 }
 
 void MainWindow::on_commandLinkButton_released(){
@@ -222,9 +238,14 @@ void MainWindow::on_similar_groupView_clicked(QModelIndex index)
 
 void MainWindow::on_addImageGroup(QStringList path_list)
 {
-   m_ImgAddingthread->setList(path_list);
+   static QMutex mut;
+   mut.lock();
+        m_ImgAddingthread->setList(path_list);
 
-   m_ImgAddingthread->start();
+        m_ImgAddingthread->start();
+    mut.unlock();
+
+
 
 //    auto first = path_list.cbegin();
 
@@ -249,14 +270,8 @@ void MainWindow::on_addImageGroup(QStringList path_list)
 
 }
 
-void MainWindow::on_removeImage()
-{
 
-//    QModelIndex oIndex = ui->exact_list->currentIndex();
-    //        ui->exact_list->model()->removeRow(oIndex.row());
-}
-
-void MainWindow::initView(QListView * view, QString header)
+void MainWindow::initView(QListView * view,const  QString &header )
 {
     //exact clumn view  + model
 
@@ -270,9 +285,11 @@ void MainWindow::initView(QListView * view, QString header)
     view->setDragEnabled(true);
     view->setAcceptDrops(true);
     view->setDropIndicatorShown(true);
-    view->setDefaultDropAction(Qt::CopyAction);
+    view->setDefaultDropAction(Qt::MoveAction);
     view->installEventFilter(this);
-    view->setSelectionMode(QAbstractItemView::MultiSelection);
+    view->setSelectionMode(QAbstractItemView::SelectionMode::ContiguousSelection);
+    std::unique_ptr<ScanThread>();
+    moveToThread()
 
 }
 

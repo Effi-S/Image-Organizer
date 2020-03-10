@@ -45,12 +45,13 @@ private:
     QString m_dir;
     int m_type;
 
-    void run() override {
+    void run() override
+    {
         std::clock_t start(std::clock());
         QString result;
         int dbSize = 1;
 
-        try {
+
             emit scanStatus("searching for images.");
             ImgScanner::scan(m_dir.toStdString());
             dbSize = int(ImgScanner::size());
@@ -58,10 +59,6 @@ private:
             emit scanStatus("Found: "+ QString::number(dbSize) +"images.");
             std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
-        } catch (...) {
-            std::cout<<"scan failed!"<<std::endl;
-        }
-        try {
             ImgFinderBase * comp;
               (m_type)?comp = new SimilarImgFinder:comp = new BitExactImgFinder;
 
@@ -78,13 +75,10 @@ private:
 
                     int pr = (100*int(comp->numOfImages()))/dbSize;
                     emit scanPercent(pr);
-                    emit sendImgGroup(l);
+                    emit sendImgGroup(std::move(l));
                 }
             }
-        } catch (...) {
-            std::cout<<"ImgFinder failed!"<<std::endl;
-        }
-        emit scanDone(true);
+           emit scanDone(true);
     }
 };
 
@@ -93,7 +87,7 @@ class addImgThread : public QThread
     Q_OBJECT
 public:
     addImgThread( MyStandardItemModel ** model )
-        :m_model(model){};
+        :m_model(model){}
     void setList(const QStringList & l) {
         m_mutex.lock();
         m_path_list = l;
@@ -117,15 +111,16 @@ protected:
                 child->setCheckable(true);
                 child->setDragEnabled(true);
                 child->setDropEnabled(true);
-                if(first!=m_path_list.cbegin())
-                    child->setCheckState(Qt::Checked);
+//                if(first!=m_path_list.cbegin())
+//                    child->setCheckState(Qt::Checked);
                 group->appendRow(std::move(child));
                 m_images++;
             }
-            group->setCheckable(true);
+
             (*m_model)->appendRow(std::move(group));
+            group->setCheckable(false);
+
       m_mutex.unlock();
-      std::cout<<RED<<"SUM : " << m_images<<std::endl<<RESET;
     }
 int m_images=0;
 QStringList m_path_list;

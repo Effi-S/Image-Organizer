@@ -32,6 +32,66 @@
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QPushButton" name="FolderButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>14</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="whatsThis">
+       <string>Choose Folder to Scan</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+background-color: #C0C0C0;
+border: 3px solid gray;
+padding: 5px;
+}
+
+QPushButton:pressed {
+background-color: #A9A9A9;
+border: 3px solid gray;
+padding: 5px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Folder</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Images.qrc">
+        <normaloff>:/new/prefix1/images/directory.png</normaloff>:/new/prefix1/images/directory.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="2">
      <widget class="QPushButton" name="SettingsButton">
       <property name="enabled">
@@ -151,7 +211,7 @@ QSplitter::handle:hover {
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="iconSize">
            <size>
@@ -245,6 +305,25 @@ QSplitter::handle:hover {
            <attribute name="title">
             <string>Advcanced Search</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QPushButton" name="pushButton_3">
+              <property name="text">
+               <string>From File</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>From tags</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidget"/>
+            </item>
+           </layout>
           </widget>
          </widget>
          <widget class="MyTreeView" name="treeView">
@@ -258,6 +337,13 @@ QSplitter::handle:hover {
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="searchingLabel">
+      <property name="text">
+       <string>Searching for images..</string>
+      </property>
      </widget>
     </item>
     <item row="3" column="0" colspan="3">
@@ -323,73 +409,6 @@ padding: 5px;
       </property>
       <property name="text">
        <string>Scan</string>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="searchingLabel">
-      <property name="text">
-       <string>Searching for images..</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="FolderButton">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="mouseTracking">
-       <bool>true</bool>
-      </property>
-      <property name="whatsThis">
-       <string>Choose Folder to Scan</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton{
-background-color: #C0C0C0;
-border: 3px solid gray;
-padding: 5px;
-}
-
-QPushButton:pressed {
-background-color: #A9A9A9;
-border: 3px solid gray;
-padding: 5px;
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Folder</string>
-      </property>
-      <property name="icon">
-       <iconset resource="Images.qrc">
-        <normaloff>:/new/prefix1/images/directory.png</normaloff>:/new/prefix1/images/directory.png</iconset>
       </property>
       <property name="iconSize">
        <size>
