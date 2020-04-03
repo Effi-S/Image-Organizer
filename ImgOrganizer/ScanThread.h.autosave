@@ -5,7 +5,7 @@
 #endif // SCANTHREAD_H
 #include <QMutex>
 #include <QThread>
-#include <MyStandardItem.h>
+#include <MyStandardItemModel.h>
 #include "ImgOrganizer/ImgMatchFinderBase.h"
 #include "BitExactImgFinder.h"
 #include "SimilarImgFinder.h"

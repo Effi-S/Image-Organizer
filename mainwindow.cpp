@@ -9,55 +9,115 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
-    ui->searchingLabel->setVisible(false);
-    ui->progressBar->setVisible(false);
+    //ui->progressBar->setVisible(false);
+    ui->progressBar_2->setVisible(false);
+    ui->progressBar_3->setVisible(false);
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
-
-
     //file model + tree view
-    QString sPath = "~/";
     m_fileModel = std::make_unique<QFileSystemModel>(this);
     m_fileModel->setReadOnly(false);
     m_fileModel->setFilter(QDir::NoDotAndDotDot| QDir::AllDirs | QDir::AllEntries);
     m_fileModel->sort(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name );
-    m_fileModel->setRootPath(sPath);
+    m_fileModel->setRootPath(QString("~/"));
 
     ui->treeView->setModel(m_fileModel.get());
-    QModelIndex index = m_fileModel->index(sPath, 0);
+    QModelIndex index = m_fileModel->index(QString("~/"), 0);
 
     ui->treeView->setRootIndex(index);
-    initView(ui->exact_groupView, "Groups");
-    initView(ui->exact_itemView, "Images");
-    initView(ui->similar_groupView, "Groups");
-    initView(ui->similar_itemView, "Images");
+    initView(ui->exact_groupView, ui->exact_itemView);
+    initView(ui->similar_groupView, ui->similar_itemView);
 
-    on_tabWidget_currentChanged(ui->tabWidget->currentIndex());//MUST be after models creation to prevent null on startup
+    m_scanController.addModel(ui->exact_groupView->model(), ScanController::algoType::exact, ui->progressBar_2);
+    m_scanController.addModel(ui->similar_groupView->model(), ScanController::algoType::similar, ui->progressBar_3);
+
+}
+
+//removes current object from view
+void MainWindow::removeFunc(QObject *object, QListView *view)
+{
+    if(object != view || !view->isVisible())return;
+
+    MyStandardItemModel * model =static_cast<MyStandardItemModel *>( view->model());
+    QModelIndex index = view->currentIndex();
+    QStandardItem * item = model->itemFromIndex(index);
+    MyStandardItemModel mod;
+
+    QMessageBox msgBox;
+    msgBox.setInformativeText("Are you sure you want to delete: "+item->text()+"?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    int ret = msgBox.exec();
+    if(ret == QMessageBox::Yes)
+    {
+        remove(item->text().toStdString().c_str());
+
+        item->parent()->removeRow(index.row());
+    }
+}
+
+void MainWindow::moveUp(QObject *object, QListView *view)
+{
+    if(object != view || !view->isVisible())return;
+
+    auto model =static_cast<MyStandardItemModel *>( view->model());
+    QModelIndex index= view->currentIndex();
+    auto row = index.row() - 1 ;
+    if(row<0)return;
+    view->setCurrentIndex(index.siblingAtRow(row));
+
+}
+
+void MainWindow::moveDown(QObject *object, QListView *view)
+{
+    if(object != view || !view->isVisible())return;
+
+    auto model =static_cast<MyStandardItemModel *>( view->model());
+    QModelIndex index= view->currentIndex();
+    auto row = index.row() + 1 ;
+
+    if(row > view->model()->rowCount() -1 )return;
+
+    view->setCurrentIndex(index.siblingAtRow(row));
+}
+
+void MainWindow::moveLeft(QObject *object, QListView *view, QListView *groups)
+{
+    if(object != view || !view->isVisible())return;
+    auto par = view->currentIndex().parent();
+    view->setVisible(false);
+    groups->setCurrentIndex(par);
+    view->setVisible(true);
 
 
 }
 
-template<typename T, typename T2>
-void func(QObject *object, T *view, T2* model)
+void MainWindow::moveEnter(QObject *object, QListView *groups, QListView *items)
 {
-    if (object == view)
-   {
+    if(object == groups)
+    {
+        std::cout<<"here1"<<std::endl;
+        moveRight(object, groups, items);
+    }
 
-          QModelIndex index = view->currentIndex();
-          auto item = model->itemFromIndex(index);
-          remove(item->text().toStdString().c_str());
-          model->removeRow(index.row());
+    else if (object == items)
+    {
+        std::cout<<"here2"<<std::endl;
+        auto mod = static_cast<MyStandardItemModel *>(items->model());
+        auto item = mod->itemFromIndex(items->currentIndex());
+        std::cout <<" Opening: " << item->text().toStdString() <<"\n"<<std::endl;
 
-   }
-    //             if (object == ui->simlar_itemView)
-    //            {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(item->text()));
+    }
 
-    //                   QModelIndex index = ui->simlar_itemView->currentIndex();
-    //                   auto item = m_curr_match_model->itemFromIndex(index);
-    //                   remove(item->text().toStdString().c_str());
-    //                  m_curr_match_model->removeRow(index.row());
+    std::cout<<"here3"<<std::endl;
+}
 
-    //            }
+void MainWindow::moveRight(QObject *object, QListView *view, QListView *items)
+{
+    if(object != view || !view->isVisible())return;
+    auto index  = view->currentIndex();
+    view->clicked(index);
 
 }
 
@@ -65,14 +125,40 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
     if (!( event->type() == QEvent::KeyPress)) return false;
 
-        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-        if (ke->key() == Qt::Key_Delete)
-        {
-            func(object, ui->similar_itemView, m_curr_match_model);
-            func(object, ui->exact_itemView, m_curr_match_model);
+    QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+    if (ke->key() == Qt::Key_Delete)
+    {
+        removeFunc(object, ui->similar_itemView);
+        removeFunc(object, ui->exact_itemView);
+    }
+    else if (ke->key() == Qt::Key_Up) {
+        moveUp(object, ui->similar_itemView);
+        moveUp(object, ui->exact_itemView);
+        moveUp(object, ui->similar_groupView);
+        moveUp(object, ui->exact_groupView);
+    }
+    else if (ke->key() == Qt::Key_Down) {
+        moveDown(object, ui->similar_itemView);
+        moveDown(object, ui->exact_itemView);
+        moveDown(object, ui->similar_groupView);
+        moveDown(object, ui->exact_groupView);
+    }
+    else if (ke->key() == Qt::Key_Right){
+        moveRight(object, ui->similar_groupView , ui->similar_itemView);
+        moveRight(object, ui->exact_groupView   , ui->exact_itemView);
+    }
+    else if (ke->key() == Qt::Key_Left){
+        moveLeft(object, ui->similar_itemView , ui->similar_groupView);
+        moveLeft(object, ui->exact_itemView   , ui->exact_groupView  );
+    }
 
-        }
-        return true;
+     if (ke->key() == Qt::Key_Enter)
+    {
+        std::cout << RED << "Enter pressed!" << RESET << std::endl;
+        moveEnter(object, ui->similar_itemView , ui->similar_groupView);
+        moveEnter(object, ui->exact_itemView   , ui->exact_groupView  );
+    }
+    return true;
 }
 
 MainWindow::~MainWindow()
@@ -85,21 +171,18 @@ void MainWindow::on_actionchange_file_triggered()
 
     QString foldername = QFileDialog::getExistingDirectory(this , "Choose the Folder");
 
-    QFile dir(foldername);
-    m_currDir = foldername;
-
-    if(!dir.exists())
+    if(!QFile(foldername).exists())
     {
-        m_currDir =foldername;
-        QMessageBox::warning(this, "Warning", "Cannot Open file");
+        QMessageBox::warning(this, "Warning", "Cannot Open:"+foldername);
         ui->actionScan->setEnabled(true);
         ui->FolderButton->setText("Folder");
     }
     else
     {
-        ui->FolderButton->setToolTip(m_currDir);
-        ui->FolderButton->setText(m_currDir.split("/").last());
-        ui->statusBar->showMessage("File" + m_currDir);
+        ui->FolderButton->setToolTip(foldername);
+        ui->FolderButton->setText(foldername.split("/").last());
+        ui->statusBar->showMessage("File" + foldername);
+        m_scanController.setRoot(foldername);
     }
     ui->commandLinkButton->setEnabled(true);
 }
@@ -145,53 +228,26 @@ void MainWindow::on_actionsave_changes_triggered()
 
 void MainWindow::on_actionScan_triggered()
 {
+    auto set_enabled = [=](bool b){
+        ui->commandLinkButton->setEnabled(b);
+        ui->FolderButton->setEnabled(b);
+        ui->actionScan->setEnabled(b);
+        ui->tabWidget->setEnabled(b);
 
-    //disabaling buttons
-    ui->commandLinkButton->setEnabled(false);
-    ui->FolderButton->setEnabled(false);
-    ui->actionScan->setEnabled(false);
-    ui->tabWidget->setEnabled(false);
+    };
 
-    //making thread
-    m_scanThread = std::make_unique<ScanThread>(m_currDir, ui->tabWidget->currentIndex());
+    set_enabled(false);
+    ui->statusBar->showMessage("Scanning for images...");
 
-    ui->searchingLabel->setVisible(true);
-    m_curr_model->clear();
-
-    //connecting thread
-    connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar,
-            [=](int){ui->searchingLabel->setVisible(false); ui->progressBar->setVisible(true);});
-    connect(m_scanThread.get(), &ScanThread::resultReady, this, &MainWindow::windowHandle);
-    connect(m_scanThread.get(), &ScanThread::scanDone , ui->commandLinkButton, &QCommandLinkButton::setEnabled);
-    connect(m_scanThread.get(), &ScanThread::scanDone , ui->FolderButton, &QPushButton::setEnabled);
-    connect(m_scanThread.get(), &ScanThread::scanStatus, ui->statusBar, &QStatusBar::showMessage );
-    connect(m_scanThread.get(), &ScanThread::scanPercent, ui->progressBar, &QProgressBar::setValue );
-    connect(m_scanThread.get(), &ScanThread::scanDone, ui->progressBar,[=]()
-    {
-
-
-
-        ui->progressBar->setVisible(false);
-        ui->tabWidget->setEnabled(true);
-        m_curr_model->sort(0,Qt::SortOrder::DescendingOrder);
-
-        //outputing size
-        int size =0;
-        for(int i=0 ; i< m_curr_model->rowCount();++i)
-        {
-           on_exact_groupView_clicked(m_curr_model->index(i,0));
-           size += m_curr_match_model->rowCount();
-
-        }
-
-        std::cout<<ORANGE<<"size = "<<RESET<<size<<std::endl;
+    connect(&m_scanController, &ScanController::scanDone, this,[=](){
+        set_enabled(true);
+        ui->statusBar->showMessage("scanning for images done");
+    });
+    connect(&m_scanController, &ScanController::scanStatus ,this, [=]( QString s){
+        ui->statusBar->showMessage(s);
     });
 
-    connect(m_scanThread.get(), &ScanThread::sendImgGroup, this, &MainWindow::on_addImageGroup);
-
-    //sending to thread
-    ui->statusBar->showMessage("Scanning " + m_currDir + "...");
-    m_scanThread->start();
+    m_scanController.start();
 }
 
 void MainWindow::on_commandLinkButton_released(){
@@ -202,94 +258,24 @@ void MainWindow::on_FolderButton_clicked(){
     on_actionchange_file_triggered();
 }
 
-void MainWindow::on_tabWidget_currentChanged(int i)
-{
-    switch(i){
-    case 0:m_curr_model = static_cast<MyStandardItemModel *>(ui->exact_groupView->model());break;
-    case 1:m_curr_model = static_cast<MyStandardItemModel *>(ui->similar_groupView->model());break;
-    }
-
-    switch(i)
-    {
-    case 0:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->exact_itemView->model());break;
-    case 1:m_curr_match_model = static_cast<MyStandardItemModel *>(ui->similar_itemView->model());break;
-    }
-}
-
-void MainWindow::on_exact_groupView_clicked(QModelIndex index)
-{
-    QStandardItem * group = m_curr_model->item(index.row());
-    m_curr_match_model->clear();
-
-    for(int i=0 ;i< group->rowCount(); ++i)
-    {
-        auto temp =  new QStandardItem(group->child(i)->icon(), group->child(i)->text() );
-
-        temp->setDragEnabled(true);
-        m_curr_match_model->appendRow(temp);
-    }
-
-}
-
-void MainWindow::on_similar_groupView_clicked(QModelIndex index)
-{
-    on_exact_groupView_clicked(index);
-}
-
-void MainWindow::on_addImageGroup(QStringList path_list)
-{
-   static QMutex mut;
-   mut.lock();
-        m_ImgAddingthread->setList(path_list);
-
-        m_ImgAddingthread->start();
-    mut.unlock();
-
-
-
-//    auto first = path_list.cbegin();
-
-//    QStandardItem *group = new QStandardItem(QIcon(*first),
-//                                             QVariant(path_list.length()).toString());
-
-//    for(;first != path_list.cend(); ++first)
-//    {
-//        QStandardItem *child = new QStandardItem(QIcon(*first) ,*first);
-
-
-//        child->setToolTip(*first);
-//        child->setCheckable(true);
-//        child->setDragEnabled(true);
-//        child->setDropEnabled(true);
-//        if(first!=path_list.cbegin())
-//            child->setCheckState(Qt::Checked);
-//        group->appendRow(std::move(child));
-//    }
-//    //group->setCheckable(true);
-//    m_curr_model->appendRow(std::move(group));
-
-}
-
-
-void MainWindow::initView(QListView * view,const  QString &header )
+void MainWindow::initView(QListView * view1, QListView * view2 )
 {
     //exact clumn view  + model
-
-    view->setIconSize(QSize(64,64));
     auto mod = new MyStandardItemModel;
-    mod->appendRow(new QStandardItem(header));
-    view->setModel(mod);
-    view->setDragEnabled(true);
-    //view->setWrapping(true);
-    //view->setResizeMode(QListView::Adjust);
-    view->setDragEnabled(true);
-    view->setAcceptDrops(true);
-    view->setDropIndicatorShown(true);
-    view->setDefaultDropAction(Qt::MoveAction);
-    view->installEventFilter(this);
-    view->setSelectionMode(QAbstractItemView::SelectionMode::ContiguousSelection);
-    std::unique_ptr<ScanThread>();
-    moveToThread()
-
+    auto item = new QStandardItem("Groups");
+    item->appendRow(new QStandardItem("Images"));
+    mod->appendRow(item);
+    for (auto view : {view1,view2})
+    {
+        view->setIconSize(QSize(64,64));
+        view->setModel(mod);
+        view->setDragEnabled(true);
+        view->setAcceptDrops(true);
+        view->setDropIndicatorShown(true);
+        view->setDefaultDropAction(Qt::MoveAction);
+        view->installEventFilter(this);
+        view->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+    }
+    view2->setRootIndex(mod->index(0,0));
 }
 

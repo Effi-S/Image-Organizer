@@ -22,23 +22,25 @@ LIBS += "C:/opencv/build/install/x64/vc16/lib/*.lib"
 
 
 SOURCES += \
-    ImgOrganizer/ImgFinderBase.cpp \
     ImgOrganizer/BitExactImgFinder.cpp \
-    ImgOrganizer/ImgScanner.cpp \
+    ImgOrganizer/ImgFileScanner.cpp \
+    ImgOrganizer/ImgMatchFinderBase.cpp \
     ImgOrganizer/SimilarImgFinder.cpp \
-    MyStandardItem.cpp \
+    MyStandardItemModel.cpp \
     MyTreeView.cpp \
+    ScanController.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    MyStandardItem.h \
+    ImgOrganizer/ImgFileScanner.h \
+    ImgOrganizer/ImgMatchFinderBase.h \
+    MyStandardItemModel.h \
     MyTreeView.h \
+    ScanController.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
-    ImgOrganizer/ImgFinderBase.h \
     ImgOrganizer/BitExactImgFinder.h \
-    ImgOrganizer/ImgScanner.h \
     ImgOrganizer/ScanThread.h \
     ImgOrganizer/SimilarImgFinder.h
 

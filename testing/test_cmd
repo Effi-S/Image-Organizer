@@ -1,0 +1,15 @@
+#!/bin/bash
+pwd=$(pwd)
+cd ../ImgOrganizer/x64/Release
+x=$pwd/"tests"
+truncate -s 0 $x/*output.txt
+for i in $(ls $x)
+	 do 	
+		./ImgOrganizer.exe $x/$i	
+	 done
+for i in $(ls $x | grep output)
+	do
+		echo $i
+		cat $x/$i | grep C:/ | wc -l 	
+	done
+cd $(pwd)

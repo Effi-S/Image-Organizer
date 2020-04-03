@@ -1,7 +1,0 @@
-#!/bin/bash
-cd ~/Documents/QT/UI/ImgOrganizer/x64/Release
-x="/c/Users/effi/Desktop/testing/proj_tests"
-for i in $(ls $x)
-	 do 	
-		./ImgOrganizer.exe $x/$i	
-	 done

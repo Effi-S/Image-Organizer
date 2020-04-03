@@ -1,4 +1,8 @@
 ImgOrganizer/x64
 ImgOrganizer/vs
+ImgOrganizer/html
+html/
+testing/tests/*
+testing/archive/*
 archive/
 ImgOrganizer/.vs

@@ -1,4 +1,4 @@
-#include "MyStandardItem.h"
+#include "MyStandardItemModel.h"
 
 QMimeData* MyStandardItemModel::mimeData(const QModelIndexList &indexes) const
 {
@@ -56,7 +56,7 @@ bool MyStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
          // Add items to the target at a specific child index if requested,
          // using thier clone() function to create the items.
-         for (int i = 0; i < numItems; i++)
+         for (unsigned i = 0; i < numItems; i++)
          {
              if ( 0 <= row )
                   target->insertRow(row, stdItems[i]->clone());

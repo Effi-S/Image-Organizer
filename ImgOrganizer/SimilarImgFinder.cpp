@@ -1,14 +1,14 @@
 #include "SimilarImgFinder.h"
-#include "ImgFinderBase.h"
+#include "ImgMatchFinderBase.h"
 
-void SimilarImgFinder::makeGroups()
+void SimilarImgFinder::makeMatchGroups()
 {
 	for (const auto& x : m_matches)
 	{
 		std::vector<std::string> group;
 		for (auto& img : x.second.second)
 			group.push_back(img.second.c_str());
-		addGroup(group);
+		addMatchGroup(group);
 	}
 	
 }
@@ -37,59 +37,57 @@ void SimilarImgFinder::makeGroups()
 //	}
 
 
-void SimilarImgFinder::makeSet()
+void SimilarImgFinder::makeListOfSimilarImages()
 {  
-	//creating list 
-    for (auto &x : ImgScanner())
+    // 1. creating list of digests (key) paired with the image itself (imgValue)
+    for (auto &x : ImgFileScanner())
 	{
-		cv::Mat im = *x.first;
-		cv::Mat imHash;
+        // 1.1 getting the algorithm's output
+        cv::Mat imgValue = *x.first;
+        cv::Mat imgHash;
 
-		try {
-			m_algo->compute(im, imHash);
-		}
-		catch (std::exception & e)
-		{
-			std::cout << "error: in SimilarFinder: " << e.what() << std::endl;
-			continue;
-		}
+        m_algo->compute(imgValue, imgHash);
 
+       // 1.2 creating a digest key from the output
+        auto* ptr = imgHash.data;
 
-		auto* p = imHash.data;
+        std::string key;
 
+        for (uint16_t i = 0; i < KEY_SIZE; ++i, ++ptr)
+            key += *ptr;
 
-		std::string k;
-
-		for (uint16_t i = 0; i < BITS; ++i, ++p)
-			k += *p;
-
-		auto it = m_matches.find(k);
+        // 1.3 adding key to list of keys
+        auto it = m_matches.find(key);
 
 		if (it == m_matches.end())
-            m_matches.emplace( k, HashValue(imHash, std::list<ImgInfo>()));
+            m_matches.emplace(key, HashValue(imgHash, std::list<ImgInfo>()));
 
 
-        m_matches.at(k).second.push_back(ImgInfo( im , *x.second));
+        m_matches.at(key).second.push_back(ImgInfo(imgValue , *x.second));
 	}
 
-	if (m_matches.size() <= 1)return;
 	
-//reducing list where neccessary
+    // 2. reducing list by splicing the list where the key values have enough similar points
 	for (auto it = m_matches.begin(); it != m_matches.end(); ++it)
 	{
-		bool first = true;
-		for (auto next = it; next != m_matches.end(); ++next)
+        bool first = true;
+        for (auto next = it; next != m_matches.end(); ++next)
 		{
+            // ( skipping first key )
 			if (first)
 			{
 				first = false;
 				continue;
 			}
+
+            // 2.1 getting number of similar points
 			cv::Mat hash1(it->second.first);
 			cv::Mat hash2(next->second.first);
 
-			auto matches = m_algo->compare(hash1, hash2);
-            if (matches <= 12)
+            auto matches = m_algo->compare(hash1, hash2);
+
+            // 2.2 if there are enough similarities splicing the list
+            if (matches <= SIMILARITY_DELTA)
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);

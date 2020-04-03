@@ -1,0 +1,8 @@
+#!/bin/bash
+echo Please enter new Folder name:
+read fd
+mkdir tests/$fd
+touch tests/$fd'output.txt'
+echo Please enter Folder with Images:
+read images
+cp $images/* tests/$fd

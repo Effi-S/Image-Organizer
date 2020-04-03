@@ -1,8 +1,9 @@
 #pragma once
-#include "ImgScanner.h"
+#include "ImgFileScanner.h"
+#include "ImgMatchFinderBase.h"
 #include <string>
 #include <opencv2/img_hash/block_mean_hash.hpp>
-class ImgSearch
+class ImgSearch : public ImgMatchFinderBase
 {
 	const int BITS = 42;
 	
@@ -14,7 +15,7 @@ public:
 		cv::Mat img = cv::imread(querry);
 		m_algo->compute(img, qHash);
 
-		for (auto& x : ImgScanner())
+		for (auto& x : ImgFileScanner())
 		{
 			cv::Mat xHash;
 			cv::Mat img = cv::imread(*(x.second));
@@ -37,7 +38,7 @@ public:
 		for (auto window : windows)
 			cv::destroyWindow(window);
 	}
-
+    void makeMatchGroups() override {};
 private:
 	cv::Ptr<cv::img_hash::ImgHashBase> m_algo = cv::img_hash::BlockMeanHash::create(0);
 	std::vector<std::string> m_matches;
