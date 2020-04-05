@@ -35,10 +35,10 @@ public:
     BitExactImgFinder() { makeImageMap();}
     ~BitExactImgFinder () override = default;
 
-    void makeMatchGroups() override;
+    void makeMatchGroups() override; 
 private:
 	
-    void makeImageMap();
+    void makeImageMap(); ///< initializing the map 
 	
     MatchMap m_matches; ///< a map from a key to list of images
 

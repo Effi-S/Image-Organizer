@@ -24,18 +24,18 @@
 class ImgMatchFinderBase
 {
 public:
-    virtual void makeMatchGroups() = 0; ///< MUST be overriden
-    std::vector<std::vector<std::string>> getMatchGroups();
+    virtual void makeMatchGroups() = 0;  ///< To run after init. So groups can be used by others.
+    std::vector<std::vector<std::string>> getMatchGroups();  ///< retreaivng match groups that have been created already.
     uint32_t numberOfImagesFound ();
 
-    virtual ~ImgMatchFinderBase()  = default; ///< Should  be overriden as well
+    virtual ~ImgMatchFinderBase()  = default;  ///< (Should be overriden as well)
 protected:
 
-    void addMatchGroup(std::vector<std::string>& group);
+    void addMatchGroup(std::vector<std::string>& group);  ///< adding a new match group to the groups 
 
 private:
 
-    std::mutex m_mutex;	///< mutex for safe use of match database
-    std::vector<std::vector<std::string>> m_stringGroups; ///< holds the match groups
+    std::mutex m_mutex;	 ///< mutex for safe use of match database
+    std::vector<std::vector<std::string>> m_matchGroups; ///< holds the match groups
 };
 
