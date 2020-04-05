@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include "opencv2/opencv.hpp"
+#include "opencv2/img_hash/block_mean_hash.hpp"
 
 /******************************
  * Base class for all image finding classes

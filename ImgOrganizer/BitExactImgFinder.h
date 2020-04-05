@@ -1,8 +1,6 @@
 #pragma once
 #include "ImgMatchFinderBase.h"
 #include <unordered_map>
-#include <opencv2/opencv.hpp>
-#include <opencv2/img_hash/block_mean_hash.hpp>
 #include "ImgFileScanner.h"
 #include "COLOR.h"
 
