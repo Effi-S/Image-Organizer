@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ImgScanner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BitExactImgFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,27 +24,30 @@
     <ClCompile Include="DEBUG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImgFinderBase.cpp">
+    <ClCompile Include="ImgSearch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImgSearch.cpp">
+    <ClCompile Include="ImgFileScanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImgMatchFinderBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImgScanner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BitExactImgFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimilarImgFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImgFinderBase.h">
+    <ClInclude Include="ImgSearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImgSearch.h">
+    <ClInclude Include="ImgFileScanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImgMatchFinderBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,8 +1,8 @@
-#include "ImgScanner.h"
+#include "ImgFileScanner.h"
 #include "BitExactImgFinder.h"
 #include "ImgSearch.h"
 #include "SimilarImgFinder.h"
-#include "ImgFinderBase.h"
+#include "ImgMatchFinderBase.h"
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 
 	std::string path = (argc > 1) ? argv[1] : "C:\\Users\\effi\\Desktop";
 	
-	ImgScanner::scan(path);
+	ImgFileScanner::scan(path);
 
 	path.append("output.txt");
 	std::cout << path <<std::endl;
@@ -44,7 +44,7 @@ int main(int argc, char** argv){
 	myFstream out_file(path, std::ios_base::app);
 	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
-	std::cout << GREEN << "Found: " << RESET << ImgScanner::size() << std::endl;
+	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
 
 
 #if BIT_EXACT  
@@ -52,14 +52,14 @@ int main(int argc, char** argv){
 
 	start = std::clock_t(std::clock());
 
-	ImgFinderBase * comp = new BitExactImgFinder;
+	ImgMatchFinderBase * comp = new BitExactImgFinder;
 
 	//out_file << GREEN << "Time BitExactImgFinder took: " << RESET << double(std::clock()) - start<<std::endl;
 
-	comp->makeGroups();
+	comp->makeMatchGroups();
 	
 	int g = 0;
-	for (auto i : comp->getGroups())
+	for (auto i : comp->getMatchGroups())
 	{
 		if (i.size() > 1)
 		{
@@ -84,14 +84,14 @@ int main(int argc, char** argv){
 
 	start = std::clock_t(std::clock());
 
-	ImgFinderBase* comp2 = new SimilarImgFinder;
+	ImgMatchFinderBase* comp2 = new SimilarImgFinder;
 
 	//out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
 
-	comp2->getGroups();
+	comp2->getMatchGroups();
 
 	int g2 = 0;
-	for (auto i : comp2->getGroups())
+	for (auto i : comp2->getMatchGroups())
 	{
 		if (i.size() > 1)
 		{
