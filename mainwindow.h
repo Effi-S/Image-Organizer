@@ -1,7 +1,10 @@
+
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -17,19 +20,24 @@ QT_END_NAMESPACE
 #include <QColumnView>
 #include <QList>
 #include <QListView>
-
-
 #include <opencv2/opencv.hpp>
 #include "ImgOrganizer/BitExactImgFinder.h"
 #include "ImgOrganizer/SimilarImgFinder.h"
 #include "ImgOrganizer/ImgFileScanner.h"
-#include "ImgOrganizer/ScanThread.h"
+
 #include "ImgOrganizer/COLOR.h"
 #include "MyStandardItemModel.h"
 #include <QGraphicsView>
 #include "ScanController.h"
 
-
+/***********************
+ * Main Window of the application
+ *
+ * This Class holds all of the logic behind the main window
+ * of the application.
+ *
+ *
+ * ********************** */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -66,7 +74,7 @@ private slots:
 private:
     QString m_currDir ="";
     std::unique_ptr<Ui::MainWindow> ui;
-    std::unique_ptr<ScanThread> m_scanThread;
+    //std::unique_ptr<ScanThread> m_scanThread;
     void removeFunc(QObject *object, QListView *view);
 
 

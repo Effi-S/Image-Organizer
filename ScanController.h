@@ -18,13 +18,18 @@
 /***********************
  * Thread runnig an algorithm
  *
- * Derrived from QThread as it runs in its own thread.
+ * Derrived from QObject for sending signals
+ *
+ * and from QRunnable for being run in own thread in Qt's Threadpool.
  *
  * receives an algorithm to run in constructor
+ *
  * runs algo and then
+ *
  * emits signal when algo ready to give results
  *
  *********************** */
+
 class AlgoThread :public QObject, public QRunnable
 {
     Q_OBJECT
@@ -43,10 +48,14 @@ private:
 /***********************
  * Thread for adding images to a model
  *
- * Derrived from QThread as it runs in its own thread.
+ * Derrived from QObject for sending signals
+ *
+ * and from QRunnable for being run in own thread in Qt's Threadpool.
  *
  * gets pointer to a model and QStringlist
+ *
  * creats image group from QStringlist and emits to the model a signal
+ *
  * for adding this group.
  *
  *********************** */
@@ -73,9 +82,13 @@ QAbstractItemModel ** m_model;
  *  Derrived from QThread as it runs in its own thread.
  *
  * The procedure:
+ *
  * 1) creates AlgoThread for running the algorithm.
+ *
  * 2) creates AddingImgThread
+ *
  * 3) while both are running check AlgoThread for added groups
+ *
  * 4) If found emitting to AddingImgThread
  *
  *********************** */
@@ -107,11 +120,16 @@ private:
  * Scan Controller
  *
  * This Class controls all the threads of the algorithms.
+ *
  * Derrived from QThread as it runs in its own thread.
  *
+ *
  * The procedure:
+ *
  * 1) runs the ImgFileScanner
+ *
  * 2) creates a ScanThread for each algorithm set to run
+ *
  * 3) waits for all of the threads above to finish.
  *
  *********************** */

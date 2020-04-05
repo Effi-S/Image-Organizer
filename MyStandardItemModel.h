@@ -10,7 +10,9 @@
  * Class for a model holding image Groups
  *
  * This class derrives from QStandardItemModel
+ *
  * with the adition of implementing draging and dropping as well
+ *
  * as adding rows properly.
  *
  * ************************************** */

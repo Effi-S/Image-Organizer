@@ -14,7 +14,7 @@
 #include "COLOR.h"
 #include <iterator>
 
-/************ Img File Scanner **********
+/* *********** Img File Scanner **********
  * Recursive image file finder
  *
  * this Class is scans the filesystem for images
