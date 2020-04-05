@@ -20,8 +20,8 @@
 
 class SimilarImgFinder : public ImgMatchFinderBase
 {
-    const int KEY_SIZE = 121;  ///< the hash digest size
-    const int SIMILARITY_DELTA = 48;  ///< the number of similar values that are considered a match
+    const int KEY_SIZE = 32;  ///< the hash digest size
+    const int SIMILARITY_DELTA = 12;  ///< the number of similar values that are considered a match
 
     using ImgInfo = std::pair<cv::Mat, std::string>;
     using HashKey = std::string;

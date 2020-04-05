@@ -3,6 +3,7 @@
 #include "ImgSearch.h"
 #include "SimilarImgFinder.h"
 #include "ImgMatchFinderBase.h"
+
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -26,6 +27,28 @@
 #define SIMILAR 1
 #define SEARCH 0
 
+std::string run_algo(ImgMatchFinderBase* comp)
+{
+	std::string output;
+	comp->makeMatchGroups();
+
+	int g = 0;
+	for (auto i : comp->getMatchGroups())
+	{
+		if (i.size() > 1)
+		{
+			g++;
+			std::cout << BLUE << "group #" << g << ":" << GREEN << std::endl;
+			for (auto x : i)
+			{
+				output += " " +  x + "\n";
+				std::cout << "	" << x << std::endl;
+			}
+			output += "\n\n";
+		}
+	}
+	return output;
+}
 
 int main(int argc, char** argv){	
 
@@ -37,76 +60,50 @@ int main(int argc, char** argv){
 	
 	ImgFileScanner::scan(path);
 
-	path.append("output.txt");
-	std::cout << path <<std::endl;
+	
 
 	typedef std::basic_ofstream<std::string::value_type> myFstream;
-	myFstream out_file(path, std::ios_base::app);
+	
 	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
 
 
 #if BIT_EXACT  
+
+	//path.append("exact_output.txt");
+	auto  out_file = myFstream(path + "exact_output.txt", std::ios_base::app);
+
+	std::cout << "Output file: " << path + "exact_output.txt" << std::endl;
+
 	std::cout << ORANGE << "Computing Bit exact... " <<RESET<< std::endl;
 
 	start = std::clock_t(std::clock());
 
-	ImgMatchFinderBase * comp = new BitExactImgFinder;
+
+	out_file << run_algo(new BitExactImgFinder);
 
 	//out_file << GREEN << "Time BitExactImgFinder took: " << RESET << double(std::clock()) - start<<std::endl;
 
-	comp->makeMatchGroups();
-	
-	int g = 0;
-	for (auto i : comp->getMatchGroups())
-	{
-		if (i.size() > 1)
-		{
-			g++;
-			std::cout << BLUE << "group #" << g << ":" << GREEN << std::endl;
-			for (auto x : i)
-			{	
-				out_file << x << std::endl;
-				std::cout << "	" << x << std::endl;
-			}
-			std::cout << RESET << std::endl;
-			out_file <<  std::endl;
-		}
-	}
-				
-
 #endif // BIT_EXACT
 
-#if SIMILAR  
+#if SIMILAR 
+
+	//path.append("exact_output.txt");
+
+	out_file = myFstream(path+ "similar_output.txt", std::ios_base::app);
+
+	std::cout << "Output file: " << path + "similar_output.txt" << std::endl;
 
 	std::cout << ORANGE << "Computing Similar finder... " << RESET << std::endl;
 
 	start = std::clock_t(std::clock());
 
-	ImgMatchFinderBase* comp2 = new SimilarImgFinder;
+	
+	out_file << run_algo(new SimilarImgFinder);
+
 
 	//out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
-
-	comp2->getMatchGroups();
-
-	int g2 = 0;
-	for (auto i : comp2->getMatchGroups())
-	{
-		if (i.size() > 1)
-		{
-			g2++;
-			std::cout << BLUE << "group #" << g2 << ":" << GREEN << std::endl;
-
-			for (auto x : i)
-			{
-				out_file << x << std::endl;
-				std::cout << "	" << x << std::endl;
-			}
-			std::cout << RESET << std::endl;
-			out_file << std::endl;
-		}	
-	}
 
 #endif
 #if SEARCH

@@ -15,21 +15,17 @@ cv::Mat imread(const std::filesystem::directory_entry& entry)
 }
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	
-    try {
-        static std::mutex mutex;
-        std::lock_guard<std::mutex> lk(mutex);
-		cv::Mat img = imread(entry);
+  
+	static std::mutex mutex;
+	std::lock_guard<std::mutex> lk(mutex);
+	cv::Mat img = imread(entry);
 
-		if(!img.empty())
+	if(!img.empty())
 		ImgFileScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
-			std::make_shared<cv::Mat>(img)),
-			std::make_unique<std::string>(entry.path().string())));
+	std::make_shared<cv::Mat>(img)),
+	std::make_unique<std::string>(entry.path().string())));
        
-    } catch (std::exception & e) {
-        std::cout<<RED<<"imread error for file "<<entry.path().c_str()<<"\n "<<RESET<<std::endl;
-		std::cout << ORANGE << "imread error:" << e.what() << " " << RESET << std::endl;
-        return;
-    }
+
 }
 
 void ImgFileScanner::scan(std::string path)
@@ -54,7 +50,7 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 
 
 	uint img_count = 0;
-	uint faild_count = 0;
+	uint failed_count = 0;
 
     IMG_DB().clear();
 
@@ -75,17 +71,24 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 			catch (cv::Exception & e)
 			{
 				std::cout << RED << "cv error:" << e.what() << RESET << std::endl;
-				faild_count++;
+				failed_count++;
 				break;
+			}
+			catch (std::exception& e) {
+				// mostly unicode errors 
+				std::cout << RED << "imread error for file " << entry.path().c_str() << "\n " << RESET << std::endl;
+				std::cout << ORANGE << "imread error:" << e.what() << " " << RESET << std::endl;
+				failed_count++;
 			}
 			catch (...)
 			{
+				//just in case libpng/cv send strange errors
 				std::cout << RED << "unknown error" << RESET << std::endl;
-				faild_count++;
+				failed_count++;
 			}
 		}
 	}
-    std::cout <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< faild_count<<std::endl <<RESET<<std::endl;
+    std::cout <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< failed_count<<std::endl <<RESET<<std::endl;
     return img_count ;
 }
 

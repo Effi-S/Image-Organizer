@@ -1,7 +1,7 @@
 #!/bin/bash
-pwd=$(pwd)
+orig_dir=$(pwd)
 cd ../ImgOrganizer/x64/Release
-x=$pwd/"tests"
+x=$orig_dir/"tests"
 truncate -s 0 $x/*output.txt
 for i in $(ls $x)
 	 do 	
@@ -12,4 +12,4 @@ for i in $(ls $x | grep output)
 		echo $i
 		cat $x/$i | grep C:/ | wc -l 	
 	done
-cd $(pwd)
+cd $orig_dir

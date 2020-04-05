@@ -22,7 +22,7 @@
 
 class BitExactImgFinder : public ImgMatchFinderBase
 {
-    const int KEY_SIZE = 42;  ///< the hash digest size
+    const int KEY_SIZE = 32;  ///< the hash digest size
 
 	using HashKey = std::string;
 	using ImgInfo = std::pair<cv::Mat, std::unique_ptr<std::string>>;

@@ -26,6 +26,7 @@
 class ImgMatchFinderBase
 {
 public:
+    
     virtual void makeMatchGroups() = 0;  ///< To run after init. So groups can be used by others.
     std::vector<std::vector<std::string>> getMatchGroups();  ///< retreaivng match groups that have been created already.
     uint32_t numberOfImagesFound ();
