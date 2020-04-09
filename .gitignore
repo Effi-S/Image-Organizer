@@ -6,3 +6,4 @@ testing/tests/*
 testing/archive/*
 archive/
 ImgOrganizer/.vs
+ImgOrganizer\Dependencies\lib

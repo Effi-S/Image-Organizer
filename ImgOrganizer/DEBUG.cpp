@@ -1,8 +1,12 @@
+
 #include "ImgFileScanner.h"
 #include "BitExactImgFinder.h"
 #include "ImgSearch.h"
 #include "SimilarImgFinder.h"
 #include "ImgMatchFinderBase.h"
+
+#include "OrbMatcher.h"
+
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -23,9 +27,11 @@
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 
-#define BIT_EXACT 1
-#define SIMILAR 1
-#define SEARCH 0
+#define _BIT_EXACT_ 0
+#define _SIMILAR_ 0
+#define _SEARCH_ 0
+#define _YOLO_ 0
+#define _ORB_ 1
 
 std::string run_algo(ImgMatchFinderBase* comp)
 {
@@ -52,6 +58,7 @@ std::string run_algo(ImgMatchFinderBase* comp)
 
 int main(int argc, char** argv){	
 
+#if _BIT_EXACT_ || _SIMILAR_ || _SEARCH_
 	//scanning for images
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
@@ -68,11 +75,12 @@ int main(int argc, char** argv){
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
 
+#endif
 
-#if BIT_EXACT  
+#if _BIT_EXACT_  
 
 	//path.append("exact_output.txt");
-	auto  out_file = myFstream(path + "exact_output.txt", std::ios_base::app);
+	auto  out_file = myFstream(path + "_exact_output.txt", std::ios_base::app);
 
 	std::cout << "Output file: " << path + "exact_output.txt" << std::endl;
 
@@ -87,11 +95,11 @@ int main(int argc, char** argv){
 
 #endif // BIT_EXACT
 
-#if SIMILAR 
+#if _SIMILAR_ 
 
 	//path.append("exact_output.txt");
 
-	out_file = myFstream(path+ "similar_output.txt", std::ios_base::app);
+	out_file = myFstream(path+ "_similar_output.txt", std::ios_base::app);
 
 	std::cout << "Output file: " << path + "similar_output.txt" << std::endl;
 
@@ -106,7 +114,7 @@ int main(int argc, char** argv){
 	//out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;
 
 #endif
-#if SEARCH
+#if _SEARCH_
 	ImgSearch searcher;
 	char choice = 'y';
 	do{
@@ -123,21 +131,41 @@ int main(int argc, char** argv){
 	} while (choice != 'n');
 #endif
 
+
+#if _YOLO_
+
+	int a = 5;
+
+
+#endif
+
+#if _ORB_
+
+	OrbMatcher matcher;
+	matcher.execute();
+
+	
+#endif
+	
 	return 0;
 }
 
 
-
+/*
+Developer: Derek Santos
+Note that this program uses C++ 14 experimental library to detect file existence.
+Below is a working example of using Brute-Force matching along with ORB descriptors.
+The program will take base_image_filename and search within locate_image_filename for features matching the base.
+*/
 
 //#include <iostream>
 //#include <vector>
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/features2d.hpp>
+//#include <opencv2/opencv.hpp>
+//
 //
 //#include <filesystem>
 //
-//void sort_matches_increasing(std::vector< cv::DMatch > & matches)
+//void sort_matches_increasing(std::vector< cv::DMatch >& matches)
 //{
 //	for (int i = 0; i < matches.size(); i++)
 //	{
@@ -152,31 +180,34 @@ int main(int argc, char** argv){
 //		}
 //	}
 //}
-//int main()
-//{
-//	/* Base Image -> Searching For. */
-//	/* Locate Image -> Searching In. */
-//	std::string search_filename = "C:\\Users\\effi\\Desktop\\testing\\proj_tests\\base_images\\1.jpg";
-//	std::string search_dir = "C:\\Users\\effi\\Desktop\\testing\\proj_tests\\base_images";
 //
-//	// Check if file exists.
-//	if (!std::filesystem::exists(search_filename))
+////int main()
+////{
+////	/* Base Image -> Searching For. */
+////	/* Locate Image -> Searching In. */
+////	std::string base_image_filename = "baseImage.png";
+////	std::string locate_image_filename = "locate.jpg";
+////
+////	// Check if file exists.
+//	if (!std::filesystem::exists(base_image_filename))
 //	{
-//		std::cout << "ERROR! File not found." << std::endl << search_filename << std::endl;
+//		std::cout << "ERROR! File not found." << std::endl << base_image_filename << std::endl;
 //		std::cin.get();
 //		exit(1);
 //	}
 //
-//	if (!std::filesystem::exists(search_dir))
+//	if (!std::filesystem::exists(locate_image_filename))
 //	{
-//		std::cout << "ERROR! File not found." << std::endl << search_dir << std::endl;
+//		std::cout << "ERROR! File not found." << std::endl << locate_image_filename << std::endl;
 //		std::cin.get();
 //		exit(1);
 //	}
+//
+//	/* Orb Stuff */
 //
 //	// Load Base and Locate image
-//	cv::Mat base_image = cv::imread(search_filename, cv::IMREAD_GRAYSCALE);
-//	cv::Mat locate_image = cv::imread(search_dir, cv::IMREAD_GRAYSCALE);
+//	cv::Mat base_image = cv::imread(base_image_filename, cv::IMREAD_GRAYSCALE);
+//	cv::Mat locate_image = cv::imread(locate_image_filename, cv::IMREAD_GRAYSCALE);
 //
 //	// Initiate ORB Detector Class within pointer.
 //	cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create();
@@ -205,6 +236,7 @@ int main(int argc, char** argv){
 //
 //	// Create Brute-Force Matcher. Other Algorithms are 'non-free'.
 //	cv::BFMatcher brue_force_matcher = cv::BFMatcher(cv::NORM_HAMMING, true);
+//
 //
 //	// Vector where matches will be stored.
 //	std::vector< cv::DMatch > matches;
@@ -243,6 +275,7 @@ int main(int argc, char** argv){
 //	cv::imshow("Matches", output_image);
 //
 //	cv::waitKey(0);
+//
 //
 //	return 0;
 //}

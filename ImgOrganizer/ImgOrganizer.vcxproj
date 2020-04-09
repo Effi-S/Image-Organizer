@@ -108,12 +108,13 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib%(AdditionalDependencies)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,7 +158,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib%(AdditionalDependencies)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -166,6 +167,7 @@
     <ClCompile Include="ImgFileScanner.cpp" />
     <ClCompile Include="ImgMatchFinderBase.cpp" />
     <ClCompile Include="ImgSearch.cpp" />
+    <ClCompile Include="OrbMatcher.cpp" />
     <ClCompile Include="SimilarImgFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +175,7 @@
     <ClInclude Include="ImgFileScanner.h" />
     <ClInclude Include="ImgMatchFinderBase.h" />
     <ClInclude Include="ImgSearch.h" />
+    <ClInclude Include="OrbMatcher.h" />
     <ClInclude Include="SimilarImgFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
