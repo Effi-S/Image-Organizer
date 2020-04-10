@@ -114,7 +114,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib%(AdditionalDependencies)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_xfeatures2d420.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -158,7 +158,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib%(AdditionalDependencies)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_xfeatures2d420.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -169,6 +169,7 @@
     <ClCompile Include="ImgSearch.cpp" />
     <ClCompile Include="OrbMatcher.cpp" />
     <ClCompile Include="SimilarImgFinder.cpp" />
+    <ClCompile Include="SurfMatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitExactImgFinder.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="ImgSearch.h" />
     <ClInclude Include="OrbMatcher.h" />
     <ClInclude Include="SimilarImgFinder.h" />
+    <ClInclude Include="SurfMatcher.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

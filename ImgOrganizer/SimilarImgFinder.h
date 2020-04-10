@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "ImgMatchFinderBase.h"
+#include "OrbMatcher.h"
 
 //#include <opencv2/img_hash/color_moment_hash.hpp>
 #include "ImgFileScanner.h"

@@ -86,8 +86,9 @@ void SimilarImgFinder::makeListOfSimilarImages()
 
             auto matches = m_algo->compare(hash1, hash2);
 
+
             // 2.2 if there are enough similarities splicing the list
-            if (matches <= SIMILARITY_DELTA)
+            if (matches <= SIMILARITY_DELTA || OrbMatcher().numberOfMatches(it->second.first, next->second.first) > SIMILARITY_DELTA)
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);

@@ -5,7 +5,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++1z
 
-CONFIG += static
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -17,9 +16,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += C:/opencv/build/install/include
+INCLUDEPATH += ImgOrganizer/Dependencies/include
 
-LIBS += "C:/opencv/build/install/x64/vc16/lib/*.lib"
+
+LIBS += $$_PRO_FILE_PWD_/ImgOrganizer/Dependencies/lib/*.lib
+
 
 
 SOURCES += \
@@ -30,6 +31,7 @@ SOURCES += \
     MyStandardItemModel.cpp \
     MyTreeView.cpp \
     ScanController.cpp \
+    ImgOrganizer/OrbMatcher.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -42,7 +44,7 @@ HEADERS += \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
-    ImgOrganizer/ScanThread.h \
+    ImgOrganizer/OrbMatcher.h \
     ImgOrganizer/SimilarImgFinder.h
 
 FORMS += \

@@ -4,9 +4,8 @@
 #include "ImgSearch.h"
 #include "SimilarImgFinder.h"
 #include "ImgMatchFinderBase.h"
-
 #include "OrbMatcher.h"
-
+#include "SurfMatcher.h"
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -28,10 +27,11 @@
 
 
 #define _BIT_EXACT_ 0
-#define _SIMILAR_ 0
+#define _SIMILAR_ 1
 #define _SEARCH_ 0
 #define _YOLO_ 0
 #define _ORB_ 1
+#define _SURF_ 0
 
 std::string run_algo(ImgMatchFinderBase* comp)
 {
@@ -63,7 +63,7 @@ int main(int argc, char** argv){
 	std::clock_t start(std::clock());
 	std::cout <<ORANGE<< "Scanning... " << RESET << std::endl;
 
-	std::string path = (argc > 1) ? argv[1] : "C:\\Users\\effi\\Desktop";
+	std::string path = (argc > 1) ? argv[1] : "../testing/tests/";
 	
 	ImgFileScanner::scan(path);
 
@@ -74,13 +74,14 @@ int main(int argc, char** argv){
 	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
+	//path.append("exact_output.txt");
+	auto  out_file = myFstream(path + "_exact_output.txt", std::ios_base::app);
 
 #endif
 
 #if _BIT_EXACT_  
 
-	//path.append("exact_output.txt");
-	auto  out_file = myFstream(path + "_exact_output.txt", std::ios_base::app);
+	
 
 	std::cout << "Output file: " << path + "exact_output.txt" << std::endl;
 
@@ -140,13 +141,43 @@ int main(int argc, char** argv){
 #endif
 
 #if _ORB_
-
-	OrbMatcher matcher;
-	matcher.execute();
+	cv::Mat img1 = cv::imread("../testing/tests/rotation-0-5/18.jpg", cv::IMREAD_GRAYSCALE);
+	cv::Mat img2 = cv::imread("../testing/tests/rotation-0-5/dd18.jpg", cv::IMREAD_GRAYSCALE);
+	OrbMatcher orb;
+	std::cout << BLUE << "Number of ORB matches:" << GREEN << (orb.numberOfMatches(img1 , img2, true)) << RESET << std::endl;
 
 	
 #endif
+
+#if _SURF_
+	std::vector< std::function<void()>> m = {
+		[]() {SurfMatcher().execute(cv::xfeatures2d::LUCID::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::LATCH::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::DAISY::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::FREAK::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::StarDetector::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::BriefDescriptorExtractor::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::HarrisLaplaceFeatureDetector::create()); },
+		[]() {SurfMatcher().execute(cv::xfeatures2d::MSDDetector::create()); },
+		
 	
+	};
+
+	
+		for (auto x : m)
+		{
+			try {
+			x();
+			}
+
+			catch (cv::Exception& e) {
+				std::cerr << e.what() << std::endl;
+			}
+		}
+	
+	
+
+#endif	
 	return 0;
 }
 
