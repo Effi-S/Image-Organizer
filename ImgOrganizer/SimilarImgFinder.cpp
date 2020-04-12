@@ -8,6 +8,7 @@ void SimilarImgFinder::makeMatchGroups()
 		std::vector<std::string> group;
 		for (auto& img : x.second.second)
 			group.push_back(img.second.c_str());
+		
 		addMatchGroup(group);
 	}
 	
@@ -40,10 +41,11 @@ void SimilarImgFinder::makeMatchGroups()
 void SimilarImgFinder::makeListOfSimilarImages()
 {  
     // 1. creating list of digests (key) paired with the image itself (imgValue)
-    for (auto &x : ImgFileScanner())
+    for (auto &img_path_pair : ImgFileScanner())
 	{
         // 1.1 getting the algorithm's output
-        cv::Mat imgValue = *x.first;
+        cv::Mat imgValue = *img_path_pair.first; // getting the image
+		
         cv::Mat imgHash;
 
         m_algo->compute(imgValue, imgHash);
@@ -63,7 +65,8 @@ void SimilarImgFinder::makeListOfSimilarImages()
             m_matches.emplace(key, HashValue(imgHash, std::list<ImgInfo>()));
 
 
-        m_matches.at(key).second.push_back(ImgInfo(imgValue , *x.second));
+        m_matches.at(key).second.push_back(ImgInfo(imgValue , *img_path_pair.second));
+		
 	}
 
 	

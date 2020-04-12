@@ -19,13 +19,13 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
 	static std::mutex mutex;
 	std::lock_guard<std::mutex> lk(mutex);
 	cv::Mat img = imread(entry);
+	std::string path = entry.path().string();
+	std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly
 
 	if(!img.empty())
 		ImgFileScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
 	std::make_shared<cv::Mat>(img)),
-	std::make_unique<std::string>(entry.path().string())));
-       
-
+	std::make_unique<std::string>(path)));
 }
 
 void ImgFileScanner::scan(std::string path)

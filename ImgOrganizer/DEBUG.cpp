@@ -30,7 +30,7 @@
 #define _SIMILAR_ 1
 #define _SEARCH_ 0
 #define _YOLO_ 0
-#define _ORB_ 1
+#define _ORB_ 0
 #define _SURF_ 0
 
 std::string run_algo(ImgMatchFinderBase* comp)
@@ -44,7 +44,7 @@ std::string run_algo(ImgMatchFinderBase* comp)
 		if (i.size() > 1)
 		{
 			g++;
-			std::cout << BLUE << "group #" << g << ":" << GREEN << std::endl;
+			std::cout << BLUE << "group #" << g << ":" << GREEN << std::endl << RESET;
 			for (auto x : i)
 			{
 				output += " " +  x + "\n";
