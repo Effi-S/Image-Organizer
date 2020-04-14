@@ -75,11 +75,12 @@ void ScannerThread::run()
     int db_size = int(ImgFileScanner::size());
     int images = 1;
     while (future.isRunning() || comp->getMatchGroups().size()>0) {
-        for(auto i: comp->getMatchGroups())
+        for(auto & i: comp->getMatchGroups())
         {
             QStringList l;
-            for(auto mem: i)
-                l.append(mem.c_str());
+            for(const std::wstring & mem: i)
+                l.append(QString::fromStdWString(mem));
+
             images += l.size();
             emit sendImgGroup(l);
             emit scanPercent(100*int(images/db_size));

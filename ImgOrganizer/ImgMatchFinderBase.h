@@ -2,8 +2,9 @@
 #include <vector>
 #include <string>
 #include <mutex>
-#include "opencv2/opencv.hpp"
 #include "opencv2/img_hash/block_mean_hash.hpp"
+#include "ImgFileScanner.h"
+#include "MyUtils.h"
 
 /******************************
  * Base class for all image finding classes
@@ -28,17 +29,19 @@ class ImgMatchFinderBase
 public:
     
     virtual void makeMatchGroups() = 0;  ///< To run after init. So groups can be used by others.
-    std::vector<std::vector<std::string>> getMatchGroups();  ///< retreaivng match groups that have been created already.
+    
+    std::vector<std::vector<std::wstring>> getMatchGroups();  ///< retreaivng match groups that have been created already.
+    
     uint32_t numberOfImagesFound ();
 
     virtual ~ImgMatchFinderBase()  = default;  ///< (Should be overriden as well)
 protected:
 
-    void addMatchGroup(std::vector<std::string>& group);  ///< adding a new match group to the groups 
+    void addMatchGroup(std::vector<std::wstring>& group);  ///< adding a new match group to the groups 
 
 private:
 
     std::mutex m_mutex;	 ///< mutex for safe use of match database
-    std::vector<std::vector<std::string>> m_matchGroups; ///< holds the match groups
+    std::vector<std::vector<std::wstring>> m_matchGroups; ///< holds the match groups
 };
 

@@ -1,31 +1,20 @@
 ﻿#include "ImgFileScanner.h"
 
-cv::Mat imread(const std::filesystem::directory_entry& entry)
-{
-	cv::Mat img;
 
-	img = cv::imread(entry.path().string(), cv::IMREAD_GRAYSCALE);
-	if (entry.path().extension() == ".jpg" && !img.empty())
-	{
-		auto tmp = "tmp.jpg";
-		cv::imwrite(tmp, img);
-		img = cv::imread(tmp, cv::IMREAD_GRAYSCALE);
-	}
-	return std::move(img);
-}
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	
   
+
 	static std::mutex mutex;
 	std::lock_guard<std::mutex> lk(mutex);
-	cv::Mat img = imread(entry);
-	std::string path = entry.path().string();
+	cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring());
+	std::wstring path = entry.path().wstring();
 	std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly
 
 	if(!img.empty())
 		ImgFileScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
 	std::make_shared<cv::Mat>(img)),
-	std::make_unique<std::string>(path)));
+	std::make_unique<std::wstring>(path)));
 }
 
 void ImgFileScanner::scan(std::string path)
@@ -55,7 +44,7 @@ int ImgFileScanner::_scan(std::string path, bool dry)
     IMG_DB().clear();
 
 
-    std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", "bmp" });
+    std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", ".bmp" });
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
 	{

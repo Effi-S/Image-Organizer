@@ -177,8 +177,13 @@
     <ClInclude Include="ImgMatchFinderBase.h" />
     <ClInclude Include="ImgSearch.h" />
     <ClInclude Include="OrbMatcher.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SimilarImgFinder.h" />
     <ClInclude Include="SurfMatcher.h" />
+    <ClInclude Include="MyUtils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ImgOrganizer.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

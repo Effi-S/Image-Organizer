@@ -2,9 +2,8 @@
 #include <map>
 #include "ImgMatchFinderBase.h"
 #include "OrbMatcher.h"
-
 //#include <opencv2/img_hash/color_moment_hash.hpp>
-#include "ImgFileScanner.h"
+
 
 /********************************
  * Similar Image Finding class
@@ -24,7 +23,7 @@ class SimilarImgFinder : public ImgMatchFinderBase
     const int KEY_SIZE = 32;  ///< the hash digest size
     const int SIMILARITY_DELTA = 12;  ///< the number of similar values that are considered a match
 
-    using ImgInfo = std::pair<cv::Mat, std::string>;
+    using ImgInfo = std::pair<cv::Mat, std::wstring>;
     using HashKey = std::string;
     using HashValue = std::pair<cv::Mat, std::list<ImgInfo>>;
 

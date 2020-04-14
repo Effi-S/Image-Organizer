@@ -1,6 +1,5 @@
 #pragma once
 #include<iostream>
-#include <iostream>
 #include <string>
 #include <filesystem>
 #include <fstream>
@@ -8,11 +7,11 @@
 #include <memory>
 #include <unordered_set>
 #include <ctime>
-#include <opencv2/opencv.hpp>
 #include <future>
 #include <mutex>
 #include "COLOR.h"
 #include <iterator>
+#include "MyUtils.h"
 
 /* *********** Img File Scanner **********
  * Recursive image file finder
@@ -24,12 +23,13 @@
  * ************************************** */
 
 namespace fs = std::filesystem;
-using ImgInfo = std::pair<cv::Ptr<const cv::Mat>, std::unique_ptr<std::string>> ;
+using ImgInfo = std::pair<cv::Ptr<const cv::Mat>, std::unique_ptr<std::wstring>> ;
 using IMG_DataBase = std::vector<ImgInfo>;
 
 class ImgFileScanner
 {
 public:
+
     static void scan(std::string path = "C:\\");  ///< The main scanning function - saves the images in database for later use
     static int getNumberOfImages(std::string path = "C:\\");  ///< Returns the number of images in the path (a dry run).
 

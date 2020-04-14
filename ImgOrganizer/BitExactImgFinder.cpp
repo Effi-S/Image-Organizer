@@ -5,7 +5,7 @@ void BitExactImgFinder::makeMatchGroups()
 {
 	for (const auto& x : m_matches)
 	{
-        std::vector<std::string> group;
+        std::vector<std::wstring> group;
 		for (auto& img : x.second)
             group.push_back(img.second->c_str());
        addMatchGroup(group);

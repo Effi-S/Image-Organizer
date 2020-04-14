@@ -33,9 +33,9 @@
 #define _ORB_ 0
 #define _SURF_ 0
 
-std::string run_algo(ImgMatchFinderBase* comp)
+std::wstring run_algo(ImgMatchFinderBase* comp)
 {
-	std::string output;
+	std::wstring output;
 	comp->makeMatchGroups();
 
 	int g = 0;
@@ -47,10 +47,10 @@ std::string run_algo(ImgMatchFinderBase* comp)
 			std::cout << BLUE << "group #" << g << ":" << GREEN << std::endl << RESET;
 			for (auto x : i)
 			{
-				output += " " +  x + "\n";
-				std::cout << "	" << x << std::endl;
+				output += L" " +  x + L"\n";
+				std::wcout << L"	" << x << std::endl;
 			}
-			output += "\n\n";
+			output += L"\n\n";
 		}
 	}
 	return output;
@@ -109,7 +109,7 @@ int main(int argc, char** argv){
 	start = std::clock_t(std::clock());
 
 	
-	out_file << run_algo(new SimilarImgFinder);
+	out_file << run_algo(new SimilarImgFinder).c_str() << std::endl;
 
 
 	//out_file <<GREEN<< "Time SimilarImgFinder took: "<<RESET << double(std::clock()) - start << std::endl;

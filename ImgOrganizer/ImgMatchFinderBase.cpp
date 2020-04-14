@@ -1,6 +1,6 @@
 #include "ImgMatchFinderBase.h"
 
-std::vector<std::vector<std::string>> ImgMatchFinderBase::getMatchGroups()
+std::vector<std::vector<std::wstring>> ImgMatchFinderBase::getMatchGroups()
 {
 	std::lock_guard<std::mutex> lk(m_mutex);
 	return std::move(m_matchGroups);
@@ -13,7 +13,8 @@ uint32_t ImgMatchFinderBase::numberOfImagesFound()
     return m_matchGroups.size();
 }
 
-void ImgMatchFinderBase::addMatchGroup(std::vector<std::string>& group)
+
+void ImgMatchFinderBase::addMatchGroup(std::vector<std::wstring>& group)
 {
 	std::lock_guard<std::mutex> lk(m_mutex);
 	m_matchGroups.push_back(group);

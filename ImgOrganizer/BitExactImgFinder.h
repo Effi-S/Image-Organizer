@@ -1,7 +1,7 @@
 #pragma once
 #include "ImgMatchFinderBase.h"
 #include <unordered_map>
-#include "ImgFileScanner.h"
+
 #include "COLOR.h"
 
 /***********************
@@ -25,7 +25,7 @@ class BitExactImgFinder : public ImgMatchFinderBase
     const int KEY_SIZE = 32;  ///< the hash digest size
 
 	using HashKey = std::string;
-	using ImgInfo = std::pair<cv::Mat, std::unique_ptr<std::string>>;
+	using ImgInfo = std::pair<cv::Mat, std::unique_ptr<std::wstring>>;
     using MatchMap = std::unordered_map<HashKey, std::vector<ImgInfo>>;
 
 public:
