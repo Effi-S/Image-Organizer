@@ -6,7 +6,7 @@ class OrbMatcher
 {
 	float TRIMMING_DIST = 500.f; ///< a filter distances for matches. only matches coser than this are consindered macthes.
 public:
-	int numberOfMatches( cv::Mat  ,  cv::Mat , const bool draw=false);
+    double matcheScore( cv::Mat  ,  cv::Mat , const bool draw=false);
 
 private:
 	void sort(std::vector<cv::DMatch>& matches);

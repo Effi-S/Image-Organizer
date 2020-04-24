@@ -4,12 +4,10 @@
 
 int main(int argc, char *argv[])
 {
-    std::cout << "here \n" << std::endl;
-
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
 
    return a.exec();
-    return 0;
+   return 0;
 }

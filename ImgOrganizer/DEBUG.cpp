@@ -27,10 +27,10 @@
 
 
 #define _BIT_EXACT_ 0
-#define _SIMILAR_ 1
+#define _SIMILAR_ 0
 #define _SEARCH_ 0
 #define _YOLO_ 0
-#define _ORB_ 0
+#define _ORB_ 1
 #define _SURF_ 0
 
 std::wstring run_algo(ImgMatchFinderBase* comp)
@@ -141,10 +141,10 @@ int main(int argc, char** argv){
 #endif
 
 #if _ORB_
-	cv::Mat img1 = cv::imread("../testing/tests/rotation-0-5/18.jpg", cv::IMREAD_GRAYSCALE);
-	cv::Mat img2 = cv::imread("../testing/tests/rotation-0-5/dd18.jpg", cv::IMREAD_GRAYSCALE);
+	cv::Mat img1 = cv::imread("../testing/tests/rotation-0-5/17.jpg", cv::IMREAD_GRAYSCALE);
+	cv::Mat img2 = cv::imread("../testing/tests/rotation-0-5/dd19.jpg", cv::IMREAD_GRAYSCALE);
 	OrbMatcher orb;
-	std::cout << BLUE << "Number of ORB matches:" << GREEN << (orb.numberOfMatches(img1 , img2, true)) << RESET << std::endl;
+	std::cout << BLUE << " ORB matche score:" << GREEN << orb.matcheScore(img1 , img2, true) << RESET << std::endl;
 
 	
 #endif

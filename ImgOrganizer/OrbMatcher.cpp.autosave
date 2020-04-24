@@ -65,7 +65,7 @@ double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
 		cv::waitKey();
 	}
 	
-       std::cout << double(good_matches.size()) / double(knn_matches.size()) <<std::endl;
+    std::cout << double(good_matches.size()) / double(knn_matches.size()) <<std::endl; //TODO remove
     return double(good_matches.size()) / double(knn_matches.size());
 }
 

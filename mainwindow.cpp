@@ -60,7 +60,7 @@ void MainWindow::moveUp(QObject *object, QListView *view)
 {
     if(object != view || !view->isVisible())return;
 
-    auto model =static_cast<MyStandardItemModel *>( view->model());
+//    auto model =static_cast<MyStandardItemModel *>( view->model());
     QModelIndex index= view->currentIndex();
     auto row = index.row() - 1 ;
     if(row<0)return;
@@ -72,7 +72,7 @@ void MainWindow::moveDown(QObject *object, QListView *view)
 {
     if(object != view || !view->isVisible())return;
 
-    auto model =static_cast<MyStandardItemModel *>( view->model());
+//    auto model =static_cast<MyStandardItemModel *>( view->model());
     QModelIndex index= view->currentIndex();
     auto row = index.row() + 1 ;
 
@@ -96,13 +96,12 @@ void MainWindow::moveEnter(QObject *object, QListView *groups, QListView *items)
 {
     if(object == groups)
     {
-        std::cout<<"here1"<<std::endl;
         moveRight(object, groups, items);
     }
 
     else if (object == items)
     {
-        std::cout<<"here2"<<std::endl;
+
         auto mod = static_cast<MyStandardItemModel *>(items->model());
         auto item = mod->itemFromIndex(items->currentIndex());
         std::cout <<" Opening: " << item->text().toStdString() <<"\n"<<std::endl;
@@ -110,7 +109,7 @@ void MainWindow::moveEnter(QObject *object, QListView *groups, QListView *items)
         QDesktopServices::openUrl(QUrl::fromLocalFile(item->text()));
     }
 
-    std::cout<<"here3"<<std::endl;
+
 }
 
 void MainWindow::moveRight(QObject *object, QListView *view, QListView *items)
@@ -123,42 +122,56 @@ void MainWindow::moveRight(QObject *object, QListView *view, QListView *items)
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
-    if (!( event->type() == QEvent::KeyPress)) return false;
-
-    QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-    if (ke->key() == Qt::Key_Delete)
+    if ( event->type() == QEvent::KeyPress)
     {
-        removeFunc(object, ui->similar_itemView);
-        removeFunc(object, ui->exact_itemView);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_Delete)
+        {
+            removeFunc(object, ui->similar_itemView);
+            removeFunc(object, ui->exact_itemView);
+        }
+        else if (ke->key() == Qt::Key_Up) {
+            moveUp(object, ui->similar_itemView);
+            moveUp(object, ui->exact_itemView);
+            moveUp(object, ui->similar_groupView);
+            moveUp(object, ui->exact_groupView);
+        }
+        else if (ke->key() == Qt::Key_Down) {
+            moveDown(object, ui->similar_itemView);
+            moveDown(object, ui->exact_itemView);
+            moveDown(object, ui->similar_groupView);
+            moveDown(object, ui->exact_groupView);
+        }
+        else if (ke->key() == Qt::Key_Right){
+            moveRight(object, ui->similar_groupView , ui->similar_itemView);
+            moveRight(object, ui->exact_groupView   , ui->exact_itemView);
+        }
+        else if (ke->key() == Qt::Key_Left){
+            moveLeft(object, ui->similar_itemView , ui->similar_groupView);
+            moveLeft(object, ui->exact_itemView   , ui->exact_groupView  );
+        }
+        else if (ke->key() == 16777220){
+            moveEnter(object, ui->similar_groupView , ui->similar_itemView);
+            moveEnter(object, ui->exact_groupView   , ui->exact_itemView);
+//
+        }
+        else
+            std::cout << RED << "Enter pressed!:"<< ke->key() << RESET << std::endl;
+
+        return true;
     }
-    else if (ke->key() == Qt::Key_Up) {
-        moveUp(object, ui->similar_itemView);
-        moveUp(object, ui->exact_itemView);
-        moveUp(object, ui->similar_groupView);
-        moveUp(object, ui->exact_groupView);
+    else if (event->type() == QEvent::MouseButtonDblClick){
+        std::cout << RED << "Double Click!" << RESET << std::endl;
+
     }
-    else if (ke->key() == Qt::Key_Down) {
-        moveDown(object, ui->similar_itemView);
-        moveDown(object, ui->exact_itemView);
-        moveDown(object, ui->similar_groupView);
-        moveDown(object, ui->exact_groupView);
-    }
-    else if (ke->key() == Qt::Key_Right){
-        moveRight(object, ui->similar_groupView , ui->similar_itemView);
-        moveRight(object, ui->exact_groupView   , ui->exact_itemView);
-    }
-    else if (ke->key() == Qt::Key_Left){
-        moveLeft(object, ui->similar_itemView , ui->similar_groupView);
-        moveLeft(object, ui->exact_itemView   , ui->exact_groupView  );
+    else if (1) {
+        std::cout << RED << "event: "<< event->type() << RESET << std::endl;
     }
 
-     if (ke->key() == Qt::Key_Enter)
-    {
-        std::cout << RED << "Enter pressed!" << RESET << std::endl;
-        moveEnter(object, ui->similar_itemView , ui->similar_groupView);
-        moveEnter(object, ui->exact_itemView   , ui->exact_groupView  );
-    }
-    return true;
+
+
+
+    return false;
 }
 
 MainWindow::~MainWindow()
