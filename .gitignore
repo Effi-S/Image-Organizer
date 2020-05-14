@@ -1,3 +1,5 @@
+.idea
+ImgOrganizer/.idea
 ImgOrganizer/x64
 ImgOrganizer/vs
 ImgOrganizer/html
@@ -5,5 +7,7 @@ html/
 testing/tests/*
 testing/archive/*
 archive/
+ImgOrganizer/FaceDetection/faces/*
+ImgOrganizer/FaceDetection/backlog/*
 ImgOrganizer/.vs
-ImgOrganizer\Dependencies\lib
+ImgOrganizer/FaceDetection/trained_model.yml

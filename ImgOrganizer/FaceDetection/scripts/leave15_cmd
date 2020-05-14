@@ -1,0 +1,11 @@
+#! /bin/bash
+# This cmd removes all but 15
+# Random images in each folder in faces/ dir 
+for dir in $(ls ../faces)
+ do 
+	num=$(($(ls ../faces/$dir | wc -l)-15))  # number of images - 15
+	for x in $(shuf -e $(ls ../faces/$dir) -n $num)
+	do 
+		rm ../faces/$dir$x
+	done
+done

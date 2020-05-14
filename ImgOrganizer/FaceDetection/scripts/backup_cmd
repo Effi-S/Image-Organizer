@@ -1,0 +1,4 @@
+#!/bin/bash
+filename=`date +"%Y-%m-%d-%H-%M"`.tar
+tar cf $filename ../trained_model.yml ../training_data.csv ../faces
+mv $filename ../backlog

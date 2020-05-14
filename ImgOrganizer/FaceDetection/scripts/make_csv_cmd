@@ -1,0 +1,4 @@
+pd=$(pwd)
+cd ../../
+python FaceDetection/scripts/create_csv.py FaceDetection/faces FaceDetection/training_data.csv
+cd $pd
