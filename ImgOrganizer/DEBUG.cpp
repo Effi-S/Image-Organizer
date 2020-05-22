@@ -26,11 +26,11 @@
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 
-#define _BIT_EXACT_ 0
-#define _SIMILAR_ 0
+#define _BIT_EXACT_ 1
+#define _SIMILAR_ 1
 #define _SEARCH_ 0
 #define _YOLO_ 0
-#define _ORB_ 1
+#define _ORB_ 0
 #define _SURF_ 0
 
 std::wstring run_algo(ImgMatchFinderBase* comp)
