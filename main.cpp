@@ -4,10 +4,21 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    try {
+        QApplication a(argc, argv);
+        MainWindow w;
+        w.show();
+          return a.exec();
 
-   return a.exec();
-   return 0;
+    } catch (QException &e) {
+        std::cout<<"Qt Exception:" <<e.what() << std::endl;
+
+    } catch (std::exception & e ){
+         std::cout << "Error: " << e.what() <<std::endl;
+     } catch (...) {
+
+     std::cout << "!!! unknown error !!!" << std::endl;
+     }
+
+ return 0;
 }

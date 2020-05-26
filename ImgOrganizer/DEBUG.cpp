@@ -69,13 +69,10 @@ int main(int argc, char** argv){
 
 	
 
-	typedef std::basic_ofstream<std::string::value_type> myFstream;
-	
-	
 	std::cout <<GREEN<< "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
 	//path.append("exact_output.txt");
-	auto  out_file = myFstream(path + "_exact_output.txt", std::ios_base::app);
+	auto  out_file = std::wofstream(path + "_exact_output.txt", std::wofstream::app);
 
 #endif
 
@@ -100,7 +97,7 @@ int main(int argc, char** argv){
 
 	//path.append("exact_output.txt");
 
-	out_file = myFstream(path+ "_similar_output.txt", std::ios_base::app);
+	out_file = std::wofstream(path+ "_similar_output.txt", std::wofstream::app);
 
 	std::cout << "Output file: " << path + "similar_output.txt" << std::endl;
 

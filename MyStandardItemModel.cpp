@@ -29,8 +29,8 @@ QMimeData* MyStandardItemModel::mimeData(const QModelIndexList &indexes) const
     return mimeData;
 }
 
-bool MyStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                     int row, int column, const QModelIndex &parent)
+bool MyStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction /*action*/,
+                                     int row, int /*column*/, const QModelIndex &parent)
 {
     // Get the QStandardItem target of the drop.
     QStandardItem* target = itemFromIndex(parent);

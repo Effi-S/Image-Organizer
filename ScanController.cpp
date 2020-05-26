@@ -36,7 +36,7 @@ void ScanController::run()
     emit scanDone(true);
     dbSize = int(ImgFileScanner::size());
 
-    emit scanStatus("Found: "+ QString::number(dbSize) +"images.");
+    emit scanStatus("Found: " + QString::number(dbSize) +"images.");
 
     std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
@@ -55,9 +55,9 @@ std::function<ImgMatchFinderBase *()> ScanController::typeToFunc(ScanController:
 {
     std::unordered_map<algoType, std::function<ImgMatchFinderBase *()> >
             m = {
-    {algoType::exact,[=](){return std::move(new BitExactImgFinder);}},
-    {algoType::similar,[=](){return std::move(new SimilarImgFinder);}},
-    {algoType::search,[=](){return std::move(new ImgSearch);}}
+    {   algoType::exact,[=](){return std::move(new BitExactImgFinder);}},
+    {   algoType::similar,[=](){return std::move(new BitExactImgFinder);}},
+    {   algoType::search,[=](){return std::move(new ImgSearch);}}
 };
 
     return m.at(type);

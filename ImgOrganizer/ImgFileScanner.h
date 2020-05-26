@@ -40,7 +40,7 @@ public:
 
 
 private:  
-    friend void addImgToDB(const std::filesystem::directory_entry& entry);  ///< adding to database
+    friend void addImgToDB(const fs::directory_entry& entry);  ///< adding to database
     static int _scan(std::string path = "C:\\", bool dry = false);  ///< internal scan overload
     static IMG_DataBase &IMG_DB();  ///< secure access to database
 
