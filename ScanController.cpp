@@ -38,7 +38,7 @@ void ScanController::run()
 
     emit scanStatus("Found: " + QString::number(dbSize) +"images.");
 
-    std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
+//    std::cout <<ORANGE<< "Time reading images scan took: " <<GREEN<< double(std::clock()) - start <<RESET<< std::endl;
 
     //running algorithms in threads
     std::vector<std::unique_ptr<QFuture<void> >> futures;

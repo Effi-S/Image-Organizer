@@ -231,30 +231,25 @@ void MainWindow::on_actionsave_changes_triggered()
 
 void MainWindow::on_actionScan_triggered()
 {
-
-        auto set_enabled = [=](bool b){
+    auto set_enabled = [=](bool b){
             ui->commandLinkButton->setEnabled(b);
             ui->FolderButton->setEnabled(b);
             ui->actionScan->setEnabled(b);
             ui->tabWidget->setEnabled(b);
+         };
 
-        };
+    set_enabled(false);
+    ui->statusBar->showMessage("Scanning for images...");
 
-        set_enabled(false);
-        ui->statusBar->showMessage("Scanning for images...");
+    connect(&m_scanController, &ScanController::scanDone, this, [=](){
+        set_enabled(true);
+        ui->statusBar->showMessage("scanning for images done");
+    });
+    connect(&m_scanController, &ScanController::scanStatus, this, [=](QString s){
+        ui->statusBar->showMessage(s);
+    });
 
-        connect(&m_scanController, &ScanController::scanDone, this,[=](){
-            set_enabled(true);
-            ui->statusBar->showMessage("scanning for images done");
-        });
-        connect(&m_scanController, &ScanController::scanStatus ,this, [=]( QString s){
-            ui->statusBar->showMessage(s);
-        });
-
-        m_scanController.start();
-
-
-
+    m_scanController.start();
 }
 
 void MainWindow::on_commandLinkButton_released(){

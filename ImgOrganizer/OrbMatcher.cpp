@@ -9,28 +9,12 @@ double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
     std::vector<cv::KeyPoint> keyPoints, keyPoints2;
     cv::Mat descriptors, descriptors2;
 
-    if(img1.rows > 500 || img1.rows < 50)
-        img1.resize(500);
-    if (img2.rows > 500 || img2.rows < 50)
-        img2.resize(500);
-
-    if(img1.type() != img1.type())
-    {
-        cv::cvtColor(img1, img1, CV_8U);
-        cv::cvtColor(img2, img2, CV_8U);
-    }
-
-    if(img1.cols != img2.cols)
-        img1.cols = img2.cols = (img1.cols < img2.cols)? img1.cols: img2.cols;
-
-
      m_orb->detectAndCompute(img1, cv::noArray(), keyPoints, descriptors);
         m_orb->detectAndCompute(img2, cv::noArray(), keyPoints2, descriptors2);
 
 
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::BFMatcher::create(cv::DescriptorMatcher::BRUTEFORCE);
     std::vector< std::vector<cv::DMatch> > knn_matches;
-
 
     matcher->knnMatch(descriptors, descriptors2, knn_matches, 2);
 
