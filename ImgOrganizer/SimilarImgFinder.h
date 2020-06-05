@@ -27,12 +27,11 @@ class SimilarImgFinder : public ImgMatchFinderBase
     using HashKey = std::string;
     using HashValue = std::pair<cv::Mat, std::list<ImgInfo>>;
 
-    ~SimilarImgFinder() override = default;
-
 public:
 
     SimilarImgFinder() { makeListOfSimilarImages(); }
     void makeMatchGroups() override;
+     ~SimilarImgFinder() override = default;
 
 private:
 
