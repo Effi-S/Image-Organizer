@@ -28,7 +28,7 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/COLOR.h"
 #include "MyStandardItemModel.h"
 #include <QGraphicsView>
-#include "ScanController.h"
+
 
 /***********************
  * Main Window of the application
@@ -81,7 +81,6 @@ private:
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
     void initView(QListView * view1, QListView * view2);
-    ScanController m_scanController;
 
     // user movement functions
     void moveRight(QObject *object, QListView *view, QListView *items);

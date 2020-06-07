@@ -9,9 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
-    //ui->progressBar->setVisible(false);
-    ui->progressBar_2->setVisible(false);
-    ui->progressBar_3->setVisible(false);
+
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
     //file model + tree view
@@ -27,9 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->treeView->setRootIndex(index);
     initView(ui->exact_groupView, ui->exact_itemView);
     initView(ui->similar_groupView, ui->similar_itemView);
-
-    m_scanController.addModel(ui->exact_groupView->model(), ScanController::algoType::exact, ui->progressBar_2);
-    m_scanController.addModel(ui->similar_groupView->model(), ScanController::algoType::similar, ui->progressBar_3);
 
 }
 
@@ -185,7 +180,7 @@ void MainWindow::on_actionchange_file_triggered()
         ui->FolderButton->setToolTip(foldername);
         ui->FolderButton->setText(foldername.split("/").last());
         ui->statusBar->showMessage("File" + foldername);
-        m_scanController.setRoot(foldername);
+
     }
     ui->commandLinkButton->setEnabled(true);
 }
@@ -229,28 +224,7 @@ void MainWindow::on_actionsave_changes_triggered()
 }
 
 
-void MainWindow::on_actionScan_triggered()
-{
-    auto set_enabled = [=](bool b){
-            ui->commandLinkButton->setEnabled(b);
-            ui->FolderButton->setEnabled(b);
-            ui->actionScan->setEnabled(b);
-            ui->tabWidget->setEnabled(b);
-         };
 
-    set_enabled(false);
-    ui->statusBar->showMessage("Scanning for images...");
-
-    connect(&m_scanController, &ScanController::scanDone, this, [=](){
-        set_enabled(true);
-        ui->statusBar->showMessage("scanning for images done");
-    });
-    connect(&m_scanController, &ScanController::scanStatus, this, [=](QString s){
-        ui->statusBar->showMessage(s);
-    });
-
-    m_scanController.start();
-}
 
 void MainWindow::on_commandLinkButton_released(){
     on_actionScan_triggered();
@@ -281,3 +255,16 @@ void MainWindow::initView(QListView * view1, QListView * view2 )
     view2->setRootIndex(mod->index(0,0));
 }
 
+void MainWindow::on_actionScan_triggered()
+{
+    auto set_enabled = [=](bool b){
+            ui->commandLinkButton->setEnabled(b);
+            ui->FolderButton->setEnabled(b);
+            ui->actionScan->setEnabled(b);
+            ui->tabWidget->setEnabled(b);
+         };
+
+    set_enabled(false);
+    ui->statusBar->showMessage("Scanning for images...");
+
+}

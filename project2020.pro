@@ -25,7 +25,6 @@ SOURCES += \
     ImgOrganizer/SimilarImgFinder.cpp \
     MyStandardItemModel.cpp \
     MyTreeView.cpp \
-    ScanController.cpp \
     ImgOrganizer/OrbMatcher.cpp \
     main.cpp \
     mainwindow.cpp
@@ -35,7 +34,6 @@ HEADERS += \
     ImgOrganizer/ImgMatchFinderBase.h \
     MyStandardItemModel.h \
     MyTreeView.h \
-    ScanController.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
