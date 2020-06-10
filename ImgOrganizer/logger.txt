@@ -1,0 +1,11 @@
+../testing/tests/base/delete.png
+../testing/tests/base/directory.png
+../testing/tests/base/exact.png
+../testing/tests/base/Icon.png
+../testing/tests/base/save2.png
+../testing/tests/base/Scan.png
+../testing/tests/base/search.png
+../testing/tests/base/settings.png
+../testing/tests/base/Similar.png
+../testing/tests/base/splitter-handle.png
+../testing/tests/base/undo2.png

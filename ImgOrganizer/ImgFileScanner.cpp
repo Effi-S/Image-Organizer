@@ -1,20 +1,19 @@
 ﻿#include "ImgFileScanner.h"
 
+//< !!!!!!!!!!!!!!!! TODO: Remove try catch blocks !!!!!!!!!!!!!!!!!
 
 void addImgToDB( const std::filesystem::directory_entry& entry)
-{	
-  
+{	 
+    static std::mutex mutex;
+    std::lock_guard<std::mutex> lk(mutex);
+    cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring());
+    std::wstring path = entry.path().wstring();
+    std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly
 
-	static std::mutex mutex;
-	std::lock_guard<std::mutex> lk(mutex);
-	cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring());
-	std::wstring path = entry.path().wstring();
-	std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly
-
-	if(!img.empty())
-		ImgFileScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
-	std::make_shared<cv::Mat>(img)),
-	std::make_unique<std::wstring>(path)));
+    if(!img.empty())
+        ImgFileScanner::IMG_DB().push_back(std::make_pair(*new cv::Ptr<cv::Mat>(
+    std::make_shared<cv::Mat>(img)),
+    std::make_unique<std::wstring>(path)));
 }
 
 void ImgFileScanner::scan(std::string path)
@@ -32,29 +31,31 @@ int ImgFileScanner::getNumberOfImages(std::string path)
 //
 int ImgFileScanner::_scan(std::string path, bool dry)
 {
-    // typedef std::basic_ofstream<std::string::value_type> myFstream;
-    // myFstream file("C:/Users/effi/Desktop/temp/t.txt", std::ios_base::app); // for logging time
-
 	std::clock_t start(std::clock());
 
-
 	uint img_count = 0;
+
 	uint failed_count = 0;
 
     IMG_DB().clear();
 
+std::unordered_set<std::wstring> extension_set({ L".png", L".jpg", L".jpeg", L".bmp" });
 
-    std::unordered_set<std::string> extension_set({ ".png", ".jpg", ".jpeg", ".bmp" });
+std::future<void> future;
+
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
-	{
-		std::string extension = entry.path().extension().string();
+    {
+    try {
+        std::wstring extension = entry.path().extension().wstring();
+
 		if (extension_set.find(extension) != extension_set.end())
 		{
 			try
 			{
 				if(!dry)
-					std::async(&addImgToDB, entry);
+                    future = std::future(std::async(&addImgToDB, entry));
+
                 img_count++;
 			}
 			catch (cv::Exception & e)
@@ -75,10 +76,23 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 				std::cout << RED << "unknown error" << RESET << std::endl;
 				failed_count++;
 			}
+
 		}
+
+      } catch (std::exception & e) {
+        std::cout <<RED "\n >>>>>>> ERROR <<<<<<\n " << e.what()
+        << "\n >>>>>>>>>><<<<<<<<<<<" << RESET << std::endl;
+        }
 	}
-    std::cout <<GREEN<< "\nNumber Of images Found:" << img_count << std::endl << "Time it took: " << double(std::clock()) - start  <<"Number of fails:" <<RED<< failed_count<<std::endl <<RESET<<std::endl;
-    return img_count ;
+
+    if(future.valid())
+			future.wait();
+
+    std::cout << GREEN << "\nNumber Of images Found: " << BLUE << img_count << std::endl
+             <<"Time it took: " << RESET << double(std::clock()) - start << GREEN
+             <<" Number of fails:" << RED << failed_count<< std::endl <<RESET <<std::endl;
+
+	return img_count ;
 }
 
 IMG_DataBase& ImgFileScanner::IMG_DB()

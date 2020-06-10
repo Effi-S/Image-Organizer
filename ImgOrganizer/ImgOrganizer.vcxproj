@@ -164,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BitExactImgFinder.cpp" />
-    <ClCompile Include="DEBUG.cpp" />
+    <ClCompile Include="_Main.cpp" />
     <ClCompile Include="ImgFileScanner.cpp" />
     <ClCompile Include="ImgMatchFinderBase.cpp" />
     <ClCompile Include="ImgSearch.cpp" />

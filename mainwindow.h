@@ -28,8 +28,8 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/COLOR.h"
 #include "MyStandardItemModel.h"
 #include <QGraphicsView>
-
-
+#include <QProgressBar>
+#include "scanhandler.h"
 /***********************
  * Main Window of the application
  *
@@ -72,7 +72,7 @@ private slots:
     void on_FolderButton_clicked();
 
 private:
-    QString m_currDir ="";
+
     std::unique_ptr<Ui::MainWindow> ui;
     //std::unique_ptr<ScanThread> m_scanThread;
     void removeFunc(QObject *object, QListView *view);
@@ -81,6 +81,8 @@ private:
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
     void initView(QListView * view1, QListView * view2);
+
+    ScanHandler m_scanHandler;
 
     // user movement functions
     void moveRight(QObject *object, QListView *view, QListView *items);

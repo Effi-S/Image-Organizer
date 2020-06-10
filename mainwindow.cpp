@@ -26,6 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     initView(ui->exact_groupView, ui->exact_itemView);
     initView(ui->similar_groupView, ui->similar_itemView);
 
+    m_scanHandler.registerAlgo(0, ui->exact_groupView->model() , [](){return new BitExactImgFinder;} );
+    m_scanHandler.registerAlgo(1, ui->similar_groupView->model() , [](){return new SimilarImgFinder;} );
+    m_scanHandler.registerAlgo(2, ui->exact_groupView->model() , [](){return new BitExactImgFinder;} );
+    connect(ui->tabWidget, &QTabWidget::currentChanged, &m_scanHandler, &ScanHandler::setAlgo);
+
 }
 
 //removes current object from view
@@ -180,6 +185,7 @@ void MainWindow::on_actionchange_file_triggered()
         ui->FolderButton->setToolTip(foldername);
         ui->FolderButton->setText(foldername.split("/").last());
         ui->statusBar->showMessage("File" + foldername);
+        m_scanHandler.setRoot(foldername);
 
     }
     ui->commandLinkButton->setEnabled(true);
@@ -264,7 +270,16 @@ void MainWindow::on_actionScan_triggered()
             ui->tabWidget->setEnabled(b);
          };
 
-    set_enabled(false);
+//    set_enabled(false);
+
+    QProgressBar * bar = new QProgressBar(this);
+    bar->setRange(0, 0);
+    ui->barLayout->addWidget(bar);
+
+    m_scanHandler.setBar(bar);
+    m_scanHandler.start();
+
+
     ui->statusBar->showMessage("Scanning for images...");
 
 }

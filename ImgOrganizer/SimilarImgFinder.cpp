@@ -93,7 +93,8 @@ void SimilarImgFinder::makeListOfSimilarImages()
             // 2.2 if there are enough similarities splicing the listtry {
 			
 			if (matches <= SIMILARITY_DELTA 
-				|| OrbMatcher().matcheScore(it->second.second.begin()->first, next->second.second.begin()->first) > ORB_DELTA)
+                //|| OrbMatcher().matcheScore(it->second.second.begin()->first, next->second.second.begin()->first) > ORB_DELTA
+                    )
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);

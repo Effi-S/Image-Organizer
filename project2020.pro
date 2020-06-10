@@ -23,22 +23,26 @@ SOURCES += \
     ImgOrganizer/ImgFileScanner.cpp \
     ImgOrganizer/ImgMatchFinderBase.cpp \
     ImgOrganizer/SimilarImgFinder.cpp \
+    addimgthread.cpp \
     MyStandardItemModel.cpp \
     MyTreeView.cpp \
     ImgOrganizer/OrbMatcher.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    scanhandler.cpp
 
 HEADERS += \
     ImgOrganizer/ImgFileScanner.h \
     ImgOrganizer/ImgMatchFinderBase.h \
+    addimgthread.h \
     MyStandardItemModel.h \
     MyTreeView.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/OrbMatcher.h \
-    ImgOrganizer/SimilarImgFinder.h
+    ImgOrganizer/SimilarImgFinder.h \
+    scanhandler.h
 
 FORMS += \
     mainwindow.ui
