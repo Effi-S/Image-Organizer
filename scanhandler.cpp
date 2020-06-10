@@ -23,6 +23,11 @@ void ScanHandler::setBar(QProgressBar *bar)
 
 }
 
+/**  While it is neccessary to use QThread to free the GUI
+ * and use signals and slots mechanism
+ * I preffered to use std::thread because for me ore reliable
+ * than QThread or QtConcurrent options.
+**/
 void ScanHandler::run()
 {
     ImgMatchFinderBase * algo;
@@ -35,23 +40,15 @@ void ScanHandler::run()
     std::thread t1([&](){ImgFileScanner::scan(m_root.toStdString());   });
     t2.join();
     std::cout << "Number of images = "<<num_of_images <<"Time:" <<double(std::clock()) - start<<std::endl;
-
+    t1.join();
+    t1 = std::thread([&](){algo = _algoData[m_algo].second(); algo->makeMatchGroups();});
+    t1.join();
+    t1 = std::thread([&](){AddingImgThread addImgThread(_algoData[m_algo].first);
+                for(const auto & x: algo->getMatchGroups())
+                    addImgThread.addStringList(x);
+        });
     t1.join();
 
-
-
-    //    std::cout << "Number of Images: " << i <<std::endl;
-
-//    algo = _algoData[m_algo].second();
-
-//    algo->makeMatchGroups();
-
-//    auto lamb = [&](){AddingImgThread addImgThread(_algoData[m_algo].first);
-
-//        for(const auto & x: algo->getMatchGroups())
-//            addImgThread.addStringList(x);
-//};
-//    QtConcurrent::run(lamb);
     std::cout << "Done with thread: " << QThread::currentThreadId() << " ";
     std::cout << "root: " <<m_root.toStdString() << " ";
     std::cout << "Algo: " <<m_algo <<std::endl;

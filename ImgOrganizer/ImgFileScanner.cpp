@@ -89,7 +89,7 @@ std::future<void> future;
 			future.wait();
 
     std::cout << GREEN << "\nNumber Of images Found: " << BLUE << img_count << std::endl
-             <<"Time it took: " << RESET << double(std::clock()) - start << GREEN
+             << GREEN <<"Time it took: " << RESET << double(std::clock()) - start << GREEN
              <<" Number of fails:" << RED << failed_count<< std::endl <<RESET <<std::endl;
 
 	return img_count ;
