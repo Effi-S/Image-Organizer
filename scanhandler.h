@@ -18,6 +18,11 @@ public:
     void registerAlgo(int, QAbstractItemModel * mod, std::function<ImgMatchFinderBase *()> func);
     void setBar(QProgressBar * bar);
 
+signals:
+    void reset();
+    void setRange(int min ,int max);
+    void setValue(int);
+    void setFormat(QString);
 public slots:
 
     void setRoot(QString);
@@ -28,7 +33,6 @@ private:
                 std::function<ImgMatchFinderBase *()>>> _algoData;
     QString m_root;
     int m_algo = 0;
-
 
 };
 

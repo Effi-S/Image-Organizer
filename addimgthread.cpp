@@ -16,7 +16,6 @@ void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 
 void AddingImgThread::run()
 {
-    std::cout << "inner img: " << QThread::currentThreadId() << std::endl;
     auto first = m_path_list.cbegin();
 
     QStandardItem *group = new QStandardItem(QIcon(*first),

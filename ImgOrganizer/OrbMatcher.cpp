@@ -5,12 +5,18 @@ const cv::Ptr<cv::ORB> OrbMatcher::m_orb = cv::ORB::create();
 double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
 {
 
+    if(img2.type() != img1.type() ||
+            img1.cols != img2.cols ||
+            (img1.type() != CV_32F && img1.type() != CV_8U))  // to prevent cv::batchDistance assertion errors
+        return 0;
+
 
     std::vector<cv::KeyPoint> keyPoints, keyPoints2;
     cv::Mat descriptors, descriptors2;
 
-     m_orb->detectAndCompute(img1, cv::noArray(), keyPoints, descriptors);
-        m_orb->detectAndCompute(img2, cv::noArray(), keyPoints2, descriptors2);
+
+    m_orb->detectAndCompute(img1, cv::noArray(), keyPoints, descriptors);
+    m_orb->detectAndCompute(img2, cv::noArray(), keyPoints2, descriptors2);
 
 
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::BFMatcher::create(cv::DescriptorMatcher::BRUTEFORCE);
@@ -26,7 +32,6 @@ double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
         if (x[0].distance < ratio_thresh * x[1].distance)
             good_matches.push_back(x[0]);
 
-
     //-- Triming matches based on trimming distance
     //	std::vector<cv::DMatch> matches;
     //	matcher->match(descriptors, descriptors2, matches);
@@ -38,7 +43,6 @@ double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
 
     /*for (int i = 0; (i < matches.size() && matches[i].distance < TRIMMING_DIST); ++i);
         std::vector<cv::DMatch> matchesTrim(matches.begin(), matches.begin() + i);*/
-
 
     //-- Draw matches
     if (draw)

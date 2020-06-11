@@ -271,7 +271,11 @@ void MainWindow::on_actionScan_triggered()
          };
 
 //    set_enabled(false);
-
+    if(m_scanHandler.isRunning())
+    {
+//   TODO     QMessageBox();
+        return;
+    }
     QProgressBar * bar = new QProgressBar(this);
     bar->setRange(0, 0);
     ui->barLayout->addWidget(bar);
@@ -279,7 +283,5 @@ void MainWindow::on_actionScan_triggered()
     m_scanHandler.setBar(bar);
     m_scanHandler.start();
 
-
     ui->statusBar->showMessage("Scanning for images...");
-
 }

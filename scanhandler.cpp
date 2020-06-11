@@ -18,14 +18,17 @@ void ScanHandler::registerAlgo(int type, QAbstractItemModel *mod, std::function<
 
 void ScanHandler::setBar(QProgressBar *bar)
 {
-//    bar->setRange(0, 0);
-//    std::cout << " outer: " << QThread::currentThreadId() << std::endl;
+   connect(this , &ScanHandler::setRange, bar, &QProgressBar::setRange);
+   connect(this , &ScanHandler::setValue, bar, &QProgressBar::setValue);
+   connect(this , &ScanHandler::setFormat, bar, &QProgressBar::setFormat);
 
 }
 
 /**  While it is neccessary to use QThread to free the GUI
  * and use signals and slots mechanism
- * I preffered to use std::thread because for me ore reliable
+ * I preffered to use std::thread because for me more reliable
+ * while QtConcurrent::map seemed very useful together with QFuterWatcher
+ * connected to QProgressBar, wasn't aplicable here.
  * than QThread or QtConcurrent options.
 **/
 void ScanHandler::run()
@@ -33,18 +36,27 @@ void ScanHandler::run()
     ImgMatchFinderBase * algo;
     std::clock_t start(std::clock());
 
-
+    emit setFormat("Loading...");
     int num_of_images;
-    std::thread t2([&](){num_of_images = ImgFileScanner::getNumberOfImages();});
-
+    std::thread t2([&](){num_of_images = ImgFileScanner::getNumberOfImages(m_root.toStdString());});
     std::thread t1([&](){ImgFileScanner::scan(m_root.toStdString());   });
     t2.join();
+
     std::cout << "Number of images = "<<num_of_images <<"Time:" <<double(std::clock()) - start<<std::endl;
+    emit setRange(0, num_of_images);
+    emit setFormat("Reading images: %v/%m");
+
     t1.join();
+    emit setFormat("Finding matchs: %v/%m");
     t1 = std::thread([&](){algo = _algoData[m_algo].second(); algo->makeMatchGroups();});
     t1.join();
+    int found = 0;
+
     t1 = std::thread([&](){AddingImgThread addImgThread(_algoData[m_algo].first);
-                for(const auto & x: algo->getMatchGroups())
+            auto mgroup = algo->getMatchGroups();
+            found += mgroup.size();
+            emit setValue(found);
+                for(const auto & x: mgroup)
                     addImgThread.addStringList(x);
         });
     t1.join();
@@ -54,7 +66,6 @@ void ScanHandler::run()
     std::cout << "Algo: " <<m_algo <<std::endl;
 
     std::cout << "DoneTime:" <<double(std::clock()) - start<<std::endl;
-
 }
 
 void ScanHandler::setRoot(QString s)
