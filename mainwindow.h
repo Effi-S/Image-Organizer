@@ -47,7 +47,8 @@ public:
     bool eventFilter(QObject *object, QEvent *event);
 
     ~MainWindow();
-
+signals:
+    void stopScan();
 private slots:
     void on_actionchange_file_triggered();
 

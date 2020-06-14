@@ -36,6 +36,6 @@ void AddingImgThread::run()
     }
     group->setCheckable(false);
 
-   emit addRow(std::move(group));
+   emit addRow(std::move(group), m_path_list.size());
    m_path_list.clear();
 }

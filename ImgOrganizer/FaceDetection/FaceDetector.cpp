@@ -1,5 +1,5 @@
 ﻿#include "FaceDetector.h"
-#include "ImgFileScanner.h"
+#include "../ImgFileScanner.h"
 #include <iostream>
 
 
@@ -11,8 +11,6 @@ FaceDetector::FaceDetector(const std::string& yml)
         m_model->read(yml);
         std::cout << "...Done Loading model! Time: " << std::clock() - start << std::endl;
 
-        //std::cout << "read:" << std::endl
-        //    << "Labels:" << m_model->getLabels() << std::endl;
     }
     catch (cv::Exception & e) {
         std::cout << "CV ERROR:" << e.msg << std::endl;
@@ -52,8 +50,6 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
     auto label_path = std::filesystem::path().append(saveTo).append(label);
 
     std::filesystem::create_directory(label_path);
-
-    // crop out faces ?? 
 
     // (ii) - convert images to grayscale and add to directory
    
@@ -139,6 +135,14 @@ void FaceDetector::save(const std::string yml)
     m_model->write(yml);
 }
 
+std::vector<std::wstring> FaceDetector::getUserLabels(std::string path)
+{
+    std::vector<std::wstring> labels;
+    for (auto x : _getUserLabelMap())
+        labels.push_back(x.first);
+    return labels;
+}
+
 void FaceDetector::read_csv(std::vector<cv::Mat>& images, std::vector<int>& labels) {
 
     std::wifstream file(m_training_labels_csv.c_str(), std::wifstream::in, std::wifstream::binary);
@@ -167,10 +171,11 @@ void FaceDetector::read_csv(std::vector<cv::Mat>& images, std::vector<int>& labe
 
         }
     }  
-    //for (auto& x : failed)
-    //    std::wcout << x << std::endl;
-    std::wcout << "Successfully read: " << successfull.size() << " failed to read: " << failed.size() << L"\n";
+    for (auto& x : failed)
+        std::wcout <<L"Failed to read: "<< x << std::endl;
+    std::wcout << L"Successfully read: " << successfull.size() << " failed to read: " << failed.size() << L"\n";
 }
+
 std::unordered_map<std::wstring, int> FaceDetector::_getUserLabelMap()
 {
     std::unordered_map<std::wstring, int> lblMap;

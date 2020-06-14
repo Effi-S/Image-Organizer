@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_scanHandler.registerAlgo(1, ui->similar_groupView->model() , [](){return new SimilarImgFinder;} );
     m_scanHandler.registerAlgo(2, ui->exact_groupView->model() , [](){return new BitExactImgFinder;} );
     connect(ui->tabWidget, &QTabWidget::currentChanged, &m_scanHandler, &ScanHandler::setAlgo);
+    connect(this , &MainWindow::stopScan, &m_scanHandler, &ScanHandler::terminate);
 
 }
 
@@ -43,9 +44,10 @@ void MainWindow::removeFunc(QObject *object, QListView *view)
     QStandardItem * item = model->itemFromIndex(index);
     MyStandardItemModel mod;
 
-    QMessageBox msgBox;
+    QMessageBox msgBox(this);
     msgBox.setInformativeText("Are you sure you want to delete: "+item->text()+"?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setIcon(QMessageBox::Icon::Critical);
     msgBox.setDefaultButton(QMessageBox::Yes);
     int ret = msgBox.exec();
     if(ret == QMessageBox::Yes)
@@ -150,19 +152,17 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
             moveLeft(object, ui->similar_itemView , ui->similar_groupView);
             moveLeft(object, ui->exact_itemView   , ui->exact_groupView  );
         }
-        else if (ke->key() == 16777220){
+        else if (ke->key() == 16777220){ // Enter key (Qt has a bug)
             moveEnter(object, ui->similar_groupView , ui->similar_itemView);
             moveEnter(object, ui->exact_groupView   , ui->exact_itemView);
 //
         }
         return true;
     }
-    else if (event->type() == QEvent::MouseButtonDblClick){
-        std::cout << RED << "Double Click!" << RESET << std::endl;
 
-    }
     return false;
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -273,8 +273,16 @@ void MainWindow::on_actionScan_triggered()
 //    set_enabled(false);
     if(m_scanHandler.isRunning())
     {
-//   TODO     QMessageBox();
-        return;
+        QMessageBox msgBox(this);
+        msgBox.setInformativeText("Scan is already running:\nNew scan?");
+        msgBox.setIcon(QMessageBox::Icon::Warning);
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        int ret = msgBox.exec();
+        if(ret == QMessageBox::Yes)
+            emit stopScan();
+         else
+            return;
     }
     QProgressBar * bar = new QProgressBar(this);
     bar->setRange(0, 0);

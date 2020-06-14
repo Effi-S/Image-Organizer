@@ -5,6 +5,7 @@
 #include "qmimedata.h"
 #include <QKeyEvent>
 #include <iostream>
+#include <QSortFilterProxyModel>
 
 /* *************************************
  * Class for a model holding image Groups
@@ -27,8 +28,9 @@ public:
                               int row, int column, const QModelIndex &parent);
 
 public slots:
-    void addRow(QStandardItem * item){ appendRow(item);}
+    void addRow(QStandardItem * item, int size);
 protected:
+
 
 };
 

@@ -54,11 +54,10 @@ double OrbMatcher::matcheScore( cv::Mat img1, cv::Mat  img2, const bool draw )
         cv::imshow("Good Matches", img_matches);
 
         cv::waitKey();
-        return  double(good_matches.size()) / double(knn_matches.size());
     }
-
-    return 0;
+    return  double(good_matches.size()) / double(knn_matches.size());
 }
+
 
 // sorting matches based on size 
 void OrbMatcher::sort(std::vector<cv::DMatch>& matches)

@@ -111,8 +111,9 @@ void MyTreeView::keyPressEvent(QKeyEvent *event)
         QFileSystemModel * data = static_cast<QFileSystemModel *>(this ->model());
         if(data)
         {
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
             msgBox.setInformativeText("Are you sure you want to delete: " + data->fileName(index) + "?");
+            msgBox.setIcon(QMessageBox::Icon::Question);
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Yes);
             int ret = msgBox.exec();

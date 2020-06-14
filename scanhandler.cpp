@@ -24,6 +24,16 @@ void ScanHandler::setBar(QProgressBar *bar)
 
 }
 
+void ScanHandler::stop()
+{
+    delete t1;
+    delete t2;
+
+    t1 = nullptr;
+    t2 = nullptr;
+    quit();
+}
+
 /**  While it is neccessary to use QThread to free the GUI
  * and use signals and slots mechanism
  * I preffered to use std::thread because for me more reliable
@@ -38,28 +48,30 @@ void ScanHandler::run()
 
     emit setFormat("Loading...");
     int num_of_images;
-    std::thread t2([&](){num_of_images = ImgFileScanner::getNumberOfImages(m_root.toStdString());});
-    std::thread t1([&](){ImgFileScanner::scan(m_root.toStdString());   });
-    t2.join();
+    t2 = new std::thread([&](){num_of_images = ImgFileScanner::getNumberOfImages(m_root.toStdString());});
+    t1= new std::thread([&](){ImgFileScanner::scan(m_root.toStdString());   });
+    t2->join();
 
     std::cout << "Number of images = "<<num_of_images <<"Time:" <<double(std::clock()) - start<<std::endl;
     emit setRange(0, num_of_images);
     emit setFormat("Reading images: %v/%m");
 
-    t1.join();
-    emit setFormat("Finding matchs: %v/%m");
-    t1 = std::thread([&](){algo = _algoData[m_algo].second(); algo->makeMatchGroups();});
-    t1.join();
+    t1->join();
+    emit setFormat("Finding matches: %v/%m");
+    t1 = new std::thread([&](){algo = _algoData[m_algo].second(); algo->makeMatchGroups();});
+    t1->join();
+
+    emit setFormat("Adding match groups: %v/%m");
+    emit setRange(0, algo->numberOfImagesFound());
     int found = 0;
 
-    t1 = std::thread([&](){AddingImgThread addImgThread(_algoData[m_algo].first);
-            auto mgroup = algo->getMatchGroups();
-            found += mgroup.size();
-            emit setValue(found);
-                for(const auto & x: mgroup)
+    t1 = new std::thread([&](){
+                AddingImgThread addImgThread(_algoData[m_algo].first);
+                for(const auto & x: algo->getMatchGroups()){
                     addImgThread.addStringList(x);
-        });
-    t1.join();
+                    emit setValue(++found);
+                }});
+    t1->join();
 
     std::cout << "Done with thread: " << QThread::currentThreadId() << " ";
     std::cout << "root: " <<m_root.toStdString() << " ";

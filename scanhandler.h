@@ -25,6 +25,7 @@ signals:
     void setFormat(QString);
 public slots:
 
+    void stop();
     void setRoot(QString);
     void setAlgo(int);
 private:
@@ -32,6 +33,7 @@ private:
     std::map<int, std::pair<MyStandardItemModel *,
                 std::function<ImgMatchFinderBase *()>>> _algoData;
     QString m_root;
+    std::thread * t1, *t2; ///< INTERNAL THREADS
     int m_algo = 0;
 
 };
