@@ -1,1 +1,40 @@
 #!/bin/bash
+# usage: ./auto_run <path to images>
+
+#-- Variables
+testfolder=$(pwd)/auto_test_$(date +'%y-%m-%d__%s')
+tests_arr=(brighten crop resize rotate)
+
+echo testfolder: $testfolder
+
+#-- Getting user info
+imgfolderpath="$1"
+numimgs="$2"
+
+echo Getting images from: $imgfolderpath and testing: $numimgs for each test 
+
+#-- Making directories
+
+mkdir $testfolder
+for x in ${tests_arr[@]};do
+	mkdir $testfolder/$x
+done
+
+# -- Copy folder with images into test folder
+for x in ${tests_arr[@]};do
+	cp -r $imgfolderpath $testfolder/$x
+done 
+
+#-- Select numimgs images in each test at random to run test on 
+for t in ${tests_arr[@]};do
+	for x in $(shuf -e $(find $testfolder/$t -not -type d ) -n $numimgs);do 
+		echo $x >> tmp.txt
+		python $t'.py' $x 
+	done
+done 
+
+
+
+
+
+

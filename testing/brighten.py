@@ -16,7 +16,9 @@ def main():
 
     img = Image.open(filename)
     img2 = ImageEnhance.Brightness(image=img).enhance(factor=brightness)
-    img2.save('dup' + '_{}_'.format(brightness) + img.filename)
+    name = filename.split('/')
+    name[-1] = 'dup' + '_{}_'.format(brightness) + name[-1]
+    img2.save('/'.join(name))
 
 
 if __name__ == '__main__':
