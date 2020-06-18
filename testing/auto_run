@@ -1,15 +1,17 @@
 #!/bin/bash
 # usage: ./auto_run <path to images>
 
-#-- Variables
-testfolder=$(pwd)/auto_test_$(date +'%y-%m-%d__%s')
-tests_arr=(brighten crop resize rotate)
-
-echo testfolder: $testfolder
-
 #-- Getting user info
 imgfolderpath="$1"
 numimgs="$2"
+
+#--Setting Variables
+base=$(basename $imgfolderpath)  # getting bas dir name (ex: a from c/b/a) 
+testfolder=$(pwd)/auto_test_$base_$(date +'%y-%m-%d__%s')
+tests_arr=(brighten crop resize rotate nothing)
+
+echo testfolder: $testfolder
+
 
 echo Getting images from: $imgfolderpath and testing: $numimgs for each test 
 
@@ -28,11 +30,12 @@ done
 #-- Select numimgs images in each test at random to run test on 
 for t in ${tests_arr[@]};do
 	for x in $(shuf -e $(find $testfolder/$t -not -type d ) -n $numimgs);do 
-		echo $x >> tmp.txt
 		python $t'.py' $x 
-	done
+	done	
 done 
 
+#--  Run test
+./test_cmd $testfolder
 
 
 

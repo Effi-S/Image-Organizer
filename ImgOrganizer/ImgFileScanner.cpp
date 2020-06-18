@@ -39,9 +39,9 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 
     IMG_DB().clear();
 
-std::unordered_set<std::wstring> extension_set({ L".png", L".jpg", L".jpeg", L".bmp" });
+    std::unordered_set<std::wstring> extension_set({ L".png", L".jpg", L".jpeg", L".bmp" });
 
-std::future<void> future;
+    std::future<void> future;
 
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))

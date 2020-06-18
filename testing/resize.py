@@ -19,13 +19,17 @@ def main():
     height = args.height or 0
     width = args.width or 0
 
-    while height <= 0 or width <= 0 or height > img.height or width > img.width:
-        height = args.height or random.randint(a=img.height*0.1, b=img.height*0.9)
-        width = args.height or random.randint(a=img.width*0.1, b=img.width*0.9)
+    width, height = map(int, (width, height))   # make sure integers
+
+    if height <= 0 or width <= 0 or height > img.height or width > img.width:
+        height = random.randint(a=int(img.height*0.1), b=int(img.height*0.9))
+        width = random.randint(a=int(img.width*0.1),  b=int(img.width*0.9))
 
     img2 = img.resize(size=(width, height))
-    img2.save('dup' + img.filename)
-
+    name = filename.split('/')
+    name[-1] = 'dup_{}_{}_'.format(width, height) + name[-1]
+    img2.save('/'.join(name))
+    
 
 if __name__ == '__main__':
     main()

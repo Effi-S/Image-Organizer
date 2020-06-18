@@ -11,3 +11,4 @@ ImgOrganizer/FaceDetection/faces/*
 ImgOrganizer/FaceDetection/backlog/*
 ImgOrganizer/.vs
 ImgOrganizer/FaceDetection/trained_model.yml
+ImgOrganizer/testing/auto_test*

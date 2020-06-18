@@ -1,11 +1,11 @@
 from PIL import Image
 import argparse
 import random
-
+import os
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('name', nargs='?', default=None, help='name of image file.', type=str)
+    parser = argparse.ArgumentParser('Creates rotated image.')
+    parser.add_argument('name', nargs='?', default=None, help='Name of image file path. Default is random file in directory', type=str)
     parser.add_argument('--angle', help='angle to rotate image if not entered a random angle is chosen between 1 and 359', default=None, type=int)
     args = parser.parse_args()
 

@@ -1,15 +1,20 @@
 #!/bin/bash
 orig_dir=$(pwd)
+test_dir=${1:-$orig_dir/"tests"}
+
+# -- Making sure path exists
+[[ -d  $orig_dir/$test_dir ]] && test_dir=$orig_dir/$test_dir  # make absolute path if not
+[[ ! -d  $test_dir ]] &&  echo Directory $test_dir Not found && exit 1
+
+# -- Running ImageOrganizer on subdirs in path  
 cd ../ImgOrganizer/x64/Release
-x=$orig_dir/"tests"
-truncate -s 0 $x/*output.txt
-for i in $(ls $x)
-	 do 	
-		./ImgOrganizer.exe $x/$i	
+for subdir in $(find $test_dir -maxdepth 1 -mindepth 1 -type d);do 	
+		./ImgOrganizer.exe -b -s $subdir		
 	 done
-for i in $(ls $x | grep output)
-	do
-		echo $x/$i
-		grep  -c "/*/" $x/$i  	
+
+# -- Retrieving info
+for subdir in $(ls $test_dir | grep output);do
+		val=$(grep  -c "/*/" $test_dir/$subdir)
+		echo $val: $test_dir/$subdir 		  	
 	done
 cd $orig_dir
