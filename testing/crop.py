@@ -25,6 +25,7 @@ def main():
     box = (left, upper, right, lower)
     img2 = img.crop(box=box)
     name = filename.split('/')
+    box = str(box).replace('(', '_').replace(', ', '_').replace(')', '_')
     name[-1] = 'dup_{}_'.format(box) + name[-1]
     img2.save('/'.join(name))
 

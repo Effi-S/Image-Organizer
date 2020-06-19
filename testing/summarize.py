@@ -32,6 +32,7 @@ def main():
                       (dir=args.root, base=folder, type=args.type, ), 'r').read()
         groups = output.split('\n\n')
 
+        found = 0
         for i, img in enumerate(test_images):
             worksheet.write(i + 1, 0, img)
             worksheet.write(i + 1, 2, re.findall(r'dup_(.*)_.+\.', img)[0])
@@ -41,13 +42,14 @@ def main():
                     name = re.findall(r'.*_(.+)\.', img)[0]  # retrieving image name
                     if name in group:
                         worksheet.write(i + 1, 1, 'TRUE')
+                        found += 1
                         break
             else:
                 worksheet.write(i + 1, 1, 'FALSE')
 
         last_row = len(test_images) + 1  # index to last row.
         worksheet.write(last_row, 0, 'Number of Found:')
-        worksheet.write(last_row, 1, '=COUNTIF(B2:B{}, TRUE)'.format(last_row))
+        worksheet.write(last_row, 1, '{}/{}'.format(found, last_row))
 
     workbook.close()
 
