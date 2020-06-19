@@ -28,7 +28,8 @@ public:
                               int row, int column, const QModelIndex &parent);
 
 public slots:
-    void addRow(QStandardItem * item, int size);
+    void addRow(QStandardItem * item);
+    void clear();
 protected:
 
 

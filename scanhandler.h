@@ -3,38 +3,50 @@
 #include <QProgressBar>
 #include "MyStandardItemModel.h"
 #include "ImgOrganizer/ImgMatchFinderBase.h"
-#include <QObject>
 #include "ImgOrganizer/ImgFileScanner.h"
-#include <QThread>
 #include <QtConcurrent/QtConcurrentRun>
+#include <QThread>
+#include <QFuture>
 #include "addimgthread.h"
-#include <QFutureWatcher>
-#include <thread>  // Because QThread and QtConcurrent::map/run are extremely slow and buggy
+#include "ImgOrganizer/BitExactImgFinder.h"
+#include <thread>
+#include <QMutex>
+#include <future>
+
+
 class ScanHandler : public QThread
 {
  Q_OBJECT
 public:
     ScanHandler();
-    void registerAlgo(int, QAbstractItemModel * mod, std::function<ImgMatchFinderBase *()> func);
+
+    void registerAlgo(int, QAbstractItemModel *mod, std::function<ImgMatchFinderBase *()> );
     void setBar(QProgressBar * bar);
+
+    ~ ScanHandler();
 
 signals:
     void reset();
     void setRange(int min ,int max);
     void setValue(int);
     void setFormat(QString);
-public slots:
 
+public slots:
     void stop();
     void setRoot(QString);
     void setAlgo(int);
 private:
     void run() override;
-    std::map<int, std::pair<MyStandardItemModel *,
-                std::function<ImgMatchFinderBase *()>>> _algoData;
-    QString m_root;
-    std::thread * t1, *t2; ///< INTERNAL THREADS
-    int m_algo = 0;
+
+
+    static std::map<int, std::pair<MyStandardItemModel *,
+                std::function<ImgMatchFinderBase *()>>>_algoData;
+    std::string m_root;
+
+    int m_algoType = 0;
+    std::future<int> numfu;
+    std::future<void> scanfu;
+    std::future<void> updatefu;
 
 };
 

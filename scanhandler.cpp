@@ -1,16 +1,21 @@
 #include "scanhandler.h"
 #include <QThread>
+
+
+std::map<int, std::pair<MyStandardItemModel *, std::function<ImgMatchFinderBase *()> >> ScanHandler::_algoData;
+
 ScanHandler::ScanHandler()
 {
 
 }
 
-void ScanHandler::registerAlgo(int type, QAbstractItemModel *mod, std::function<ImgMatchFinderBase *()> func)
+void ScanHandler::registerAlgo(int type, QAbstractItemModel * mod,
+                               std::function<ImgMatchFinderBase *()>  func)
 {
-    auto model = static_cast<MyStandardItemModel * >(mod);
+    auto model = static_cast<MyStandardItemModel *>(mod);
     if(!mod){
-            std::cout << "WRONG MODEL TYPE!" <<std::endl;
-            exit(-1);
+            std::cerr << "WRONG MODEL TYPE!" <<std::endl;
+            return;
             }
     _algoData.emplace(type, std::make_pair(model, func));
 
@@ -24,70 +29,79 @@ void ScanHandler::setBar(QProgressBar *bar)
 
 }
 
-void ScanHandler::stop()
+ScanHandler::~ScanHandler()
 {
-    delete t1;
-    delete t2;
 
-    t1 = nullptr;
-    t2 = nullptr;
-    quit();
+
 }
 
-/**  While it is neccessary to use QThread to free the GUI
- * and use signals and slots mechanism
- * I preffered to use std::thread because for me more reliable
- * while QtConcurrent::map seemed very useful together with QFuterWatcher
- * connected to QProgressBar, wasn't aplicable here.
- * than QThread or QtConcurrent options.
-**/
+void ScanHandler::stop()
+{
+
+//    t1.reset(nullptr);
+//    t2.reset(nullptr);
+
+}
+
+
 void ScanHandler::run()
 {
-    ImgMatchFinderBase * algo;
-    std::clock_t start(std::clock());
+
+    std::cout<< numfu.valid() << " " << scanfu.valid() << " " << updatefu.valid() <<std::endl;
 
     emit setFormat("Loading...");
-    int num_of_images;
-    t2 = new std::thread([&](){num_of_images = ImgFileScanner::getNumberOfImages(m_root.toStdString());});
-    t1= new std::thread([&](){ImgFileScanner::scan(m_root.toStdString());   });
-    t2->join();
 
-    std::cout << "Number of images = "<<num_of_images <<"Time:" <<double(std::clock()) - start<<std::endl;
+    auto root_copy = m_root;
+
+    scanfu = std::future(std::async([&](){ImgFileScanner::scan(m_root);}));
+
+    numfu = std::future<int>(std::async(&ImgFileScanner::getNumberOfImages, root_copy));
+
+    int num_of_images = numfu.get();
     emit setRange(0, num_of_images);
     emit setFormat("Reading images: %v/%m");
 
-    t1->join();
+    for(int val=0; val < num_of_images; QThread::msleep(100)){
+        val = ImgFileScanner::size();
+        emit setValue(val);
+    }
+    scanfu.get();
+
     emit setFormat("Finding matches: %v/%m");
-    t1 = new std::thread([&](){algo = _algoData[m_algo].second(); algo->makeMatchGroups();});
-    t1->join();
+
+    static std::mutex mu;
+    std::lock_guard<std::mutex> lk(mu);
+
+    ImgMatchFinderBase * algo = _algoData[m_algoType].second();
+
+    algo->makeMatchGroups();
 
     emit setFormat("Adding match groups: %v/%m");
     emit setRange(0, algo->numberOfImagesFound());
     int found = 0;
 
-    t1 = new std::thread([&](){
-                AddingImgThread addImgThread(_algoData[m_algo].first);
-                for(const auto & x: algo->getMatchGroups()){
-                    addImgThread.addStringList(x);
-                    emit setValue(++found);
-                }});
-    t1->join();
+    AddingImgThread addImgThread(_algoData[m_algoType].first);
+    for(const auto & x: algo->getMatchGroups()){
+        QThread::msleep(100);
+        addImgThread.addStringList(x);
+        emit setValue(++found);
 
-    std::cout << "Done with thread: " << QThread::currentThreadId() << " ";
-    std::cout << "root: " <<m_root.toStdString() << " ";
-    std::cout << "Algo: " <<m_algo <<std::endl;
+    }
+    delete algo;
 
-    std::cout << "DoneTime:" <<double(std::clock()) - start<<std::endl;
+// scanfu.get();
+// updatefu.get();
+
 }
 
 void ScanHandler::setRoot(QString s)
 {
-    m_root = s;
+    m_root = s.toStdString();
 }
 
 void ScanHandler::setAlgo(int i)
 {
-    m_algo = i;
+    m_algoType = i;
 }
 
 

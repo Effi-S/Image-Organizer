@@ -2,9 +2,13 @@
 #include "ui_mainwindow.h"
 #include <QStandardItem>
 
+
+
+
+
+
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->commandLinkButton->setEnabled(false);
@@ -26,11 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
     initView(ui->exact_groupView, ui->exact_itemView);
     initView(ui->similar_groupView, ui->similar_itemView);
 
-    m_scanHandler.registerAlgo(0, ui->exact_groupView->model() , [](){return new BitExactImgFinder;} );
-    m_scanHandler.registerAlgo(1, ui->similar_groupView->model() , [](){return new SimilarImgFinder;} );
-    m_scanHandler.registerAlgo(2, ui->exact_groupView->model() , [](){return new BitExactImgFinder;} );
+
+    m_scanHandler.registerAlgo(0, ui->exact_groupView->model(),    [](){return new BitExactImgFinder;} );
+    m_scanHandler.registerAlgo(1, ui->similar_groupView->model(),  [](){return new SimilarImgFinder;}   );
+    m_scanHandler.registerAlgo(2, ui->exact_groupView->model() ,   [](){return new BitExactImgFinder;}  );
     connect(ui->tabWidget, &QTabWidget::currentChanged, &m_scanHandler, &ScanHandler::setAlgo);
-    connect(this , &MainWindow::stopScan, &m_scanHandler, &ScanHandler::terminate);
+    connect(this , &MainWindow::stopScan, &m_scanHandler, &ScanHandler::stop);
 
 }
 
@@ -263,6 +268,8 @@ void MainWindow::initView(QListView * view1, QListView * view2 )
 
 void MainWindow::on_actionScan_triggered()
 {
+    std::cout << "Main thread: "
+              << QThread::currentThreadId() << std::endl;
     auto set_enabled = [=](bool b){
             ui->commandLinkButton->setEnabled(b);
             ui->FolderButton->setEnabled(b);
@@ -279,14 +286,18 @@ void MainWindow::on_actionScan_triggered()
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Yes);
         int ret = msgBox.exec();
-        if(ret == QMessageBox::Yes)
+        if(ret == QMessageBox::Yes){
             emit stopScan();
+        }
          else
             return;
     }
     QProgressBar * bar = new QProgressBar(this);
     bar->setRange(0, 0);
     ui->barLayout->addWidget(bar);
+    connect(&m_scanHandler, &ScanHandler::finished,
+            ui->barLayout , [&](){ui->barLayout->removeWidget(bar);});
+    connect(&m_scanHandler, &ScanHandler::finished, bar , &QProgressBar::deleteLater);
 
     m_scanHandler.setBar(bar);
     m_scanHandler.start();

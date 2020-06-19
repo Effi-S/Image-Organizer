@@ -73,12 +73,15 @@ bool MyStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction /*a
     return false;
 }
 
-void MyStandardItemModel::addRow(QStandardItem *item, int size)
+void MyStandardItemModel::addRow(QStandardItem *item)
 {
 
     appendRow(item);
-    for(int i=0; i< this->rowCount(); ++i)
-    {
-    }
 
+}
+
+void MyStandardItemModel::clear()
+{
+    for(int i=1; i< this->rowCount(); ++i)
+        this->removeRow(i);
 }

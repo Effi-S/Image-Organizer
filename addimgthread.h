@@ -24,17 +24,18 @@ class AddingImgThread :public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    AddingImgThread( MyStandardItemModel * model);
+    AddingImgThread(MyStandardItemModel * model);
 
 signals:
-    void addRow(QStandardItem *, int size);  ///< signal sent to model for it to add a row
+    void addRow(QStandardItem *);  ///< signal sent to model for it to add a row
+    void clear();
 public slots:
     void addStringList(const std::vector<std::wstring>  &l);
+
 
 private:
 void run() override;
 QStringList m_path_list;
-MyStandardItemModel * m_model;
 
 };
 

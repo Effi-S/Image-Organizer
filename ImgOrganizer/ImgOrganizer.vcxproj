@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="BitExactImgFinder.cpp" />
     <ClCompile Include="FaceDetection\FaceDetector.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="_Main.cpp" />
     <ClCompile Include="ImgFileScanner.cpp" />
     <ClCompile Include="ImgMatchFinderBase.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ImgMatchFinderBase.h" />
     <ClInclude Include="ImgSearch.h" />
     <ClInclude Include="OrbMatcher.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SimilarImgFinder.h" />
     <ClInclude Include="SurfMatcher.h" />

@@ -1,14 +1,16 @@
 #include "addimgthread.h"
 
 AddingImgThread::AddingImgThread(MyStandardItemModel *model)
-    :m_model(model){
+    {
 
     connect(this, &AddingImgThread::addRow, model, &MyStandardItemModel::addRow);
+    connect(this, &AddingImgThread::clear, model, &MyStandardItemModel::clear);
+    emit clear();
+
 }
 
 void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 {
-
     for(auto & x : l)
         m_path_list.append(QString::fromStdWString(x));
     run();
@@ -16,6 +18,7 @@ void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 
 void AddingImgThread::run()
 {
+
     auto first = m_path_list.cbegin();
 
     QStandardItem *group = new QStandardItem(QIcon(*first),
@@ -36,6 +39,6 @@ void AddingImgThread::run()
     }
     group->setCheckable(false);
 
-   emit addRow(std::move(group), m_path_list.size());
+   emit addRow(std::move(group));
    m_path_list.clear();
 }

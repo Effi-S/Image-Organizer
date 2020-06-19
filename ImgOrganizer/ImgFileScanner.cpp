@@ -31,6 +31,9 @@ int ImgFileScanner::getNumberOfImages(std::string path)
 //
 int ImgFileScanner::_scan(std::string path, bool dry)
 {
+    static std::mutex mu;
+    mu.lock();
+
 	std::clock_t start(std::clock());
 
 	uint img_count = 0;
@@ -43,6 +46,8 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 
     std::future<void> future;
 
+    mu.unlock();
+
 
 	for (const auto& entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied))
     {
@@ -51,6 +56,7 @@ int ImgFileScanner::_scan(std::string path, bool dry)
 
 		if (extension_set.find(extension) != extension_set.end())
 		{
+            //TODO remove try catch block.
 			try
 			{
 				if(!dry)
@@ -84,9 +90,9 @@ int ImgFileScanner::_scan(std::string path, bool dry)
         << "\n >>>>>>>>>><<<<<<<<<<<" << RESET << std::endl;
         }
 	}
-
+    std::lock_guard<std::mutex> lk(mu);
     if(future.valid())
-			future.wait();
+            future.get();
 
     std::cout << GREEN << "\nNumber Of images Found: " << BLUE << img_count << std::endl
              << GREEN <<"Time it took: " << RESET << double(std::clock()) - start << GREEN

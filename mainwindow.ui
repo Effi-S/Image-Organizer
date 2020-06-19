@@ -94,7 +94,7 @@ QSplitter::handle:hover {
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="iconSize">
            <size>
@@ -197,21 +197,28 @@ QSplitter::handle:hover {
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="pushButton_adv_file">
               <property name="text">
-               <string>From File</string>
+               <string>Similar to File</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="pushButton_adv_num">
               <property name="text">
-               <string>From tags</string>
+               <string>Number of People</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QListWidget" name="listWidget"/>
+             <widget class="QPushButton" name="pushButton_adv_face">
+              <property name="text">
+               <string>Face</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListView" name="listView"/>
             </item>
            </layout>
           </widget>

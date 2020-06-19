@@ -3,7 +3,9 @@ ImgOrganizer/.idea
 ImgOrganizer/x64
 ImgOrganizer/vs
 ImgOrganizer/html
+ImgOrganizer/tmp.jpg
 html/
+testing/auto_test*
 testing/tests/*
 testing/archive/*
 archive/

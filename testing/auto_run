@@ -12,7 +12,6 @@ testfolder=$(pwd)/auto_test_"$base"_$(date +'%y-%m-%d__%s')
 tests_arr=(brighten crop resize rotate nothing)
 
 echo Test Folder: $base
-exit 1
 
 echo Getting images from: $imgfolderpath and testing: $numimgs for each test 
 

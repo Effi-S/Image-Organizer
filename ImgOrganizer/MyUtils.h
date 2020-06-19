@@ -37,7 +37,7 @@ namespace MyUtils
 	}
 	static std::string getPath(const std::string& target)
 	{
-		for (const auto & x : std::filesystem::recursive_directory_iterator("../", 
+		for (const auto & x : std::filesystem::recursive_directory_iterator("../../", 
 			std::filesystem::directory_options::skip_permission_denied))
 		{
 			if (x.path().filename() == std::filesystem::path(target).filename())
