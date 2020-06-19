@@ -14,7 +14,7 @@ def main():
     img = Image.open(filename)
     img2 = img.rotate(angle=angle, expand=True)
     name = filename.split('/')
-    name[-1] = 'dup_{}'.format(angle) + name[-1]
+    name[-1] = 'dup_{}_'.format(angle) + name[-1]
     img2.save('/'.join(name))
     
 
