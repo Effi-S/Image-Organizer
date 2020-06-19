@@ -33,6 +33,7 @@ public:
     std::vector<std::vector<std::wstring>> getMatchGroups();  ///< retreaivng match groups that have been created already.
     
     uint32_t numberOfImagesFound ();
+    uint32_t numberOfGroupsFound();
 
     virtual ~ImgMatchFinderBase()  = default;  ///< (Should be overriden as well)
 protected:

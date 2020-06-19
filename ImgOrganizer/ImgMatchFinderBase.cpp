@@ -16,6 +16,12 @@ uint32_t ImgMatchFinderBase::numberOfImagesFound()
     return size;
 }
 
+uint32_t ImgMatchFinderBase::numberOfGroupsFound()
+{
+    std::lock_guard<std::mutex> lk(m_mutex);
+    return m_matchGroups.size();
+}
+
 
 void ImgMatchFinderBase::addMatchGroup(std::vector<std::wstring>& group)
 {

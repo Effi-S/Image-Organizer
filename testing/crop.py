@@ -6,21 +6,27 @@ import random
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('name', nargs='?', default=None, help='name of image file.', type=str)
-    parser.add_argument('--box', help='height of new image. must be between 0 and original height. if not chosen then a random value between'
-                                      ' 10 and 90 percent of original height is chosen', default=None, type=int)
-    parser.add_argument('--width',
-                        help='width of new image. must be between 0 and original width. if not chosen then a random value between '
-                             '10 and 90 percent of original width is chosen', default=None, type=int)
+    parser.add_argument('--box', help=' 4 consecutive floats separated by \',\'.\n '
+                                      'representing left, upper, right, lower.\n'
+                                      ' Example: \'10, 40, 300, 200\'\n '
+                                      'Make sure the cropped image is within the margins specified  ', default=None, type=str)
+    parser.add_argument('--margin',
+                        help='percent of margin to leave on all sides when auto running.', default=0.1, type=float)
 
     args = parser.parse_args()
 
     filename = args.name or random.choice(list(filter(lambda x: 'dup' not in x, os.listdir())))
     img = Image.open(filename)
 
-    left = random.randint(a=0, b=int(img.width/4))
-    upper = random.randint(a=0, b=int(img.height/4))
-    right = random.randint(a=int(img.width*0.75), b=int(img.width))
-    lower = random.randint(a=int(img.height*0.75), b=int(img.height))
+    margin = args.margin
+    left = random.randint(a=0, b=int(img.width*margin))
+    upper = random.randint(a=0, b=int(img.height*margin))
+    right = random.randint(a=int(img.width*(1-margin)), b=int(img.width))
+    lower = random.randint(a=int(img.height*(1-margin)), b=int(img.height))
+
+    if args.box:
+        left, upper, right, lower = map(float, args.box.split(','))
+        assert left < img.width*margin and upper < img.height*margin and right < img.width*(1-margin) and lower < img.height*(1-margin), 'Not within margin borders'
 
     box = (left, upper, right, lower)
     img2 = img.crop(box=box)

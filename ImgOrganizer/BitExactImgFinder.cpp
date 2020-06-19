@@ -3,11 +3,12 @@
 
 void BitExactImgFinder::makeMatchGroups()
 {
+    
 	for (const auto& x : m_matches)
 	{
         std::vector<std::wstring> group;
 		for (auto& img : x.second)
-            group.push_back(img.second->c_str());
+            group.push_back(img.second.c_str());
        addMatchGroup(group);
 	}
 }
@@ -15,14 +16,11 @@ void BitExactImgFinder::makeMatchGroups()
 // Creates map of digests (key) paired with the image itself (imgValue)
 void BitExactImgFinder::makeImageMap()
 {
-	m_algo = cv::img_hash::BlockMeanHash::create(0);
 
-
-    ImgFileScanner scanner;
-    for (const auto& x : scanner)
+    for (auto& img_path_pair : ImgFileScanner())
 	{
         // 1. getting the algorithm's output
-		cv::Mat im = *(x.first);
+		cv::Mat im = *img_path_pair.first;
 		cv::Mat imHash;
 
         m_algo->compute(im, imHash);
@@ -41,6 +39,7 @@ void BitExactImgFinder::makeImageMap()
 		if (it == m_matches.end())
             m_matches.emplace(key, std::vector<ImgInfo>());
 
-        m_matches.at(key).push_back(ImgInfo(im, x.second.get()));
+        m_matches.at(key).push_back(ImgInfo(im, *img_path_pair.second));
 	}
+
 }

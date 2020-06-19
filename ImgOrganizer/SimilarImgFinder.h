@@ -2,8 +2,6 @@
 #include <map>
 #include "ImgMatchFinderBase.h"
 #include "OrbMatcher.h"
-//#include <opencv2/img_hash/color_moment_hash.hpp>
-
 
 /********************************
  * Similar Image Finding class
@@ -35,7 +33,7 @@ public:
 
 private:
 
-    void makeListOfSimilarImages();
+    void makeListOfSimilarImages(); ///< initializing the list
 
     std::unordered_map<HashKey, HashValue > m_matches; ///< a map from a key to list of images
 

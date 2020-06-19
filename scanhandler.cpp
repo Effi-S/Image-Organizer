@@ -61,7 +61,7 @@ void ScanHandler::run()
     emit setRange(0, num_of_images);
     emit setFormat("Reading images: %v/%m");
 
-    for(int val=0; val < num_of_images; QThread::msleep(100)){
+    for(int val=0; val < num_of_images; QThread::msleep(200)){
         val = ImgFileScanner::size();
         emit setValue(val);
     }
@@ -75,22 +75,19 @@ void ScanHandler::run()
     ImgMatchFinderBase * algo = _algoData[m_algoType].second();
 
     algo->makeMatchGroups();
-
+    emit setRange(0, algo->numberOfGroupsFound());
     emit setFormat("Adding match groups: %v/%m");
-    emit setRange(0, algo->numberOfImagesFound());
-    int found = 0;
 
+
+    int found = 0;
     AddingImgThread addImgThread(_algoData[m_algoType].first);
     for(const auto & x: algo->getMatchGroups()){
-        QThread::msleep(100);
+        QThread::msleep(200);
         addImgThread.addStringList(x);
         emit setValue(++found);
 
     }
     delete algo;
-
-// scanfu.get();
-// updatefu.get();
 
 }
 
