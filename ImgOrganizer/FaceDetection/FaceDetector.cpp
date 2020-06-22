@@ -93,15 +93,18 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
 ///< searches for and returns all images with label
 std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw) 
 {    std::clock_t start(std::clock());
-    std::wcout << L"Searching For: "<< label  <<std::endl;
-
+   
     std::vector<std::wstring> foundImages;
     ImgFileScanner scanner;
 
+    for (auto x : m_userLabels)
+        std::wcout<< L"Label: " << x.first <<" ->> "<<x.second << std::endl;
     // getting integer of label
     auto it = m_userLabels.find(label);
     if (it == m_userLabels.end())
         return std::vector<std::wstring>{L"Bad Label"}; // returning if label doesn't exist 
+
+    std::wcout << L"Searching For: " << label << std::endl;
 
     int targetLabel = it->second; // the integer to find
 
@@ -135,6 +138,7 @@ std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw)
 
 void FaceDetector::save(std::string yml)
 {
+    std::cout << "Saving model to: " <<yml<< std::endl;
     m_model->write(yml);
 }
 

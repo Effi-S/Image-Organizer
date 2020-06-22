@@ -32,6 +32,8 @@ QT_END_NAMESPACE
 #include <QProgressBar>
 #include "scanhandler.h"
 #include <QStandardItem>
+#include "getnumberdialog.h"
+#include "getfacedialog.h"
 
 /***********************
  * Main Window of the application
@@ -75,12 +77,15 @@ private slots:
 
     void on_FolderButton_clicked();
 
+    void on_actionFace_to_find_triggered();
+
+    void on_actionFile_to_search_for_triggered();
+
+    void on_actionNumber_of_people_triggered();
+
 private:
 
-    std::unique_ptr<Ui::MainWindow> ui;
-    //std::unique_ptr<ScanThread> m_scanThread;
-    void removeFunc(QObject *object, QListView *view);
-
+    Ui::MainWindow * ui;
 
     std::unique_ptr<QFileSystemModel> m_fileModel =nullptr;
 
@@ -94,6 +99,7 @@ private:
     void moveDown(QObject *object, QListView *view);
     void moveLeft(QObject *object, QListView *view, QListView *groups);
     void moveEnter(QObject *object, QListView *groups, QListView *items);
+    void removeFunc(QObject *object, QListView *view);
 
 };
 

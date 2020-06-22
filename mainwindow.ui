@@ -454,6 +454,15 @@ padding: 5px;
     <property name="title">
      <string>Setting </string>
     </property>
+    <widget class="QMenu" name="menuAdvanced_search_settings">
+     <property name="title">
+      <string>Advanced search settings</string>
+     </property>
+     <addaction name="actionNumber_of_people"/>
+     <addaction name="actionFile_to_search_for"/>
+     <addaction name="actionFace_to_find"/>
+    </widget>
+    <addaction name="menuAdvanced_search_settings"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -568,6 +577,21 @@ padding: 5px;
    </property>
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionNumber_of_people">
+   <property name="text">
+    <string>Number of people</string>
+   </property>
+  </action>
+  <action name="actionFile_to_search_for">
+   <property name="text">
+    <string>File to search for</string>
+   </property>
+  </action>
+  <action name="actionFace_to_find">
+   <property name="text">
+    <string>Face to find</string>
    </property>
   </action>
  </widget>

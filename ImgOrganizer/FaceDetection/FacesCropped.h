@@ -3,12 +3,13 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "../MyUtils.h"
 #include <iostream>
 
 
 /** Global variables */
-const cv::String face_cascade_name = "lbpcascade_frontalface_improved.xml";
-const cv::String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
+const cv::String face_cascade_name = MyUtils::getPath("lbpcascade_frontalface_improved.xml");
+const cv::String eyes_cascade_name = MyUtils::getPath("haarcascade_eye_tree_eyeglasses.xml");
 const std::string window_name = "Searching for your face...";
 const cv::RNG rng(12345);
 

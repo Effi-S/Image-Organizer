@@ -39,15 +39,13 @@ public:
 
 private:
 
-
 	FaceDetector(const std::string& yml);   ///< load model from yml
 	FaceDetector(const std::string& csv, const std::string& imgs_dir);  ///< create new from csv and directory with images
-
 
 	void read_csv(std::vector<cv::Mat>& images, std::vector<int>& labels);
 
 	
-	std::unordered_map<std::wstring, int> _getUserLabelMap(); ///< because LBPH is implemented with integer labels and string labels are simpler.
+	static std::unordered_map<std::wstring, int> _getUserLabelMap(); ///< because LBPH is implemented with integer labels and string labels are simpler.
 
 	std::unordered_map<std::wstring, int> m_userLabels = _getUserLabelMap();
 

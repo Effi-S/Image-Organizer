@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 		out_file << run_algo(new SimilarImgFinder).c_str() << std::endl;
 
 	}
-	if (args.argExists("-f") || args.argExists("--face")) {
+	if (1 || args.argExists("-f") || args.argExists("--face")) {
 		
 		std::unique_ptr<FaceDetector> face_detector=nullptr; // = FaceDetector::loadFromYAML();
 		
@@ -88,11 +88,11 @@ int main(int argc, char** argv) {
 			face_detector->save();
 		}
 			
-		if (args.argExists("--search-label")) {
+		if (1 || args.argExists("--search-label")) {
 			if(face_detector == nullptr)
 				face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
 
-			auto label = "2";// args.getArg("--search-label");
+			auto label =  args.getArg("--search-label");
 			
 			std::wstringstream cls;
 			cls << label;
@@ -151,7 +151,19 @@ int main(int argc, char** argv) {
 			}
 	}
 	if (args.argExists("--people-count")) {
-		
+		int num = std::stoi(args.getArg("--people-count"));
+		std::cout << ORANGE <<"Searching for Images with: " << GREEN << num << ORANGE << " People" << RESET << std::endl;
+		FacesCropped cropper;
+
+		for (auto& img_path_pair : ImgFileScanner())
+			if (cropper.numberOfFaces(*img_path_pair.first) == num)
+			{
+				std::wstring img_name(*img_path_pair.second);
+				cv::Mat img = MyUtils::unicodeImgRead(img_name);
+				cv::namedWindow("find num", cv::WINDOW_GUI_EXPANDED);
+				cv::imshow("find num", img);
+				cv::waitKey(0);
+			}
 	}
 
 	return(0);

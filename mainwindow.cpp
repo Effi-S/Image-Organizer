@@ -2,20 +2,17 @@
 #include "ui_mainwindow.h"
 
 
-
-
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    //-- basic config
     ui->setupUi(this);
     ui->commandLinkButton->setEnabled(false);
     ui->toolBar->setVisible(false);
 
     ui->splitter->setSizes(QList<int>() << 200 << 65); //setting offset of splitter
 
-    //file model + tree view
+    //-- init file model and view
     m_fileModel = std::make_unique<QFileSystemModel>(this);
     m_fileModel->setReadOnly(false);
     m_fileModel->setFilter(QDir::NoDotAndDotDot| QDir::AllDirs | QDir::AllEntries);
@@ -26,15 +23,17 @@ MainWindow::MainWindow(QWidget *parent)
     QModelIndex index = m_fileModel->index(QString("~/"), 0);
 
     ui->treeView->setRootIndex(index);
+
+    //-- init views
     initView(ui->exact_groupView, ui->exact_itemView);
     initView(ui->similar_groupView, ui->similar_itemView);
     initView(ui->advanced_view, ui->advanced_view);
 
+    // -- connect scanHandler
     m_scanHandler.registerAlgo(0, ui->exact_groupView->model(),    [](){ return new BitExactImgFinder; } );
     m_scanHandler.registerAlgo(1, ui->similar_groupView->model(),  [](){ return new SimilarImgFinder; }   );
     m_scanHandler.registerAlgo(2, ui->advanced_view->model() ,     [](){ return new AdvancedImgSearch; } );
 
-    // -- connect scanHandler
     connect(ui->tabWidget, &QTabWidget::currentChanged, &m_scanHandler, &ScanHandler::setAlgo);
     connect(this , &MainWindow::stopScan, &m_scanHandler, &ScanHandler::stop);
     connect(&m_scanHandler, &ScanHandler::setFormat, [&](QString s){
@@ -47,18 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     //-- connect advancedSearch
-    connect(ui->pushButton_adv_face, &QPushButton::pressed, this, [](){ /*AdvancedImgSearch::setFaceToFind(L"2");*/});
-    connect(ui->pushButton_adv_num, &QPushButton::pressed, this, [](){ /*AdvancedImgSearch::setNumberOfPeople(1);*/});
-    connect(ui->pushButton_adv_file, &QPushButton::pressed, this,[&](){
-        ui->statusBar->showMessage("Choose an Image File");
-        QString imgPath = QFileDialog::getOpenFileName(this , "Choose the Folder");
-        auto file = QFile(imgPath);
-        QString imageFormat = QImageReader::imageFormat(imgPath);
-        if(!file.exists() || imageFormat.size() == 0)
-            QMessageBox::warning(this, "Warning", "Cannot Open:"+imgPath);
-        else
-            AdvancedImgSearch::setSearchFile(imgPath.toStdWString());
-    });
+    connect(ui->pushButton_adv_num , &QPushButton::pressed  , this , &MainWindow::on_actionNumber_of_people_triggered);
+    connect(ui->pushButton_adv_face , &QPushButton::pressed  , this , &MainWindow::on_actionFace_to_find_triggered);
+    connect(ui->pushButton_adv_file , &QPushButton::pressed  , this , &MainWindow::on_actionFile_to_search_for_triggered);
 
 }
 
@@ -296,14 +286,14 @@ void MainWindow::on_actionScan_triggered()
 {
     std::cout << "Main thread: "
               << QThread::currentThreadId() << std::endl;
-    auto set_enabled = [=](bool b){
-            ui->commandLinkButton->setEnabled(b);
-            ui->FolderButton->setEnabled(b);
-            ui->actionScan->setEnabled(b);
-            ui->tabWidget->setEnabled(b);
-         };
+//    auto set_enabled = [=](bool b){
+//            ui->commandLinkButton->setEnabled(b);
+//            ui->FolderButton->setEnabled(b);
+//            ui->actionScan->setEnabled(b);
+//            ui->tabWidget->setEnabled(b);
+//         };
 
-//    set_enabled(false);
+////    set_enabled(false);
     if(m_scanHandler.isRunning())
     {
         QMessageBox msgBox(this);
@@ -327,4 +317,31 @@ void MainWindow::on_actionScan_triggered()
     m_scanHandler.start();
 
     ui->statusBar->showMessage("Scanning for images...");
+}
+
+void MainWindow::on_actionFace_to_find_triggered()
+{
+    auto dialog = new GetFaceDialog(this);
+    dialog->exec();
+    AdvancedImgSearch::setFaceToFind(L"3");
+}
+
+void MainWindow::on_actionFile_to_search_for_triggered()
+{
+    ui->statusBar->showMessage("Choose an Image File");
+    QString imgPath = QFileDialog::getOpenFileName(this , "Choose the Folder");
+    auto file = QFile(imgPath);
+    QString imageFormat = QImageReader::imageFormat(imgPath);
+    if(!file.exists() || imageFormat.size() == 0)
+        QMessageBox::warning(this, "Warning", "Cannot Open:"+imgPath);
+    else
+        AdvancedImgSearch::setSearchFile(imgPath.toStdWString());
+}
+
+void MainWindow::on_actionNumber_of_people_triggered()
+{
+     auto dialog = new GetNumberDialog(this);
+     connect(dialog, &GetNumberDialog::valueChosen, this, [](int val){ AdvancedImgSearch::setNumberOfPeople(val);});
+     dialog->exec();
+
 }

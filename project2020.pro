@@ -31,6 +31,8 @@ SOURCES += \
     MyStandardItemModel.cpp \
     MyTreeView.cpp \
     ImgOrganizer/OrbMatcher.cpp \
+    getfacedialog.cpp \
+    getnumberdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     scanhandler.cpp
@@ -45,6 +47,8 @@ HEADERS += \
     addimgthread.h \
     MyStandardItemModel.h \
     MyTreeView.h \
+    getfacedialog.h \
+    getnumberdialog.h \
     mainwindow.h \
     ImgOrganizer/COLOR.h \
     ImgOrganizer/BitExactImgFinder.h \
@@ -53,6 +57,8 @@ HEADERS += \
     scanhandler.h
 
 FORMS += \
+    getfacedialog.ui \
+    getnumberdialog.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
