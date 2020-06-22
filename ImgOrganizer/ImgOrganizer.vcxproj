@@ -159,12 +159,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib%(AdditionalDependencies)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;$(SolutionDir)Dependencies\lib\opencv_flann420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_face420.lib;$(SolutionDir)Dependencies\lib\opencv_xfeatures2d420.lib;$(SolutionDir)Dependencies\lib\IlmImf.lib;$(SolutionDir)Dependencies\lib\ippiw.lib;$(SolutionDir)Dependencies\lib\ittnotify.lib;$(SolutionDir)Dependencies\lib\libjasper.lib;$(SolutionDir)Dependencies\lib\libjpeg-turbo.lib;$(SolutionDir)Dependencies\lib\libpng.lib;$(SolutionDir)Dependencies\lib\libprotobuf.lib;$(SolutionDir)Dependencies\lib\libtiff.lib;$(SolutionDir)Dependencies\lib\libwebp.lib;$(SolutionDir)Dependencies\lib\quirc.lib;$(SolutionDir)Dependencies\lib\zlib.lib;$(SolutionDir)Dependencies\lib\ippicvmt.lib;User32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dependencies\lib\opencv_core420.lib;$(SolutionDir)Dependencies\lib\opencv_highgui420.lib;$(SolutionDir)Dependencies\lib\opencv_flann420.lib;$(SolutionDir)Dependencies\lib\opencv_imgcodecs420.lib;$(SolutionDir)Dependencies\lib\opencv_imgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_photo420.lib;$(SolutionDir)Dependencies\lib\opencv_reg420.lib;$(SolutionDir)Dependencies\lib\opencv_ximgproc420.lib;$(SolutionDir)Dependencies\lib\opencv_objdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_videoio420.lib;$(SolutionDir)Dependencies\lib\opencv_xobjdetect420.lib;$(SolutionDir)Dependencies\lib\opencv_shape420.lib;$(SolutionDir)Dependencies\lib\opencv_img_hash420.lib;$(SolutionDir)Dependencies\lib\opencv_features2d420.lib;$(SolutionDir)Dependencies\lib\opencv_face420.lib;$(SolutionDir)Dependencies\lib\opencv_xfeatures2d420.lib;$(SolutionDir)Dependencies\lib\IlmImf.lib;$(SolutionDir)Dependencies\lib\ippiw.lib;$(SolutionDir)Dependencies\lib\ittnotify.lib;$(SolutionDir)Dependencies\lib\libjasper.lib;$(SolutionDir)Dependencies\lib\libjpeg-turbo.lib;$(SolutionDir)Dependencies\lib\libpng.lib;$(SolutionDir)Dependencies\lib\libprotobuf.lib;$(SolutionDir)Dependencies\lib\libtiff.lib;$(SolutionDir)Dependencies\lib\libwebp.lib;$(SolutionDir)Dependencies\lib\quirc.lib;$(SolutionDir)Dependencies\lib\zlib.lib;$(SolutionDir)Dependencies\lib\ippicvmt.lib;User32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BitExactImgFinder.cpp" />
     <ClCompile Include="FaceDetection\FaceDetector.cpp" />
+    <ClCompile Include="FaceDetection\FacesCropped.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="_Main.cpp" />
     <ClCompile Include="ImgFileScanner.cpp" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="BitExactImgFinder.h" />
     <ClInclude Include="FaceDetection\FaceDetector.h" />
+    <ClInclude Include="FaceDetection\FacesCropped.h" />
     <ClInclude Include="ImgFileScanner.h" />
     <ClInclude Include="ImgMatchFinderBase.h" />
     <ClInclude Include="ImgSearch.h" />

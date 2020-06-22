@@ -9,7 +9,7 @@
 class Parser {
 	std::set<std::string> _args = { "-s" , "--similar" ,
 		"-b", "--bit-exact",
-		"-f", "--face", "--train-new", "--add-new", "--search-label", "--train-new",
+		"-f", "--face", "--train-new-model", "--add-new-label", "--search-label",
 		"-s", "--similar",
 		"--search", "--people-count"
 	};

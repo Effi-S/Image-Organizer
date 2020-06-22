@@ -37,37 +37,35 @@ ScanHandler::~ScanHandler()
 
 void ScanHandler::stop()
 {
-
-//    t1.reset(nullptr);
-//    t2.reset(nullptr);
+    emit setFormat("Aborting scan.. this may take a while..");
+    m_stop_scan = true;
 
 }
 
 
 void ScanHandler::run()
 {
-
-    std::cout<< numfu.valid() << " " << scanfu.valid() << " " << updatefu.valid() <<std::endl;
-
     emit setFormat("Loading...");
 
     auto root_copy = m_root;
 
-    scanfu = std::future(std::async([&](){ImgFileScanner::scan(m_root);}));
+    scanfu = std::future(std::async([&](){ ImgFileScanner::scan(m_root, std::ref(m_stop_scan)); }));
 
-    numfu = std::future<int>(std::async(&ImgFileScanner::getNumberOfImages, root_copy));
+    numfu = std::future<int>(std::async( &ImgFileScanner::getNumberOfImages , root_copy, std::ref(m_stop_scan)));
 
     int num_of_images = numfu.get();
+
     emit setRange(0, num_of_images);
     emit setFormat("Reading images: %v/%m");
 
-    for(int val=0; val < num_of_images; QThread::msleep(200)){
+    for(int val=0 ; !m_stop_scan && val < num_of_images; QThread::msleep(100)){
         val = ImgFileScanner::size();
         emit setValue(val);
     }
     scanfu.get();
 
-    emit setFormat("Finding matches: %v/%m");
+    emit setFormat("Calculating Matches..");  //TODO add more info.
+    emit setRange(0,0);
 
     static std::mutex mu;
     std::lock_guard<std::mutex> lk(mu);
@@ -82,13 +80,16 @@ void ScanHandler::run()
     int found = 0;
     AddingImgThread addImgThread(_algoData[m_algoType].first);
     for(const auto & x: algo->getMatchGroups()){
-        QThread::msleep(200);
+        if(m_stop_scan) break;
+        QThread::msleep(300);
         addImgThread.addStringList(x);
         emit setValue(++found);
 
     }
     delete algo;
 
+    m_stop_scan = false;
+    emit setFormat("Done scan");
 }
 
 void ScanHandler::setRoot(QString s)
@@ -98,6 +99,7 @@ void ScanHandler::setRoot(QString s)
 
 void ScanHandler::setAlgo(int i)
 {
+
     m_algoType = i;
 }
 

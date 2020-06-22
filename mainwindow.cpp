@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QStandardItem>
 
 
 
@@ -29,13 +28,37 @@ MainWindow::MainWindow(QWidget *parent)
     ui->treeView->setRootIndex(index);
     initView(ui->exact_groupView, ui->exact_itemView);
     initView(ui->similar_groupView, ui->similar_itemView);
+    initView(ui->advanced_view, ui->advanced_view);
 
+    m_scanHandler.registerAlgo(0, ui->exact_groupView->model(),    [](){ return new BitExactImgFinder; } );
+    m_scanHandler.registerAlgo(1, ui->similar_groupView->model(),  [](){ return new SimilarImgFinder; }   );
+    m_scanHandler.registerAlgo(2, ui->advanced_view->model() ,     [](){ return new AdvancedImgSearch; } );
 
-    m_scanHandler.registerAlgo(0, ui->exact_groupView->model(),    [](){return new BitExactImgFinder;} );
-    m_scanHandler.registerAlgo(1, ui->similar_groupView->model(),  [](){return new SimilarImgFinder;}   );
-    m_scanHandler.registerAlgo(2, ui->exact_groupView->model() ,   [](){return new BitExactImgFinder;}  );
+    // -- connect scanHandler
     connect(ui->tabWidget, &QTabWidget::currentChanged, &m_scanHandler, &ScanHandler::setAlgo);
     connect(this , &MainWindow::stopScan, &m_scanHandler, &ScanHandler::stop);
+    connect(&m_scanHandler, &ScanHandler::setFormat, [&](QString s){
+        std::string str = s.toStdString();
+        std::string sub = "%v/%m";
+        std::string::size_type i = str.find(sub);
+        if (i != std::string::npos)
+           str.erase(i, sub.length());
+        ui->statusBar->showMessage(QString::fromStdString(str));
+    });
+
+    //-- connect advancedSearch
+    connect(ui->pushButton_adv_face, &QPushButton::pressed, this, [](){ /*AdvancedImgSearch::setFaceToFind(L"2");*/});
+    connect(ui->pushButton_adv_num, &QPushButton::pressed, this, [](){ /*AdvancedImgSearch::setNumberOfPeople(1);*/});
+    connect(ui->pushButton_adv_file, &QPushButton::pressed, this,[&](){
+        ui->statusBar->showMessage("Choose an Image File");
+        QString imgPath = QFileDialog::getOpenFileName(this , "Choose the Folder");
+        auto file = QFile(imgPath);
+        QString imageFormat = QImageReader::imageFormat(imgPath);
+        if(!file.exists() || imageFormat.size() == 0)
+            QMessageBox::warning(this, "Warning", "Cannot Open:"+imgPath);
+        else
+            AdvancedImgSearch::setSearchFile(imgPath.toStdWString());
+    });
 
 }
 
@@ -234,9 +257,6 @@ void MainWindow::on_actionsave_changes_triggered()
     ui->statusBar->showMessage("Save Changes");
 }
 
-
-
-
 void MainWindow::on_commandLinkButton_released(){
     on_actionScan_triggered();
 }
@@ -247,12 +267,12 @@ void MainWindow::on_FolderButton_clicked(){
 
 void MainWindow::initView(QListView * view1, QListView * view2 )
 {
-    //exact clumn view  + model
+    //exact column view  + model
     auto mod = new MyStandardItemModel;
     auto item = new QStandardItem("Groups");
     item->appendRow(new QStandardItem("Images"));
     mod->appendRow(item);
-    for (auto view : {view1,view2})
+    for (auto view : {view1, view2})
     {
         view->setIconSize(QSize(64,64));
         view->setModel(mod);
@@ -262,6 +282,12 @@ void MainWindow::initView(QListView * view1, QListView * view2 )
         view->setDefaultDropAction(Qt::MoveAction);
         view->installEventFilter(this);
         view->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+        if(view1 == view2){
+            mod->setStandalone();
+            mod->clear();
+            mod->appendRow(new QStandardItem("Images"));
+            return;
+        }
     }
     view2->setRootIndex(mod->index(0,0));
 }
@@ -286,10 +312,8 @@ void MainWindow::on_actionScan_triggered()
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Yes);
         int ret = msgBox.exec();
-        if(ret == QMessageBox::Yes){
+        if(ret == QMessageBox::Yes)
             emit stopScan();
-        }
-         else
             return;
     }
     QProgressBar * bar = new QProgressBar(this);

@@ -48,9 +48,9 @@ Parser::Parser(int argc, char** argv)
 			<< "\t--people-count <num> \t Serach for images with num people in them." << std::endl
 			<< "\t--face\t			    Search for a particular person." << std::endl;
 		std::cout << "\tOptional for face:" << std::endl;
-				std::cout << "\t\t'--add-new'  train a new label" << std::endl
+				std::cout << "\t\t'--add-new-label'  train a new label" << std::endl
 						  << "\t\t'--search-label'  search for a label" << std::endl
-						  << "\t\t'--train-new' retrains model from scratch." << std::endl;
+						  << "\t\t'--train-new-model' retrains model from scratch." << std::endl;
 		exit(0);
 	}
 }

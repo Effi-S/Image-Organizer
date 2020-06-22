@@ -25,13 +25,15 @@
 namespace fs = std::filesystem;
 using ImgInfo = std::pair<cv::Ptr<const cv::Mat>, std::unique_ptr<std::wstring>> ;
 using IMG_DataBase = std::vector<ImgInfo>;
+static std::atomic_bool constant_false = false;   // helpful for default atomic bool.
 
 class ImgFileScanner
 {
+
 public:
 
-    static void scan(std::string path = "C:\\");  ///< The main scanning function - saves the images in database for later use
-    static int getNumberOfImages(std::string path = "C:\\");  ///< Returns the number of images in the path (a dry run).
+    static void scan(std::string path = "C:\\", std::atomic_bool & = constant_false);  ///< The main scanning function - saves the images in database for later use
+    static int getNumberOfImages(std::string path = "C:\\", std::atomic_bool & = constant_false);  ///< Returns the number of images in the path (a dry run).
 
     // functions for iterating on the images in the database
     auto end(){        return ImgFileScanner::IMG_DB().end();}
@@ -41,7 +43,7 @@ public:
 
 private:  
     friend void addImgToDB(const fs::directory_entry& entry);  ///< adding to database
-    static int _scan(std::string path = "C:\\", bool dry = false);  ///< internal scan overload
+    static int _scan(std::string path = "C:\\", std::atomic_bool & = constant_false , bool dry = false);  ///< internal scan overload
     static IMG_DataBase &IMG_DB();  ///< secure access to database
 
 };

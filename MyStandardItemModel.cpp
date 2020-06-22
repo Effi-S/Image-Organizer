@@ -73,15 +73,25 @@ bool MyStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction /*a
     return false;
 }
 
+void MyStandardItemModel::setStandalone()
+{
+    m_standalone = true;
+}
+
 void MyStandardItemModel::addRow(QStandardItem *item)
 {
-
+    if(!m_standalone)
     appendRow(item);
+    else
+    {
+        auto child = item->takeChild(0);  // if standalone ignore grouping.
+        appendRow(child);
+    }
 
 }
 
 void MyStandardItemModel::clear()
 {
-    for(int i=1; i< this->rowCount(); ++i)
+    for(int i = this->rowCount() - 1; i >= 0 ; --i)
         this->removeRow(i);
 }

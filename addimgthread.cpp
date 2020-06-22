@@ -11,9 +11,11 @@ AddingImgThread::AddingImgThread(MyStandardItemModel *model)
 
 void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 {
-    for(auto & x : l)
+    for(auto & x : l){
+        //std::wcout << L"adding " << x <<std::endl;
         m_path_list.append(QString::fromStdWString(x));
-    run();
+   }
+   run();
 }
 
 void AddingImgThread::run()
@@ -33,6 +35,7 @@ void AddingImgThread::run()
         child->setDragEnabled(true);
         child->setDropEnabled(true);
         child->setEditable(false);
+
         if(first!=m_path_list.cbegin())
             child->setCheckState(Qt::Checked);
         group->appendRow(std::move(child));

@@ -26,13 +26,15 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
-
+    void setStandalone();
 public slots:
     void addRow(QStandardItem * item);
     void clear();
 protected:
-
+private:
+bool m_standalone=false;
 
 };
+
 
 #endif // MYSTANDARDITEM_H

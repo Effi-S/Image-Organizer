@@ -24,12 +24,15 @@ QT_END_NAMESPACE
 #include "ImgOrganizer/BitExactImgFinder.h"
 #include "ImgOrganizer/SimilarImgFinder.h"
 #include "ImgOrganizer/ImgFileScanner.h"
+#include "ImgOrganizer/advancedimgsearch.h"
 
 #include "ImgOrganizer/COLOR.h"
 #include "MyStandardItemModel.h"
 #include <QGraphicsView>
 #include <QProgressBar>
 #include "scanhandler.h"
+#include <QStandardItem>
+
 /***********************
  * Main Window of the application
  *

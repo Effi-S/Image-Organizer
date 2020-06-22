@@ -1,3 +1,4 @@
+#pragma once
 #include "opencv2/face.hpp"
 #include "opencv2/opencv.hpp"
 #include "opencv2/core.hpp"
@@ -8,9 +9,6 @@
 #include <sstream>
 #include "../MyUtils.h"
 #include <locale>
-#pragma once
-
-
 
 const std::string FACES_DIR = MyUtils::getPath("faces");
 const std::string YML = MyUtils::getPath("trained_model.yml");
@@ -33,7 +31,7 @@ public:
 	
 	std::vector<std::wstring> searchFor(std::wstring label, bool draw=false);
 
-	void save(const std::string yml = YML);
+	void save(std::string yml = YML);
 
 	std::vector<std::wstring> getUserLabels(std::string path = USER_LABELS);
 

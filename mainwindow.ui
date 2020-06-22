@@ -94,7 +94,7 @@ QSplitter::handle:hover {
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>1</number>
           </property>
           <property name="iconSize">
            <size>
@@ -218,7 +218,7 @@ QSplitter::handle:hover {
              </widget>
             </item>
             <item>
-             <widget class="QListView" name="listView"/>
+             <widget class="QListView" name="advanced_view"/>
             </item>
            </layout>
           </widget>
@@ -598,8 +598,8 @@ padding: 5px;
      <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>126</x>
-     <y>222</y>
+     <x>362</x>
+     <y>366</y>
     </hint>
    </hints>
   </connection>

@@ -8,7 +8,7 @@
 class ImgSearch : public ImgMatchFinderBase
 {
 	const int BITS = 42;
-	const int ORB_DELTA = 0.7;
+    const int ORB_DELTA = 0.65;
 	
 public:
 	void searchFor(const std::wstring& querry, bool draw=false)

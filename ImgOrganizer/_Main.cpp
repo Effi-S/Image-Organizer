@@ -9,7 +9,7 @@
 #include "OrbMatcher.h"
 #include "SurfMatcher.h"
 #include "FaceDetection/FaceDetector.h"
-
+#include "FaceDetection/FacesCropped.h"
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -78,25 +78,47 @@ int main(int argc, char** argv) {
 
 	}
 	if (args.argExists("-f") || args.argExists("--face")) {
-		std::cout << "Face detector" << std::endl;
-		std::unique_ptr<FaceDetector> face_detector; // = FaceDetector::loadFromYAML();
 		
-		if (args.argExists( "--train-new"))
-			face_detector = std::make_unique<FaceDetector>(FaceDetector::creatNew());
-		else
-			face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
+		std::unique_ptr<FaceDetector> face_detector=nullptr; // = FaceDetector::loadFromYAML();
 		
-		if (args.argExists("--add-new")) {
-
-		}
-		if (args.argExists("--search-label")) {
-			auto label = args.getArg("--search-label");
-			std::cout << "Searching For:"<< label << std::endl;
-		}
-		else if (!args.argExists("--add-new"))
+		if (args.argExists("--train-new-model"))
 		{
-			std::cout << "Existing labels: " << std::endl;
+			std::cout << BOLDMAGENTA <<" >>> Creating New Face detector <<<" <<RESET << std::endl;
+			face_detector = std::make_unique<FaceDetector>(FaceDetector::creatNew());
+			face_detector->save();
+		}
+			
+		if (args.argExists("--search-label")) {
+			if(face_detector == nullptr)
+				face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
+
+			auto label = "2";// args.getArg("--search-label");
+			
+			std::wstringstream cls;
+			cls << label;
+			std::wstring wLabel = cls.str();
+
+			face_detector->searchFor(wLabel, true);
+		}
+		if (args.argExists("--add-new-label"))
+		{
+			if (face_detector == nullptr)
+				face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
+
+			std::cout << "\nExisting labels: " << std::endl;
 			for(auto x: face_detector->getUserLabels())
+				std::wcout << x << std::endl;
+
+			FacesCropped cropper;
+			auto faces = cropper.readfromWebCam();
+			std::cout << "Pleaese input new label: " << std::endl;
+			std::wstring newLabel;
+			std::wcin >> newLabel;
+
+			face_detector->addTrainingSet(faces, newLabel);
+
+			std::cout << "New labels: " << std::endl;
+			for (auto x : face_detector->getUserLabels())
 				std::wcout << x << std::endl;
 		}
 	} 

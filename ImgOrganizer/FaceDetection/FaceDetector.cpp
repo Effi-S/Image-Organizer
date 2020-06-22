@@ -19,18 +19,20 @@ FaceDetector::FaceDetector(const std::string& yml)
     {
         std::cout << "STD ERROR:" << e.what() << std::endl;
     }
-
-
 }
 
 FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
     : m_training_labels_csv(csv) {
     std::clock_t start(std::clock());
         std::vector<cv::Mat> images;
-        std::cout << "Training new model from CSV file: " << m_training_labels_csv <<"..."<< std::endl;
+        std::cout << "Reading from CSV file: " << m_training_labels_csv <<"..."<< std::endl;
+        
         std::vector<int> labels;
         read_csv(images, labels);  // Read in the data from csv
         
+        
+        
+        std::cout << "Done Reading CSV, found "<<labels.size() << " Labels" << std::endl <<"Training Model.. "<<std::endl;
         try {
             m_model->train(images, labels);
         }
@@ -40,7 +42,7 @@ FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
             exit(1);
         }
 
-        std::cout << "...Done Training new model! Time: " << std::clock() - start << std::endl;
+         std::cout << "...Done Training new model! Time: " << std::clock() - start << std::endl;
 };
 
 void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring label, std::string saveTo)
@@ -90,9 +92,8 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
 
 ///< searches for and returns all images with label
 std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw) 
-{
-    std::clock_t start(std::clock());
-    std::wcout << L"Searching For:  "<< label  <<std::endl;
+{    std::clock_t start(std::clock());
+    std::wcout << L"Searching For: "<< label  <<std::endl;
 
     std::vector<std::wstring> foundImages;
     ImgFileScanner scanner;
@@ -105,10 +106,12 @@ std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw)
     int targetLabel = it->second; // the integer to find
 
     // searching for images that match
-    for (const auto& x : scanner)
+    for (const auto& x : ImgFileScanner())
     {
         try {
             cv::Mat img; 
+
+            if (x.first->empty())continue;
 
             cv::cvtColor(*x.first, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);  // converting to grayscale image
 
@@ -123,14 +126,14 @@ std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw)
             }
         }
         catch (cv::Exception& e){
-            std::cout << e.msg << std::endl;
+            std::wcout << *x.second << std::endl << e.what() << std::endl;
         }     
     }
     std::cout << "...Done Searching! Time: " << std::clock() - start << " Found: "<<foundImages.size() << std::endl;
     return foundImages;
 }
 
-void FaceDetector::save(const std::string yml)
+void FaceDetector::save(std::string yml)
 {
     m_model->write(yml);
 }
@@ -150,25 +153,34 @@ void FaceDetector::read_csv(std::vector<cv::Mat>& images, std::vector<int>& labe
 
     std::vector<std::wstring> successfull, failed;
     std::wstring line, path, classlabel;
+    
     while (std::getline(file, line)) {
         std::wstringstream liness(line);
         std::getline(liness, path, separator);
         std::getline(liness, classlabel);
         if (!path.empty() && !classlabel.empty()) {
             
-            auto d = MyUtils::unicodeImgRead(path, cv::IMREAD_GRAYSCALE);
-
-            if (d.dims ==  0)
-                failed.push_back(path);
-            else {
-
-                std::replace(path.begin(), path.end(), L'\\', L'/');
-                images.push_back(d);
-                addUserLabel(classlabel);
-                labels.push_back(m_userLabels.at(classlabel));
-                successfull.push_back(path);
-            }
-
+                // --  check if image exists 
+                if (!std::filesystem::exists(path)) {
+                    auto save = path;
+                    path = L"../../" + path;
+                    if (!std::filesystem::exists(path)){
+                        failed.push_back(save);
+                        continue;
+                    }      
+                }
+                // -- read image
+                auto d = MyUtils::unicodeImgRead(path, cv::IMREAD_GRAYSCALE);
+                if (d.dims == 0)
+                    failed.push_back(path);
+                else {
+                    std::replace(path.begin(), path.end(), L'\\', L'/');
+                    images.push_back(d);
+                    addUserLabel(classlabel);
+                    labels.push_back(m_userLabels.at(classlabel));
+                    successfull.push_back(path);
+                }
+            
         }
     }  
     for (auto& x : failed)

@@ -16,20 +16,20 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
     std::make_unique<std::wstring>(path)));
 }
 
-void ImgFileScanner::scan(std::string path)
+void ImgFileScanner::scan(std::string path, std::atomic_bool & stop_flg  )
 {
-	int tmp = _scan(path);
+    int tmp = _scan(path, stop_flg);
 }
 
-int ImgFileScanner::getNumberOfImages(std::string path)
+int ImgFileScanner::getNumberOfImages(std::string path, std::atomic_bool & stop_flg)
 {
-	return _scan(path, true);
+    return _scan(path, stop_flg, true);
 }
 
 // The main scanning algorithm
 // Recursively iterates over the path given into path
 //
-int ImgFileScanner::_scan(std::string path, bool dry)
+int ImgFileScanner::_scan(std::string path, std::atomic_bool & stop_flg, bool dry)
 {
     static std::mutex mu;
     mu.lock();
@@ -63,6 +63,13 @@ int ImgFileScanner::_scan(std::string path, bool dry)
                     future = std::future(std::async(&addImgToDB, entry));
 
                 img_count++;
+                if(stop_flg)
+                {
+                    future.get();
+                    IMG_DB().clear();
+                    return 0;
+                }
+
 			}
 			catch (cv::Exception & e)
 			{

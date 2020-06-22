@@ -47,6 +47,8 @@ private:
     std::future<int> numfu;
     std::future<void> scanfu;
     std::future<void> updatefu;
+    std::atomic_bool  m_stop_scan = false;
+
 
 };
 

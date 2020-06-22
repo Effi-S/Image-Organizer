@@ -23,6 +23,10 @@ SOURCES += \
     ImgOrganizer/ImgFileScanner.cpp \
     ImgOrganizer/ImgMatchFinderBase.cpp \
     ImgOrganizer/SimilarImgFinder.cpp \
+    ImgOrganizer/advancedimgsearch.cpp \
+    ImgOrganizer/ImgSearch.cpp \
+    ImgOrganizer/FaceDetection/FaceDetector.cpp \
+    ImgOrganizer/FaceDetection/FacesCropped.cpp \
     addimgthread.cpp \
     MyStandardItemModel.cpp \
     MyTreeView.cpp \
@@ -34,6 +38,10 @@ SOURCES += \
 HEADERS += \
     ImgOrganizer/ImgFileScanner.h \
     ImgOrganizer/ImgMatchFinderBase.h \
+    ImgOrganizer/advancedimgsearch.h \
+    ImgOrganizer/FaceDetection/FaceDetector.h \
+    ImgOrganizer/FaceDetection/FacesCropped.h \
+    ImgOrganizer/ImgSearch.h \
     addimgthread.h \
     MyStandardItemModel.h \
     MyTreeView.h \
@@ -71,11 +79,14 @@ LIBS +=  \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_photo420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_reg420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_ximgproc420 \
+        -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_objdetect420 \
+        -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_videoio420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_xobjdetect420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_shape420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_img_hash420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_features2d420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_xfeatures2d420 \
+        -L$$PWD/ImgOrganizer/Dependencies/lib/   -lopencv_face420 \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lIlmImf \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -lippiw \
         -L$$PWD/ImgOrganizer/Dependencies/lib/   -littnotify \
