@@ -10,7 +10,7 @@ void AdvancedImgSearch::setNumberOfPeople(const int num)
 }
 
 
-void AdvancedImgSearch::setFaceToFind(const std::wstring toFind)
+void AdvancedImgSearch::setFacesToFind(const std::vector<std::wstring> toFind)
 {
     FaceFunctor f(toFind);
      m_functions["face_to_find"] = f;

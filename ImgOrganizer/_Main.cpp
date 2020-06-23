@@ -36,7 +36,7 @@ std::wstring run_algo(ImgMatchFinderBase* comp);
 int main(int argc, char** argv) {
 	Parser args(argc, argv);
 	
-	std::string path = args.get_path();
+	std::string path = "C:\\Users\\effi\\Desktop\\archive\\arc5_13"; // args.get_path();
 	if (!std::filesystem::is_directory(path)) {
 
 		std::cerr << RED << "Path " << path << " Doesn't exist or isn't a Directory" << std::endl;
@@ -92,13 +92,13 @@ int main(int argc, char** argv) {
 			if(face_detector == nullptr)
 				face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
 
-			auto label =  args.getArg("--search-label");
+			auto label = 1; //args.getArg("--search-label");
 			
 			std::wstringstream cls;
 			cls << label;
 			std::wstring wLabel = cls.str();
 
-			face_detector->searchFor(wLabel, true);
+			face_detector->searchFor(wLabel/*, true*/);
 		}
 		if (args.argExists("--add-new-label"))
 		{

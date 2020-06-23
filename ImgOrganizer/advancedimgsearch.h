@@ -13,7 +13,7 @@ class AdvancedImgSearch : public  ImgMatchFinderBase
 public:
 
     static void setNumberOfPeople(const int num);
-    static void setFaceToFind(const std::wstring toFind);
+    static void setFacesToFind(const std::vector<std::wstring> toFind);
     static void setSearchFile(const std::wstring toFind);
     AdvancedImgSearch();
     void makeMatchGroups() override;
@@ -27,19 +27,29 @@ private:
 // ---------   functors --------------
 class FaceFunctor{
 public:
-    FaceFunctor(std::wstring w ): msearchfor(w){}
+    FaceFunctor(std::vector<std::wstring> wVec ): msearchfor(wVec){}
     std::vector<std::wstring> operator()(){
         std::vector<std::wstring> found;
-        std::wcout << L"searching for: " << msearchfor <<std::endl;
-        for(auto x: m_face_detector.searchFor(msearchfor))
-        if(x != L"Bad Label")
-            found.push_back(x);
+        std::cout << "size: " <<msearchfor.size()<<std::endl;
+        for(auto w: msearchfor)
+        {
 
-    return found;
+            for(auto x: m_face_detector.searchFor(w))
+                if(x != L"Bad Label"){
+                    found.push_back(x);
+                    std::wcout << "found label: " <<x <<std::endl;
+                }
+
+            else
+                  std::wcout << L"NOT found -- Bad Label "<<std::endl;
+        }
+
+
+        return found;
     }
  private:
     static FaceDetector m_face_detector;
-    std::wstring msearchfor;
+    std::vector<std::wstring> msearchfor;
 };
 
 class SearchFunctor{

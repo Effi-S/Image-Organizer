@@ -25,6 +25,7 @@ FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
     : m_training_labels_csv(csv) {
     std::clock_t start(std::clock());
         std::vector<cv::Mat> images;
+
         std::cout << "Reading from CSV file: " << m_training_labels_csv <<"..."<< std::endl;
         
         std::vector<int> labels;
@@ -54,7 +55,7 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
     std::filesystem::create_directory(label_path);
 
     // (ii) - convert images to grayscale and add to directory
-   
+    std::vector<cv::Mat> gray_images;
         int num = 0;
         for (auto& x : images)
         {
@@ -62,18 +63,21 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
                 cv::Mat img =x ;
                
                 // convert to gray scale
-               if(img.depth() > 0)
-                    cv::cvtColor(x, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);
+
+                cv::cvtColor(x, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);
 
                // write image in directory 
-                std::string filename = label_path.string() + "/" + std::to_string(num) + ".jpg";
+                std::string filename = label_path.string() + "/" + std::to_string(++num) + ".jpg";
 
                 std::replace(filename.begin(), filename.end(), '\\', '/');
 
                 cv::imwrite(filename, img);  // writ img to directory
+                gray_images.push_back(img);
             }
             catch (cv::Exception& e) {
                 std::cout << e.msg << std::endl;
+            } catch(std::exception & e){
+                std::cout <<e.what() <<std::endl;
             }
         }
         
@@ -84,10 +88,15 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
         int lbl = this->m_userLabels.at(label);  
 
         std::vector<int> labels;
-        for (const auto& x : images)
+        for (const auto& x :gray_images)
             labels.push_back(lbl);
 
-        m_model->update(images, labels);
+        try {
+            m_model->update(gray_images, labels);
+        } catch (std::exception & e) {
+            std::cerr <<"Update ERROR:\n" << e.what() <<std::endl;
+        }
+
 }
 
 ///< searches for and returns all images with label
@@ -95,42 +104,49 @@ std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw)
 {    std::clock_t start(std::clock());
    
     std::vector<std::wstring> foundImages;
-    ImgFileScanner scanner;
 
-    for (auto x : m_userLabels)
-        std::wcout<< L"Label: " << x.first <<" ->> "<<x.second << std::endl;
-    // getting integer of label
-    auto it = m_userLabels.find(label);
-    if (it == m_userLabels.end())
-        return std::vector<std::wstring>{L"Bad Label"}; // returning if label doesn't exist 
+     auto labelMap =(m_userLabels.size() == 0)? _getUserLabelMap(): m_userLabels;
+
+     // getting integer of label
+    auto it = labelMap.find(label);
+
+     if (it == labelMap.end())
+        return std::vector<std::wstring>{L"Bad Label"};  // returning if label doesn't exist
 
     std::wcout << L"Searching For: " << label << std::endl;
 
-    int targetLabel = it->second; // the integer to find
+    int targetLabel = it->second;  // the integer to corresponding to label find
 
     // searching for images that match
     for (const auto& x : ImgFileScanner())
     {
-        try {
+        
             cv::Mat img; 
 
             if (x.first->empty())continue;
-
+        
             cv::cvtColor(*x.first, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);  // converting to grayscale image
-
-            int predictedLabel = m_model->predict(img);
+        
+            int predictedLabel = -1;
+            double confidence = 0.0;
+            
+            try {
+                m_model->predict(img, predictedLabel, confidence);
+            } catch (std::exception & e) {
+                std::cout << e.what() << std::endl;
+                continue; 
+            }
+            
             if (predictedLabel == targetLabel) {
                 foundImages.push_back(*x.second);
+                std::wcout << *x.second <<L" c:" <<confidence <<std::endl;
                 if (draw)
                 {
                     cv::imshow(std::to_string(predictedLabel), *x.first);
                     cv::waitKey(0);
                 }
             }
-        }
-        catch (cv::Exception& e){
-            std::wcout << *x.second << std::endl << e.what() << std::endl;
-        }     
+        
     }
     std::cout << "...Done Searching! Time: " << std::clock() - start << " Found: "<<foundImages.size() << std::endl;
     return foundImages;
@@ -144,8 +160,9 @@ void FaceDetector::save(std::string yml)
 
 std::vector<std::wstring> FaceDetector::getUserLabels(std::string path)
 {
+
     std::vector<std::wstring> labels;
-    for (auto x : _getUserLabelMap())
+    for (auto x : FaceDetector::_getUserLabelMap())
         labels.push_back(x.first);
     return labels;
 }
@@ -207,7 +224,7 @@ std::unordered_map<std::wstring, int> FaceDetector::_getUserLabelMap()
         int num =  std::stoi(number);
         lblMap.emplace(name, num);
     }
-    
+
     return lblMap;
 }
 void FaceDetector::addUserLabel(const std::wstring& lbl)

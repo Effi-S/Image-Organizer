@@ -322,8 +322,12 @@ void MainWindow::on_actionScan_triggered()
 void MainWindow::on_actionFace_to_find_triggered()
 {
     auto dialog = new GetFaceDialog(this);
+    connect(dialog , &GetFaceDialog::chosenLabels, this, [&](std::vector<std::wstring> faces){
+
+    AdvancedImgSearch::setFacesToFind(faces);
+    });
     dialog->exec();
-    AdvancedImgSearch::setFaceToFind(L"3");
+
 }
 
 void MainWindow::on_actionFile_to_search_for_triggered()
