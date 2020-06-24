@@ -3,6 +3,7 @@ import argparse
 import random
 import os
 
+
 def main():
     parser = argparse.ArgumentParser('Creates rotated image.')
     parser.add_argument('name', nargs='?', default=None, help='Name of image file path. Default is random file in directory', type=str)

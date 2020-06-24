@@ -1,4 +1,11 @@
 #!/bin/bash
+# This script automatically runs all python tests on the folder given in param1 
+# And then creates summary excel file and pie chart.
+# usage: /auto_run <dir of images to test> <number of images to test>
+# example usage for bulk: 
+#	for x in $(ls image_folders) ; do  # ( <- image_folder is a dir with subdirs of >500 images in each)
+# 	./auto_run $x 500
+# 	done
 
 #-- Getting user info
 imgfolderpath="$1"
@@ -29,7 +36,7 @@ done
 
 #-- Select numimgs images in each test at random to run test on 
 for t in ${tests_arr[@]};do
-	for x in $(shuf -e $(find $testfolder/$t -not -type d ) -n $numimgs);do 
+	for x in $(shuf -e $(find $testfolder/$t -not -type d  -and -not -name "*.txt") -n $numimgs);do 
 		python $t'.py' $x 
 	done	
 done 
@@ -38,9 +45,13 @@ done
 ./test_cmd $testfolder
 
 #-- summarizing 
-reltestfolder=$(basename $testfolder)
-python summarize.py --root $reltestfolder --type exact
-python summarize.py --root $reltestfolder --type similar
+for t in ${tests_arr[@]};do
+	reltestfolder=$(basename $testfolder)
+	python summarize.py --root $reltestfolder --type exact --test $t
+	python summarize.py --root $reltestfolder --type similar --test $t
+	python draw_chart.py ${testfolder}/${t}_exact_summary.xlsx
+	python draw_chart.py ${testfolder}/${t}_similar_summary.xlsx
+done
 
 
 

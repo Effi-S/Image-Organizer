@@ -1,8 +1,6 @@
 #include "FacesCropped.h"
 
 
-
-
 cv::Mat FacesCropped::_cropOutFace(cv::Mat frame, bool draw)
 {
     const int DESIRED_SIZE = 400; // size of face image 
@@ -98,7 +96,7 @@ FacesVec FacesCropped::readfromWebCam(int num_of_images)
 		//-- 2. add cropped faces from the video stream
 		cv::Mat frame;
         std::clock_t start(std::clock());
-		while (cropped_faces.size() < num_of_images)
+        while (int(cropped_faces.size()) < num_of_images)
 		{
 			m_cap.read(frame);
 			if (frame.empty())continue;

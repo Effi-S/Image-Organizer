@@ -36,7 +36,7 @@ std::wstring run_algo(ImgMatchFinderBase* comp);
 int main(int argc, char** argv) {
 	Parser args(argc, argv);
 	
-	std::string path = "C:\\Users\\effi\\Desktop\\archive\\arc5_13"; // args.get_path();
+	std::string path =  args.get_path();
 	if (!std::filesystem::is_directory(path)) {
 
 		std::cerr << RED << "Path " << path << " Doesn't exist or isn't a Directory" << std::endl;
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 		out_file << run_algo(new SimilarImgFinder).c_str() << std::endl;
 
 	}
-	if (1 || args.argExists("-f") || args.argExists("--face")) {
+	if (args.argExists("-f") || args.argExists("--face")) {
 		
 		std::unique_ptr<FaceDetector> face_detector=nullptr; // = FaceDetector::loadFromYAML();
 		
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 			face_detector->save();
 		}
 			
-		if (1 || args.argExists("--search-label")) {
+		if (args.argExists("--search-label")) {
 			if(face_detector == nullptr)
 				face_detector = std::make_unique<FaceDetector>(FaceDetector::loadFromYAML());
 

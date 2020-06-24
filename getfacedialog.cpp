@@ -31,6 +31,11 @@ GetFaceDialog::GetFaceDialog(QWidget *parent) :
     // -- new label from webcam request
    connect(ui->pushButton_fromWebCam,&QPushButton::pressed, this, [&](){
          std::vector<cv::Mat> faces = m_cropper.readfromWebCam();
+         if(faces.size() < 8 ) {
+             QMessageBox::warning(this, "Warning", "Could not connect to Webcam");
+             return;
+
+         }
          m_detector.addTrainingSet(faces, m_newLabel);
          m_detector.save();
          addOption(m_newLabel);
