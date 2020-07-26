@@ -13,7 +13,7 @@ def main():
     angle = args.angle or random.randint(a=1, b=359)
     filename = args.name or random.choice(list(filter(lambda x: 'dup' not in x, os.listdir())))
     img = Image.open(filename)
-    img2 = img.rotate(angle=angle, expand=True)
+    img2 = img.rotate(angle=angle, expand=False)
     name = filename.split('/')
     name[-1] = 'dup_{}_'.format(angle) + name[-1]
     img2.save('/'.join(name))

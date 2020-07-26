@@ -49,7 +49,7 @@ cv::Mat FacesCropped::_cropOutFace(cv::Mat frame, bool draw)
     cv::Point2f eye_r_center(face.x + eye_r_rect.x + eye_r_rect.width * 0.5f, face.y + eye_r_rect.y + eye_r_rect.height * 0.5f);
     cv::Point2f eyes_center = cv::Point2f((eye_l_center.x + eye_r_center.x) * 0.5f, (eye_l_center.y + eye_r_center.y) * 0.5f);
     cv::line(frame, eyes_center, eye_r_center, cv::Scalar());
-    ///--5 align by the eyes
+    //-- 5 align by the eyes
     //-- 5.1 Get the angle between the 2 eyes.
     double dy = (eye_r_center.y - eye_l_center.y);
     double dx = (eye_r_center.x - eye_l_center.x);

@@ -32,6 +32,7 @@ def main():
     img2 = img.crop(box=box)
     name = filename.split('/')
     percent_left = (img2.width * img2.height) / (img.width * img.height)
+    percent_left = round(percent_left, 1)
     name[-1] = 'dup_{}_'.format(percent_left) + name[-1]
     img2.save('/'.join(name))
 

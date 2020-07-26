@@ -23,7 +23,6 @@ echo Test Folder: $base
 echo Getting images from: $imgfolderpath and testing: $numimgs for each test 
 
 #-- Making directories
-
 mkdir $testfolder
 for x in ${tests_arr[@]};do
 	mkdir $testfolder/$x
@@ -45,13 +44,15 @@ done
 ./test_cmd $testfolder
 
 #-- summarizing 
-for t in ${tests_arr[@]};do
-	reltestfolder=$(basename $testfolder)
-	python summarize.py --root $reltestfolder --type exact --test $t
-	python summarize.py --root $reltestfolder --type similar --test $t
-	python draw_chart.py ${testfolder}/${t}_exact_summary.xlsx
-	python draw_chart.py ${testfolder}/${t}_similar_summary.xlsx
-done
+# reltestfolder=$(basename $testfolder)
+python summarize.py --root $testfolder --type exact 
+python summarize.py --root $testfolder --type similar 
+python draw_chart.py ${testfolder}/exact_summary.xlsx
+python draw_chart.py ${testfolder}/similar_summary.xlsx
+
+#-- cleaning up raw data
+mkdir ${testfolder}/'raw_output_data'
+mv ${testfolder}/*.txt ${testfolder}/'raw_output_data'
 
 
 

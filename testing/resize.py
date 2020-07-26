@@ -28,6 +28,7 @@ def main():
     img2 = img.resize(size=(width, height))
     name = filename.split('/')
     size_difference = (img2.width * img2.height) / (img.width * img.height)
+    size_difference = round(size_difference, 2)
     name[-1] = 'dup_{}_'.format(size_difference) + name[-1]
     img2.save('/'.join(name))
     
