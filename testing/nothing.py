@@ -6,3 +6,4 @@ if __name__ == '__main__':
     parser.add_argument('name', nargs='?', default=None, help='name of image file'
                                                               '(all tests must have this).', type=str)
     args = parser.parse_args()
+

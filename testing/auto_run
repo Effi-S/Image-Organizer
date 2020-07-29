@@ -2,10 +2,8 @@
 # This script automatically runs all python tests on the folder given in param1 
 # And then creates summary excel file and pie chart.
 # usage: /auto_run <dir of images to test> <number of images to test>
-# example usage for bulk: 
-#	for x in $(ls image_folders) ; do  # ( <- image_folder is a dir with subdirs of >500 images in each)
-# 	./auto_run $x 500
-# 	done
+# Example usage for bulk: dirs=$(find archive -maxdepth 1 -mindepth 1 -type d) # archive is a dir with subdirs of >500 images in each)
+#  	   for x in $dirs; do  ./auto_run $x 500; done
 
 #-- Getting user info
 imgfolderpath="$1"
@@ -16,7 +14,19 @@ numimgs="$2"
 #--Setting Variables
 base=$(basename $imgfolderpath)  # getting bas dir name (ex: a from c/b/a) 
 testfolder=$(pwd)/auto_test_"$base"_$(date +'%y-%m-%d__%s')
-tests_arr=(brighten crop resize rotate nothing)
+
+declare -A tests_dict  # keys are test name vals are test commands
+tests_dict[brighten]='python brighten.py'
+tests_dict[crop-2]='python crop.py --margin 0.02' 
+tests_dict[crop-5]='python crop.py  --margin 0.05'
+tests_dict[crop-7]='python crop.py  --margin 0.07'
+tests_dict[crop-10]='python crop.py' 
+tests_dict[resize]='python resize.py' 
+tests_dict[rotate-3]='python rotate.py --angle-limit 3'
+tests_dict[rotate-5]='python rotate.py --angle-limit 5'
+tests_dict[rotate-10]='python rotate.py --angle-limit 10'
+tests_dict[rotate-359]='python rotate.py'
+tests_dict[False-Positives]='python nothing.py' # does nothing-- for false positives
 
 echo Test Folder: $base
 
@@ -24,19 +34,19 @@ echo Getting images from: $imgfolderpath and testing: $numimgs for each test
 
 #-- Making directories
 mkdir $testfolder
-for x in ${tests_arr[@]};do
+for x in ${!tests_dict[@]};do
 	mkdir $testfolder/$x
 done
 
 # -- Copy folder with images into test folder
-for x in ${tests_arr[@]};do
+for x in ${!tests_dict[@]};do
 	cp -r $imgfolderpath $testfolder/$x
 done 
 
-#-- Select numimgs images in each test at random to run test on 
-for t in ${tests_arr[@]};do
+#-- Select numimgs images in each test at random and run test on 
+for t in ${!tests_dict[@]};do
 	for x in $(shuf -e $(find $testfolder/$t -not -type d  -and -not -name "*.txt") -n $numimgs);do 
-		python $t'.py' $x 
+		${tests_dict[$t]} $x
 	done	
 done 
 

@@ -17,23 +17,30 @@ def main():
 
     _, folders, _ = next(os.walk(args.root))  # getting folders
     for folder in folders:
-        if folder == 'nothing':
-            continue
         worksheet = workbook.add_worksheet(name=folder)
 
-        test_images = []
-        for _, _, files in os.walk('{}/{}'.format(args.root, folder)):
-            for fd in files:
-                if 'dup' in fd:
-                    test_images.append(fd)
+        # -- Opening output into groups
+        output = open('{dir}/{base}_{type}_output.txt'.format
+                      (dir=args.root, base=folder, type=args.type, ), 'r').read()
+        groups = output.split('\n\n')
 
         worksheet.write(0, 0, 'Test Image')
         worksheet.write(0, 1, 'Found:')
         worksheet.write(0, 2, 'Params')
 
-        output = open('{dir}/{base}_{type}_output.txt'.format
-                      (dir=args.root, base=folder, type=args.type, ), 'r').read()
-        groups = output.split('\n\n')
+        # -- adding False Positive data if False-Positive folder
+        if folder == 'False-Positives':
+            worksheet.write(1, 0, 'Number of Found:')
+            worksheet.write(1, 1, '{}/{}'.format(len([x for x in output.split('\n') if x != '\n']),  # number of lines in output.txt
+                                                 sum([len(x) for _, _, x in os.walk('{}/{}'.format(args.root, folder))])))  # number of files recursively
+            continue
+
+        # -- otherwise summing files with prefix 'dup' that were found
+        test_images = []
+        for _, _, files in os.walk('{}/{}'.format(args.root, folder)):
+            for fd in files:
+                if 'dup' in fd:
+                    test_images.append(fd)
 
         found = 0
         for i, img in enumerate(test_images):
