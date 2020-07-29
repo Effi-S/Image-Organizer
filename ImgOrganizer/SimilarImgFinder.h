@@ -18,9 +18,9 @@
 
 class SimilarImgFinder : public ImgMatchFinderBase
 {
-    const int KEY_SIZE = 32;  ///< the hash digest size
-    const int SIMILARITY_DELTA = 30;  ///< the number of similar values that are considered a match
-    const double ORB_DELTA = 0.6; ///< percent for orb that is considered a match
+    const int KEY_SIZE = 32;  ///< The hash digest size.
+    const int SIMILARITY_DELTA = 16;  ///< The number of matching values that make 2 images match.
+    const double ORB_DELTA = 0.65; ///< Percent for orb that is considered a match.
     using ImgInfo = std::pair<cv::Mat, std::wstring>;
     using HashKey = std::string;
     using HashValue = std::pair<cv::Mat, std::list<ImgInfo>>;

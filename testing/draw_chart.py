@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     names = set()
     for name in percent_info:
-        names.add(''.join([s.strip('-') for s in name if not s.isnumeric()]))
+        names.add(''.join([s for s in name if not s.isnumeric()]).strip('-'))
 
     for name in names:
         df = pd.DataFrame({x: y for x, y in percent_info.items() if x.startswith(name)})
