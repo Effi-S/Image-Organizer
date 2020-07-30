@@ -1,7 +1,5 @@
 ﻿#include "ImgFileScanner.h"
 
-//< !!!!!!!!!!!!!!!! TODO: Remove try catch blocks !!!!!!!!!!!!!!!!!
-
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	 
     static std::mutex mutex;
@@ -101,9 +99,9 @@ int ImgFileScanner::_scan(std::string path, std::atomic_bool & stop_flg, bool dr
     if(future.valid())
             future.get();
 
-    std::cout << GREEN << "\nNumber Of images Found: " << BLUE << img_count << std::endl
-             << GREEN <<"Time it took: " << RESET << double(std::clock()) - start << GREEN
-             <<" Number of fails:" << RED << failed_count<< std::endl <<RESET <<std::endl;
+    //std::cout << GREEN << "\nNumber Of images Found: " << BLUE << img_count << std::endl
+    //         << GREEN <<"Time it took: " << RESET << double(std::clock()) - start << GREEN
+    //         <<" Number of fails:" << RED << failed_count<< std::endl <<RESET <<std::endl;
 
 	return img_count ;
 }

@@ -49,6 +49,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
     bool eventFilter(QObject *object, QEvent *event);
 
     ~MainWindow();

@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+
+
 //removes current object from view
 void MainWindow::removeFunc(QObject *object, QListView *view)
 {
@@ -124,7 +126,7 @@ void MainWindow::moveEnter(QObject *object, QListView *groups, QListView *items)
 
         auto mod = static_cast<MyStandardItemModel *>(items->model());
         auto item = mod->itemFromIndex(items->currentIndex());
-        std::cout <<" Opening: " << item->text().toStdString() <<"\n"<<std::endl;
+//        std::cout <<" Opening: " << item->text().toStdString() <<"\n"<<std::endl;
 
         QDesktopServices::openUrl(QUrl::fromLocalFile(item->text()));
     }
@@ -176,6 +178,8 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 //
         }
         return true;
+    } else if ( event->type() == QEvent::MouseButtonDblClick){
+        std::cout << "MousDBClick" <<std::endl;
     }
 
     return false;

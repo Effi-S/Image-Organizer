@@ -31,7 +31,7 @@ def main():
         # -- adding False Positive data if False-Positive folder
         if folder == 'False-Positives':
             worksheet.write(1, 0, 'Number of Found:')
-            worksheet.write(1, 1, '{}/{}'.format(len([x for x in output.split('\n') if x != '\n']),  # number of lines in output.txt
+            worksheet.write(1, 1, '{}/{}'.format(len([x for x in output.split('\n') if x != '']),  # number of lines in output.txt
                                                  sum([len(x) for _, _, x in os.walk('{}/{}'.format(args.root, folder))])))  # number of files recursively
             continue
 

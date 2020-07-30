@@ -26,7 +26,7 @@ public:
 			m_algo->compute(img, xHash);
 
 			auto sim = m_algo->compare(qHash, xHash);
-			if (sim <= 12 || orb.matcheScore(target_img, img) > ORB_DELTA)
+			if (sim <= 12 || orb.matcheScoreFromImages(target_img, img) > ORB_DELTA)
 				matches.push_back(*(x.second));
 		}
 

@@ -50,9 +50,10 @@ int main(int argc, char** argv) {
 	ImgFileScanner::scan(path);
 	std::cout << GREEN << "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
-
+	
 	auto  out_file = std::wofstream(path + "_exact_output.txt", std::wofstream::app);
 	
+	start = std::clock();
 	if (args.argExists("-b") || args.argExists("--bit-exact") || argc == 1) {
 		
 		std::cout << "Output file: " << path + "exact_output.txt" << std::endl;
@@ -165,14 +166,15 @@ int main(int argc, char** argv) {
 				cv::waitKey(0);
 			}
 	}
-
+	std::cout << ORANGE << "Algo Time: " << double(std::clock()) - start << RESET << std::endl;
 	return(0);
 }
 std::wstring run_algo(ImgMatchFinderBase* comp)
 {
 	std::wstring output;
+	
 	comp->makeMatchGroups();
-
+	
 	int g = 0;
 	for (auto i : comp->getMatchGroups())
 	{

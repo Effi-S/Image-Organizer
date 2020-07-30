@@ -5,6 +5,8 @@
 # Example usage for bulk: dirs=$(find archive -maxdepth 1 -mindepth 1 -type d) # archive is a dir with subdirs of >500 images in each)
 #  	   for x in $dirs; do  ./auto_run $x 500; done
 
+out(){ echo -e "\e[1m$@"; }
+
 #-- Getting user info
 imgfolderpath="$1"
 numimgs="$2"
@@ -25,14 +27,15 @@ tests_dict[resize]='python resize.py'
 tests_dict[rotate-3]='python rotate.py --angle-limit 3'
 tests_dict[rotate-5]='python rotate.py --angle-limit 5'
 tests_dict[rotate-10]='python rotate.py --angle-limit 10'
-tests_dict[rotate-359]='python rotate.py'
+tests_dict[rotate-360]='python rotate.py'
 tests_dict[False-Positives]='python nothing.py' # does nothing-- for false positives
 
-echo Test Folder: $base
+out Test Folder: $base
 
-echo Getting images from: $imgfolderpath and testing: $numimgs for each test 
+out Getting images from: $imgfolderpath and testing: $numimgs for each test 
 
 #-- Making directories
+out Making Test Directories
 mkdir $testfolder
 for x in ${!tests_dict[@]};do
 	mkdir $testfolder/$x
@@ -45,12 +48,14 @@ done
 
 #-- Select numimgs images in each test at random and run test on 
 for t in ${!tests_dict[@]};do
+	echo  Shuffling $numimgs into $testfolder/$t  
 	for x in $(shuf -e $(find $testfolder/$t -not -type d  -and -not -name "*.txt") -n $numimgs);do 
 		${tests_dict[$t]} $x
 	done	
 done 
 
 #--  Run test
+out Running tests..
 ./test_cmd $testfolder
 
 #-- summarizing 

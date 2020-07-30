@@ -24,6 +24,11 @@ class MyStandardItemModel : public QStandardItemModel
 {
 public:
     virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
+    void mouseDoubleClickEvent( QMouseEvent * e )
+    {
+        std::cout << "herererere\n" <<std::endl;
+    }
+
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
     void setStandalone();

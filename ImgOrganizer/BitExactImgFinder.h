@@ -28,8 +28,7 @@ class BitExactImgFinder : public ImgMatchFinderBase
 
 public:
 
-    BitExactImgFinder() { std::cout << "innerherere " << std::endl;
-                          makeImageMap();}
+    BitExactImgFinder() { makeImageMap();}
     void makeMatchGroups() override; 
     ~BitExactImgFinder() override = default;
 

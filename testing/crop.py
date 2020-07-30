@@ -10,10 +10,11 @@ def main():
                                       'representing left, upper, right, lower.\n'
                                       ' Example: \'10, 40, 300, 200\'\n '
                                       'Make sure the cropped image is within the margins specified  ', default=None, type=str)
-    parser.add_argument('--margin', help='percent of margin to leave on all sides when auto running.', default=0.1, type=float)
+    parser.add_argument('--margin', help='percent of margin to leave, at-least, on all sides when auto running. default is 0.1(10 percent)', default=0.1, type=float)
 
     args = parser.parse_args()
-
+    if __name__ == '__main__':
+        assert args.margin < 0.25, 'Margin cannot be >= 0.25'
     filename = args.name or random.choice(list(filter(lambda x: 'dup' not in x, os.listdir())))
     img = Image.open(filename)
 

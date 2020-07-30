@@ -66,7 +66,11 @@ void SimilarImgFinder::makeListOfSimilarImages()
 
 
         m_matches.at(key).second.push_back(ImgInfo(imgValue , *img_path_pair.second));
-		
+
+		//1.4 adding orb descriptor.
+		if (m_orb_descriptors.find(key) == m_orb_descriptors.end())
+			m_orb_descriptors[key] = m_orb.createDescriptor(imgValue);
+	
 	}
 
 	
@@ -90,16 +94,16 @@ void SimilarImgFinder::makeListOfSimilarImages()
             auto matches = m_algo->compare(hash1, hash2);
 
 
-            // 2.2 if there are enough similarities splicing the listtry {
-			
-			if (matches >= SIMILARITY_DELTA 
-                /*|| OrbMatcher().matcheScore(it->second.second.begin()->first, next->second.second.begin()->first) > ORB_DELTA*/
-                    )
+            // 2.2 if there are enough similarities splicing the list
+
+			if (matches <= SIMILARITY_DELTA 
+				|| (matches <= SECONDARY_SIMILARITY_DELTA && 
+					m_orb.matchScoreFromdescriptors(m_orb_descriptors.at(it->first),m_orb_descriptors.at(next->first)) > ORB_DELTA
+               ))
 			{
 				next->second.second.splice(next->second.second.end(), it->second.second);
 				m_matches.erase(it++);
-			}
-			
+			}	
 		}
 	}
 
