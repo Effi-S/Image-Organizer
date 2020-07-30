@@ -5,16 +5,17 @@ const cv::Ptr<cv::ORB> OrbMatcher::m_orb = cv::ORB::create();
 
 double OrbMatcher::matcheScoreFromImages( cv::Mat img1, cv::Mat  img2, const bool draw )
 {   
-    ws.open("temp.txt", std::ofstream::app);
+    /*if(!ws.is_open())
+        ws.open("temp.txt", std::ofstream::app);*/
     auto type1 = img1.type();
     auto type2 = img2.type();
 
     // Prevent cv::batchDistance assertion errors
     if (type1 != type2) {
-        ws << "type1 != type2" <<std::endl;
+       /* ws << "type1 != type2" <<std::endl;*/
         return 0;
     } else if (img1.cols != img2.cols) {
-        ws << "img1.cols = " << img1.cols << " img2.cols= " << img2.cols << std::endl;
+        /*ws << "img1.cols = " << img1.cols << " img2.cols= " << img2.cols << std::endl;*/
         return 0;
     }
     else if (type1 != CV_32F && type1 != CV_8U)
@@ -66,8 +67,7 @@ cv::Mat OrbMatcher::createDescriptor(cv::Mat& mat)
 
 double OrbMatcher::matchScoreFromdescriptors(cv::Mat& desc1, cv::Mat& desc2)
 {
-    if(!ws.is_open())
-        ws.open("temp.txt", std::ofstream::app);
+
 
     auto type1 = desc1.type();
     auto type2 = desc2.type();
@@ -93,8 +93,9 @@ double OrbMatcher::matchScoreFromdescriptors(cv::Mat& desc1, cv::Mat& desc2)
     for (const auto& x : knn_matches)
         if (x[0].distance < ratio_thresh * x[1].distance)
             good_matches.push_back(x[0]);
-
-    ws << "SIZE:" << double(good_matches.size()) / double(knn_matches.size());
+    //if (!ws.is_open())
+    //    ws.open("temp.txt", std::ofstream::app);
+    //ws << "SIZE:" << double(good_matches.size()) / double(knn_matches.size());
     return  double(good_matches.size()) / double(knn_matches.size());
 }
 
@@ -149,7 +150,7 @@ bool OrbMatcher::convertTypes(cv::Mat& m1, cv::Mat& m2, int type)
         return true;
     
     } else 
-         ws << "TYPE: " << type << " CV_8UC3= " << CV_8UC3 << std::endl;
+         /*ws << "TYPE: " << type << " CV_8UC3= " << CV_8UC3 << std::endl;*/
 
     return false;
 }
