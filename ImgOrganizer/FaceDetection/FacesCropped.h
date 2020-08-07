@@ -24,16 +24,16 @@ public:
 	FacesVec readfromWebCam(int num_of_images = 15);
 	FacesVec fromFaceVec(FacesVec input);
 	int numberOfFaces(cv::Mat input);
+    cv::Mat cropOutFace(cv::Mat, bool draw=false);
 
 private:
 	
 	cv::CascadeClassifier m_face_cascade;
 	cv::CascadeClassifier m_eyes_cascade;
-	cv::Mat _cropOutFace(cv::Mat, bool draw=false);
 	int initCascade();
-	int initVideoCapture();
+    int initVideoCapture(cv::VideoCapture &cap);
 	void addCroppedFaceToVec(cv::Mat frame, std::vector<cv::Mat>& imgs, double elapsed = WAIT_TIME);
-	cv::VideoCapture m_cap;
+
 
 };
 

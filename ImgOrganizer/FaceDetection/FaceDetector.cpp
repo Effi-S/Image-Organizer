@@ -49,7 +49,9 @@ FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
 void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring label, std::string saveTo)
 {
     // (i) - create directory
-    
+    if (!std::filesystem::is_directory(saveTo))
+        std::filesystem::create_directories(saveTo);
+
     auto label_path = std::filesystem::path().append(saveTo).append(label);
 
     std::filesystem::create_directory(label_path);
@@ -113,40 +115,43 @@ std::vector<std::wstring> FaceDetector::searchFor(std::wstring label, bool draw)
      if (it == labelMap.end())
         return std::vector<std::wstring>{L"Bad Label"};  // returning if label doesn't exist
 
-    std::wcout << L"Searching For: " << label << std::endl;
-
     int targetLabel = it->second;  // the integer to corresponding to label find
-
+    std::wcout << L"Searching For: " << label <<" " <<targetLabel<< std::endl;
     // searching for images that match
+
     for (const auto& x : ImgFileScanner())
-    {
-        
-            cv::Mat img; 
+    {   
+            cv::Mat im, face;
 
             if (x.first->empty())continue;
         
-            cv::cvtColor(*x.first, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);  // converting to grayscale image
-        
+            cv::cvtColor(*x.first, face, cv::ColorConversionCodes::COLOR_BGR2GRAY);  // converting to grayscale image
+            if(im.channels() >1)
+                continue;
+
+//           face = m_cropper.cropOutFace(im, true);
+
+            if(face.empty())
+                continue;
+
             int predictedLabel = -1;
             double confidence = 0.0;
             
-            try {
-                m_model->predict(img, predictedLabel, confidence);
-            } catch (std::exception & e) {
+            try {  m_model->predict(face, predictedLabel, confidence); }
+            catch (std::exception & e) {
                 std::cout << e.what() << std::endl;
                 continue; 
             }
-            
+            std::cout << "predicted label:" << predictedLabel <<std::endl;
             if (predictedLabel == targetLabel) {
                 foundImages.push_back(*x.second);
-                std::wcout << *x.second <<L" c:" <<confidence <<std::endl;
-                if (draw)
-                {
-                    cv::imshow(std::to_string(predictedLabel), *x.first);
-                    cv::waitKey(0);
-                }
+                std::wcout << *x.second <<L" c:" <<confidence <<std::endl;   
             }
-        
+            if (draw) {
+                cv::imshow(std::to_string(predictedLabel), *x.first);
+                cv::waitKey(0);
+                cv::destroyWindow(std::to_string(predictedLabel));
+            }
     }
     std::cout << "...Done Searching! Time: " << std::clock() - start << " Found: "<<foundImages.size() << std::endl;
     return foundImages;
@@ -201,7 +206,6 @@ void FaceDetector::read_csv(std::vector<cv::Mat>& images, std::vector<int>& labe
                     labels.push_back(m_userLabels.at(classlabel));
                     successfull.push_back(path);
                 }
-            
         }
     }  
     for (auto& x : failed)

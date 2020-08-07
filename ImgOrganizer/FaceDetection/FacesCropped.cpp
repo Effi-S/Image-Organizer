@@ -1,7 +1,7 @@
 #include "FacesCropped.h"
 
 
-cv::Mat FacesCropped::_cropOutFace(cv::Mat frame, bool draw)
+cv::Mat FacesCropped::cropOutFace(cv::Mat frame, bool draw)
 {
     const int DESIRED_SIZE = 400; // size of face image 
     std::vector<cv::Rect> faces;
@@ -48,7 +48,7 @@ cv::Mat FacesCropped::_cropOutFace(cv::Mat frame, bool draw)
     cv::Point2f eye_l_center(face.x + eye_l_rect.x + eye_l_rect.width * 0.5f, face.y + eye_l_rect.y + eye_l_rect.height * 0.5f);
     cv::Point2f eye_r_center(face.x + eye_r_rect.x + eye_r_rect.width * 0.5f, face.y + eye_r_rect.y + eye_r_rect.height * 0.5f);
     cv::Point2f eyes_center = cv::Point2f((eye_l_center.x + eye_r_center.x) * 0.5f, (eye_l_center.y + eye_r_center.y) * 0.5f);
-    cv::line(frame, eyes_center, eye_r_center, cv::Scalar());
+//    cv::line(frame, eyes_center, eye_r_center, cv::Scalar());
     //-- 5 align by the eyes
     //-- 5.1 Get the angle between the 2 eyes.
     double dy = (eye_r_center.y - eye_l_center.y);
@@ -76,7 +76,7 @@ void FacesCropped::addCroppedFaceToVec(cv::Mat frame, std::vector<cv::Mat>& crop
 {
    
     if (elapsed < WAIT_TIME)return;
-    auto dst_img = _cropOutFace(frame);
+    auto dst_img = cropOutFace(frame);
     if(!dst_img.empty())
         cropped_faces.push_back(dst_img);
 
@@ -90,7 +90,9 @@ FacesVec FacesCropped::readfromWebCam(int num_of_images)
 
 	if (initCascade() < 0)
         return cropped_faces; 
-    if(initVideoCapture() < 0)
+
+    cv::VideoCapture cap;
+    if(initVideoCapture(cap) < 0)
         return cropped_faces;
 		
 		//-- 2. add cropped faces from the video stream
@@ -98,13 +100,13 @@ FacesVec FacesCropped::readfromWebCam(int num_of_images)
         std::clock_t start(std::clock());
         while (int(cropped_faces.size()) < num_of_images)
 		{
-			m_cap.read(frame);
+            cap.read(frame);
 			if (frame.empty())continue;
 			
 			//-- 3. add cropped and aligned image to vector
 			addCroppedFaceToVec(frame, cropped_faces, double(std::clock()) - start);
 
-			if (cv::waitKey(5) >= 0)
+            if (cv::waitKey(5) >= 0)
 				break;
 		}
 
@@ -118,7 +120,7 @@ FacesVec FacesCropped::readfromWebCam(int num_of_images)
         cv::imshow("The Face Found:", cropped_faces.begin()->clone());
         cv::waitKey(10);
 
-
+        cap.release();
 	return cropped_faces;
 }
 
@@ -126,7 +128,7 @@ FacesVec FacesCropped::fromFaceVec(FacesVec input)
 {
     FacesVec retVec;
     for (auto& img : input)
-        retVec.push_back(_cropOutFace(img));
+        retVec.push_back(cropOutFace(img));
     return retVec;
 }
 
@@ -158,7 +160,7 @@ int FacesCropped::initCascade()
 	return 1;
 }
 
-int FacesCropped::initVideoCapture()
+int FacesCropped::initVideoCapture(cv::VideoCapture &cap)
 {
 	//--- INITIALIZE VIDEOCAPTURE
 
@@ -166,9 +168,9 @@ int FacesCropped::initVideoCapture()
 	int apiID = cv::CAP_ANY;      // 0 = autodetect default API
 
 								  // open selected camera using selected API
-	m_cap.open(deviceID, apiID);
+    cap.open(deviceID, apiID);
 	// check if we succeeded
-	if (!m_cap.isOpened()) {
+    if (!cap.isOpened()) {
 		std::cerr << "ERROR! Unable to open camera\n";
 		return -1;
 	}
