@@ -108,7 +108,16 @@ LIBS +=  \
         -luser32 \
         -lgdi32 \
         -lAdvapi32 \
-        -lComdlg32
+        -lComdlg32 \
+        -lMfPlat \
+        -lMf \
+        -lMFREADWRITE \
+        -lD3D11\
+        -lSHLWAPI \
+        -lOLE32 \
+        -lKernel32 \
+        -lShell32
+
 
 QMAKE_CXXFLAGS_RELEASE += /MT
 
