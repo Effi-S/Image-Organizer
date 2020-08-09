@@ -31,8 +31,10 @@ void ScanHandler::setBar(QProgressBar *bar)
 
 ScanHandler::~ScanHandler()
 {
-
-
+//    m_stop_scan = true;
+//    numfu.get();
+//    scanfu.get();
+//    updatefu.get();
 }
 
 void ScanHandler::stop()
@@ -45,6 +47,7 @@ void ScanHandler::stop()
 
 void ScanHandler::run()
 {
+    std::clock_t start =std::clock();
     emit setFormat("Loading...");
 
     auto root_copy = m_root;
@@ -56,7 +59,7 @@ void ScanHandler::run()
     int num_of_images = numfu.get();
 
     emit setRange(0, num_of_images);
-    emit setFormat("Reading images: %v/%m");
+    emit setFormat("Reading images: %v/%m ");
 
     for(int val=0 ; !m_stop_scan && val < num_of_images; QThread::msleep(100)){
         val = ImgFileScanner::size();
@@ -64,7 +67,7 @@ void ScanHandler::run()
     }
     scanfu.get();
 
-    emit setFormat("Calculating Matches..");  //TODO add more info.
+    emit setFormat("Calculating Matches.. ");  //TODO add more info.
     emit setRange(0,0);
 
     static std::mutex mu;
@@ -74,7 +77,7 @@ void ScanHandler::run()
 
     algo->makeMatchGroups();
     emit setRange(0, algo->numberOfGroupsFound());
-    emit setFormat("Adding match groups: %v/%m");
+    emit setFormat("Adding match groups: %v/%m ");
 
 
     int found = 0;
@@ -89,12 +92,13 @@ void ScanHandler::run()
     delete algo;
 
     m_stop_scan = false;
-    emit setFormat("Done scan");
+    std::clock_t time = std::clock() - start;
+    emit setFormat(QString("Done scan ") + time);
 }
 
 void ScanHandler::setRoot(QString s)
 {
-    m_root = s.toStdString();
+    m_root = s.toStdWString();
 }
 
 void ScanHandler::setAlgo(int i)

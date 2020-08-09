@@ -54,6 +54,7 @@ int main(int argc, char** argv) {
 	auto  out_file = std::wofstream(path + "_exact_output.txt", std::wofstream::app);
 	
 	start = std::clock();
+	
 	if (args.argExists("-b") || args.argExists("--bit-exact") || argc == 1) {
 		
 		std::cout << "Output file: " << path + "exact_output.txt" << std::endl;
@@ -77,6 +78,16 @@ int main(int argc, char** argv) {
 
 		out_file << run_algo(new SimilarImgFinder).c_str() << std::endl;
 
+	}
+	if (args.argExists("--orb")) {
+		OrbMatcher orb;
+		for (auto& x : ImgFileScanner())
+			for (auto& y : ImgFileScanner())
+				if (x != y) {
+					cv::Mat im1 = *x.first;
+					cv::Mat im2 = *y.first;
+					orb.matcheScoreFromImages(im1, im2, true);
+				}
 	}
 	if (args.argExists("-f") || args.argExists("--face")) {
 		

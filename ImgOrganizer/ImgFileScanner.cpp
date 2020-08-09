@@ -2,9 +2,10 @@
 
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	 
-    static std::mutex mutex;
-    std::lock_guard<std::mutex> lk(mutex);
+
     cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring());
+
+
     std::wstring path = entry.path().wstring();
     std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly
 
@@ -14,12 +15,12 @@ void addImgToDB( const std::filesystem::directory_entry& entry)
     std::make_unique<std::wstring>(path)));
 }
 
-void ImgFileScanner::scan(std::string path, std::atomic_bool & stop_flg  )
+void ImgFileScanner::scan(std::wstring path, std::atomic_bool & stop_flg  )
 {
     int tmp = _scan(path, stop_flg);
 }
 
-int ImgFileScanner::getNumberOfImages(std::string path, std::atomic_bool & stop_flg)
+int ImgFileScanner::getNumberOfImages(std::wstring path, std::atomic_bool & stop_flg)
 {
     return _scan(path, stop_flg, true);
 }
@@ -27,7 +28,7 @@ int ImgFileScanner::getNumberOfImages(std::string path, std::atomic_bool & stop_
 // The main scanning algorithm
 // Recursively iterates over the path given into path
 //
-int ImgFileScanner::_scan(std::string path, std::atomic_bool & stop_flg, bool dry)
+int ImgFileScanner::_scan(std::wstring path, std::atomic_bool & stop_flg, bool dry)
 {
     static std::mutex mu;
     mu.lock();

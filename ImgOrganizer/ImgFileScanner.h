@@ -32,8 +32,8 @@ class ImgFileScanner
 
 public:
 
-    static void scan(std::string path = "C:\\", std::atomic_bool & = constant_false);  ///< The main scanning function - saves the images in database for later use
-    static int getNumberOfImages(std::string path = "C:\\", std::atomic_bool & = constant_false);  ///< Returns the number of images in the path (a dry run).
+    static void scan(std::wstring path = L"C:\\", std::atomic_bool & = constant_false);  ///< The main scanning function - saves the images in database for later use
+    static int getNumberOfImages(std::wstring path = L"C:\\", std::atomic_bool & = constant_false);  ///< Returns the number of images in the path (a dry run).
 
     // functions for iterating on the images in the database
     auto end(){        return ImgFileScanner::IMG_DB().end();}
@@ -43,7 +43,7 @@ public:
 
 private:  
     friend void addImgToDB(const fs::directory_entry& entry);  ///< adding to database
-    static int _scan(std::string path = "C:\\", std::atomic_bool & = constant_false , bool dry = false);  ///< internal scan overload
+    static int _scan(std::wstring path = L"C:\\", std::atomic_bool & = constant_false , bool dry = false);  ///< internal scan overload
     static IMG_DataBase &IMG_DB();  ///< secure access to database
 
 };

@@ -41,7 +41,7 @@ private:
 
     static std::map<int, std::pair<MyStandardItemModel *,
                 std::function<ImgMatchFinderBase *()>>>_algoData;
-    std::string m_root;
+    std::wstring m_root;
 
     int m_algoType = 0;
     std::future<int> numfu;

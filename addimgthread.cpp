@@ -11,6 +11,8 @@ AddingImgThread::AddingImgThread(MyStandardItemModel *model)
 
 void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 {
+//    if(l.size() < 3)return;
+
     for(auto & x : l){
         //std::wcout << L"adding " << x <<std::endl;
         m_path_list.append(QString::fromStdWString(x));

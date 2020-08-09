@@ -11,7 +11,8 @@ class Parser {
 		"-b", "--bit-exact",
 		"-f", "--face", "--train-new-model", "--add-new-label", "--search-label",
 		"-s", "--similar",
-		"--search", "--people-count"
+		"--search", "--people-count",
+		"--orb"
 	};
 	std::set<std::string> _storing_args = { "--search", "--search-label", "--people-count" };
 public:

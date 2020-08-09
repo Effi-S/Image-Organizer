@@ -72,6 +72,7 @@ void MainWindow::removeFunc(QObject *object, QListView *view)
     int ret = msgBox.exec();
     if(ret == QMessageBox::Yes)
     {
+
         remove(item->text().toStdString().c_str());
 
         item->parent()->removeRow(index.row());

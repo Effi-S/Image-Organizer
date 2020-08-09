@@ -5,29 +5,34 @@ const cv::Ptr<cv::ORB> OrbMatcher::m_orb = cv::ORB::create();
 
 double OrbMatcher::matcheScoreFromImages( cv::Mat img1, cv::Mat  img2, const bool draw )
 {   
-    /*if(!ws.is_open())
-        ws.open("temp.txt", std::ofstream::app);*/
-    auto type1 = img1.type();
-    auto type2 = img2.type();
 
-    // Prevent cv::batchDistance assertion errors
-    if (type1 != type2) {
-       /* ws << "type1 != type2" <<std::endl;*/
-        return 0;
-    } else if (img1.cols != img2.cols) {
-        /*ws << "img1.cols = " << img1.cols << " img2.cols= " << img2.cols << std::endl;*/
-        return 0;
-    }
-    else if (type1 != CV_32F && type1 != CV_8U)
-        if (!convertTypes(img1, img2, type1))
-                return 0; 
-     // -- 
+    //-- creating descriptors 
 
     std::vector<cv::KeyPoint> keyPoints, keyPoints2;
     cv::Mat descriptors, descriptors2;
 
     m_orb->detectAndCompute(img1, cv::noArray(), keyPoints, descriptors);
     m_orb->detectAndCompute(img2, cv::noArray(), keyPoints2, descriptors2);
+
+
+    // Prevent cv::batchDistance assertion errors
+    if (!ws.is_open())
+        ws.open("temp.txt", std::ofstream::app);
+    auto type1 = descriptors.type();
+    auto type2 = descriptors2.type();
+
+    if (type1 != type2) {
+        ws << "type1 != type2" << std::endl;
+        return 0;
+    }
+    else if (descriptors.cols != descriptors2.cols) {
+        ws << "img1.cols = " << descriptors.cols << " img2.cols= " << img2.cols << std::endl;
+        return 0;
+    }
+    else if (type1 != CV_32F && type1 != CV_8U)
+        if (!convertTypes(descriptors, descriptors2, type1))
+            return 0;
+    // -- 
 
     std::vector< std::vector<cv::DMatch> > knn_matches;
 
@@ -41,9 +46,9 @@ double OrbMatcher::matcheScoreFromImages( cv::Mat img1, cv::Mat  img2, const boo
         if (x[0].distance < ratio_thresh * x[1].distance)
             good_matches.push_back(x[0]);
 
-
+    auto score = double(good_matches.size()) / double(knn_matches.size());
     //-- Draw matches
-    if (draw)
+    if (score > 0.6 && draw)
     {
         cv::Mat img_matches;
 
@@ -52,8 +57,10 @@ double OrbMatcher::matcheScoreFromImages( cv::Mat img1, cv::Mat  img2, const boo
         cv::imshow("Good Matches", img_matches);
 
         cv::waitKey();
+
+        cv::destroyWindow("Good Matches");
     }
-    return  double(good_matches.size()) / double(knn_matches.size());
+    return  score;
 }
 
 cv::Mat OrbMatcher::createDescriptor(cv::Mat& mat)

@@ -12,9 +12,9 @@ class OrbMatcher
 	float TRIMMING_DIST = 500.f; ///< A filter distances for matches. only matches coser than this are consindered macthes.
 	std::ofstream ws;
 public:
-    double matcheScoreFromImages( cv::Mat ,  cv::Mat , const bool draw=false); /// < get match score from images using dnn. Very slow. 
+    double matcheScoreFromImages( cv::Mat ,  cv::Mat , const bool draw=false); /// < get match score from images using dnn. For showing and testing . 
 	cv::Mat createDescriptor(cv::Mat & mat);  ///< get an ORB descriptor from a cv::Mat.
-	double matchScoreFromdescriptors(cv::Mat& desc1, cv::Mat& desc2); /// < get match score from image descriptors using trimming distance.
+	double matchScoreFromdescriptors(cv::Mat& desc1, cv::Mat& desc2); /// < get match score from image descriptors using dnn.
 
 private:
 	void sort(std::vector<cv::DMatch>& matches);

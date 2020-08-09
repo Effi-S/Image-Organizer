@@ -1,15 +1,14 @@
 #pragma once
-
+#include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include <filesystem>
 
 namespace MyUtils
 {
-	static cv::Mat unicodeImgRead(const std::wstring& name, cv::ImreadModes mode = cv::ImreadModes::IMREAD_COLOR)
+        static cv::Mat unicodeImgRead(const std::wstring &name, cv::ImreadModes mode = cv::ImreadModes::IMREAD_COLOR)
 	{
-
-		// Open Unicode file with  binary stream into file descriptor
+                // Open Unicode file with binary stream into file descriptor
 		std::ifstream fd(name, std::iostream::binary);
 
 		// Getting img size from buffer 
@@ -23,13 +22,18 @@ namespace MyUtils
 
 		// Decode the vector into the cv Matrix
 		cv::Mat img = cv::imdecode(buffer, mode);
-		
+
 		// opencv removes noise when converting to different types
 		if (!img.empty())
 		{
-			auto tmp = "tmp.jpg";
+                        static std::mutex mutex;
+                        std::lock_guard<std::mutex> lk(mutex);
+
+                        std::string tmp = "tmp.jpg";
+
 			cv::imwrite(tmp, img);
 			img = cv::imread(tmp, mode);
+
 		}
 
 		return std::move(img);
