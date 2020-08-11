@@ -7,7 +7,11 @@
 #include "ImgOrganizer/FaceDetection/FaceDetector.h"
 #include "ImgOrganizer/FaceDetection/FacesCropped.h"
 #include <QImageReader>
-
+/***********************
+ * Window for getting a faceLebal from the webcam
+ * or from existing files.
+ * training the label or searchin for it in existing images.
+ * ********************** */
 namespace Ui {
 class GetFaceDialog;
 }

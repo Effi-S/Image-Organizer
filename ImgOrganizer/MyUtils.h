@@ -33,11 +33,8 @@ namespace MyUtils
 
 			cv::imwrite(tmp, img);
 			img = cv::imread(tmp, mode);
-
 		}
-
 		return std::move(img);
-
 	}
 	static std::string getPath(const std::string& target)
 	{

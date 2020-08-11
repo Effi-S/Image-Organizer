@@ -12,6 +12,10 @@ def main():
 
     args = parser.parse_args()
 
+    if not os.path.exists(args.root):
+        print('Path {} dowsn\'t exist !'.format(args.root))
+        return
+
     output_file = '{root}/{type}'.format(root=args.root, type=args.type)
     workbook = xlsxwriter.Workbook('{}_{}'.format(output_file, 'summary.xlsx'))
 

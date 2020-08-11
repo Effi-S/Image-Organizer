@@ -8,6 +8,9 @@ namespace Ui {
 class GetNumberDialog;
 }
 
+/***********************
+ * Window for getting a number of people to search for.
+ * ********************** */
 class GetNumberDialog : public QDialog
 {
     Q_OBJECT

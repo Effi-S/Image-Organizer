@@ -13,6 +13,15 @@
 #include <QMutex>
 #include <future>
 
+/***********************
+ * Class for handeling a Scan request
+ * Derived from QThread so it will ocur on it's own thread
+ * under Qt's event loop.
+ *
+ * Connects Front end with back end.
+ * Connects QProgressBars with the events it handles.
+ * Sends variace tasks utilizing std concurency.
+ * ********************** */
 
 class ScanHandler : public QThread
 {
@@ -20,8 +29,8 @@ class ScanHandler : public QThread
 public:
     ScanHandler();
 
-    void registerAlgo(int, QAbstractItemModel *mod, std::function<ImgMatchFinderBase *()> );
-    void setBar(QProgressBar * bar);
+    void registerAlgo(int, QAbstractItemModel *mod, std::function<ImgMatchFinderBase *()> ); ///< factory function.
+    void setBar(QProgressBar * bar); ///< setting QProgressBars to connect events to.
 
     ~ ScanHandler();
 
@@ -40,14 +49,14 @@ private:
 
 
     static std::map<int, std::pair<MyStandardItemModel *,
-                std::function<ImgMatchFinderBase *()>>>_algoData;
-    std::wstring m_root;
+                std::function<ImgMatchFinderBase *()>>>_algoData; ///< Holds data for possible scans.
+    std::wstring m_root; ///< directory to search.
 
     int m_algoType = 0;
-    std::future<int> numfu;
-    std::future<void> scanfu;
-    std::future<void> updatefu;
-    std::atomic_bool  m_stop_scan = false;
+    std::future<int> numfu; ///< future for getting number of images recursivly
+    std::future<void> scanfu;  ///< future for searching for images recursively
+    std::future<void> updatefu; ///< future for updating.
+    std::atomic_bool  m_stop_scan = false; ///< boolian for stopping futures.
 
 
 };
