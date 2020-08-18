@@ -65,21 +65,30 @@ double OrbMatcher::matcheScoreFromImages( cv::Mat img1, cv::Mat  img2, const boo
 
 cv::Mat OrbMatcher::createDescriptor(cv::Mat& mat)
 {
-    std::vector<cv::KeyPoint> keyPoints;
     cv::Mat descriptors;
-    m_orb->detectAndCompute(mat, cv::noArray(), keyPoints, descriptors);
-    
+    try {
+        std::vector<cv::KeyPoint> keyPoints;
+
+        m_orb->detectAndCompute(mat, cv::noArray(), keyPoints, descriptors);
+
+    } catch (cv::Exception & e) {
+        // CV assertions are thrown when:
+        // inv_scale_x > 0 in function 'cv::resize'
+        // (I prefered catching exception to removing assertion in 'cv::resize').
+        std::cout<< e.msg << std::endl;
+
+    }
+
     return descriptors;
 }
 
 double OrbMatcher::matchScoreFromdescriptors(cv::Mat& desc1, cv::Mat& desc2)
 {
 
-
     auto type1 = desc1.type();
     auto type2 = desc2.type();
     // Prevent cv::batchDistance assertion errors
-    if (type1 != type2 ||  desc1.cols != desc2.cols) {
+    if (desc1.empty() || desc2.empty() || type1 != type2 ||  desc1.cols != desc2.cols) {
         return 0;
     }
     else if (type1 != CV_32F && type1 != CV_8U)
