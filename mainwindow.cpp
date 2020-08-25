@@ -328,7 +328,6 @@ void MainWindow::on_actionFace_to_find_triggered()
 {
     auto dialog = new GetFaceDialog(this);
     connect(dialog , &GetFaceDialog::chosenLabels, this, [&](std::vector<std::wstring> faces){
-
     AdvancedImgSearch::setFacesToFind(faces);
     });
     dialog->exec();
@@ -352,5 +351,12 @@ void MainWindow::on_actionNumber_of_people_triggered()
      auto dialog = new GetNumberDialog(this);
      connect(dialog, &GetNumberDialog::valueChosen, this, [](int val){ AdvancedImgSearch::setNumberOfPeople(val);});
      dialog->exec();
+
+}
+
+void MainWindow::on_SettingsButton_released()
+{
+    auto dialog = new SettingsDialog(this);
+    dialog->exec();
 
 }

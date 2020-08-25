@@ -1,5 +1,6 @@
 #include "addimgthread.h"
 
+size_t AddingImgThread::m_size_limit = 5;
 AddingImgThread::AddingImgThread(MyStandardItemModel *model)
     {
 
@@ -8,10 +9,12 @@ AddingImgThread::AddingImgThread(MyStandardItemModel *model)
     emit clear();
 
 }
-
+void AddingImgThread::setGroupSizeLimit(size_t limit){
+   AddingImgThread::m_size_limit = limit;
+}
 void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 {
-//    if(l.size() < 3)return;
+   if(l.size() < m_size_limit)return;
 
     for(auto & x : l){
         //std::wcout << L"adding " << x <<std::endl;
@@ -23,7 +26,7 @@ void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
 void AddingImgThread::run()
 {
 
-    auto first = m_path_list.cbegin();
+    QList<QString>::const_iterator first = m_path_list.cbegin();
 
     QStandardItem *group = new QStandardItem(QIcon(*first),
                                              QVariant(m_path_list.length()).toString());

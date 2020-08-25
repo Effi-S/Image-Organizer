@@ -34,6 +34,7 @@ QT_END_NAMESPACE
 #include <QStandardItem>
 #include "getnumberdialog.h"
 #include "getfacedialog.h"
+#include "settingsdialog.h"
 
 /***********************
  * Main Window of the application
@@ -83,6 +84,8 @@ private slots:
     void on_actionFile_to_search_for_triggered();
 
     void on_actionNumber_of_people_triggered();
+
+    void on_SettingsButton_released();
 
 private:
 

@@ -35,7 +35,8 @@ SOURCES += \
     getnumberdialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    scanhandler.cpp
+    scanhandler.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
     ImgOrganizer/ImgFileScanner.h \
@@ -54,12 +55,15 @@ HEADERS += \
     ImgOrganizer/BitExactImgFinder.h \
     ImgOrganizer/OrbMatcher.h \
     ImgOrganizer/SimilarImgFinder.h \
-    scanhandler.h
+    scanhandler.h \
+    settingsdialog.h
 
 FORMS += \
     getfacedialog.ui \
     getnumberdialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    settings.ui \
+    settingsdialog.ui
 
 TRANSLATIONS += \
     project2020_he_IL.ts

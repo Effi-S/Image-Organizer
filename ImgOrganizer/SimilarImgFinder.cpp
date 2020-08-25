@@ -44,8 +44,8 @@ void SimilarImgFinder::makeListOfSimilarImages()
     for (auto &img_path_pair : ImgFileScanner())
 	{
         // 1.1 getting the algorithm's output
-        cv::Mat imgValue = *img_path_pair.first; // getting the image
-		
+        
+		cv::Mat imgValue = *img_path_pair.first; // getting the image;
         cv::Mat imgHash;
 
         m_algo->compute(imgValue, imgHash);

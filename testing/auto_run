@@ -5,6 +5,18 @@
 # Example usage for bulk: dirs=$(find archive -maxdepth 1 -mindepth 1 -type d) # archive is a dir with subdirs of >500 images in each)
 #  	   for x in $dirs; do  ./auto_run $x 500; done
 
+# util for rendering progress bar
+render-val() {
+ local val=${1}
+ local size=${2}
+	declare -i mid=60*$val/$size
+	declare -i per=100*$val/$size
+	for ((i=0; i<$mid; i++)); do printf "▇"; done
+	for ((i=$mid; i<60 i++)); do printf "-"; done
+	printf "| %s%%\r" $per
+	
+}
+
 out(){ echo -e "\e[1m$@"; }
 
 #-- Getting user info
@@ -35,23 +47,33 @@ out Test Folder: $base
 out Getting images from: $imgfolderpath and testing: $numimgs for each test 
 
 #-- Making directories
-out Making Test Directories
+out Making Test Directories..
+index=1
 mkdir $testfolder
 for x in ${!tests_dict[@]};do
+	render-val $((index++)) ${#tests_dict[@]}
 	mkdir $testfolder/$x
 done
+echo " " 
 
 # -- Copy folder with images into test folder
+out Copying images..
+index=1
 for x in ${!tests_dict[@]};do
+	render-val $((index++)) ${#tests_dict[@]}
 	cp -r $imgfolderpath $testfolder/$x
 done 
+echo " " 
 
 #-- Select numimgs images in each test at random and run test on 
 for t in ${!tests_dict[@]};do
-	echo  Shuffling $numimgs into $testfolder/$t  
+	echo  Shuffling $numimgs into $testfolder/$t
+	index=1  
 	for x in $(shuf -e $(find $testfolder/$t -not -type d  -and -not -name "*.txt") -n $numimgs);do 
+		render-val $((index++)) $numimgs
 		${tests_dict[$t]} $x
-	done	
+	done
+	echo " "	
 done 
 
 #--  Run test

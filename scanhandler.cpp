@@ -93,7 +93,7 @@ void ScanHandler::run()
 
     m_stop_scan = false;
     std::clock_t time = std::clock() - start;
-    emit setFormat(QString("Done scan ") + time);
+    emit setFormat(QString("Done scan ") + QString::fromStdString(std::to_string(time)));
 }
 
 void ScanHandler::setRoot(QString s)

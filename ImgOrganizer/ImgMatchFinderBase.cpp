@@ -10,16 +10,16 @@ std::vector<std::vector<std::wstring>> ImgMatchFinderBase::getMatchGroups()
 uint32_t ImgMatchFinderBase::numberOfImagesFound()
 {
     std::lock_guard<std::mutex> lk(m_mutex);
-    int size =0 ;
+    size_t size =0 ;
     for(auto & x: m_matchGroups)
         size+= x.size();
-    return size;
+    return uint32_t(size);
 }
 
 uint32_t ImgMatchFinderBase::numberOfGroupsFound()
 {
     std::lock_guard<std::mutex> lk(m_mutex);
-    return m_matchGroups.size();
+    return uint32_t(m_matchGroups.size());
 }
 
 

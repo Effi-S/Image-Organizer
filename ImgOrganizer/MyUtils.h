@@ -3,6 +3,9 @@
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include <filesystem>
+#include <opencv2/core/core.hpp>
+#include <opencv2\highgui\highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 namespace MyUtils
 {
@@ -49,5 +52,29 @@ namespace MyUtils
 		std::cerr << "Couldn't find path to: " << target << std::endl;
 		return target;
 	}
+	//static cv::Mat DFT(cv::Mat & original)
+ //   {
+	//	// convert to floats 
+	//	cv::Mat originalFloat;
+	//	original.convertTo(originalFloat, CV_32FC1, 1.0 / 255.0);
+ //       
+	//	cv::Mat originalComplax[2] = { originalFloat, cv::Mat::zeros(originalFloat.size(), CV_32FC1 )};//for holding complex and real values seperately.
+	//	
+	//	cv::Mat dftReady;
+	//	cv::merge(originalComplax, 2, dftReady);
+
+	//	cv::Mat dftOfOriginal;
+	//	
+	//	cv::dft(dftReady, dftOfOriginal, cv::DFT_COMPLEX_OUTPUT);
+ //   
+	//	return dftOfOriginal;
+	//}
+ //   static cv::Mat IDFT(cv::Mat& orig) {
+ //       //calculating the idft
+ //       cv::Mat inverseTransform;
+ //       cv::dft(orig, inverseTransform, cv::DFT_INVERSE | cv::DFT_REAL_OUTPUT | cv::DFT_SCALE);
+
+ //       return inverseTransform;
+ //   }
 };
 

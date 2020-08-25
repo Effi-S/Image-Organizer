@@ -3,8 +3,7 @@
 void addImgToDB( const std::filesystem::directory_entry& entry)
 {	 
 
-    cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring());
-
+    cv::Mat img = MyUtils::unicodeImgRead(entry.path().wstring(), cv::ImreadModes::IMREAD_GRAYSCALE);
 
     std::wstring path = entry.path().wstring();
     std::replace(path.begin() , path.end(), '\\', '/');  // necessary for windows paths to work properly

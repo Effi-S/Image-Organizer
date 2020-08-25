@@ -25,7 +25,7 @@ class AddingImgThread :public QObject, public QRunnable
     Q_OBJECT
 public:
     AddingImgThread(MyStandardItemModel * model);
-
+    static void setGroupSizeLimit(size_t limit);  ///<set a lmit for image group size to show
 signals:
     void addRow(QStandardItem *);  ///< signal sent to model for it to add a row
     void clear();
@@ -35,7 +35,8 @@ public slots:
 
 private:
 void run() override;
-QStringList m_path_list;
+QStringList m_path_list; ///< list of paths to add
+static size_t m_size_limit; ///< lmit for image group size to show
 
 };
 

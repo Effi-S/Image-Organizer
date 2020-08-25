@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 	std::clock_t start(std::clock());
 
 	std::cout << ORANGE << "Scanning " << path << "... " << RESET << std::endl;
-	ImgFileScanner::scan(path);
+	ImgFileScanner::scan(std::wstring(path.begin(), path.end()));
 	std::cout << GREEN << "Time reading images scan took: " << RESET << double(std::clock()) - start << std::endl;
 	std::cout << GREEN << "Found: " << RESET << ImgFileScanner::size() << std::endl;
 	
