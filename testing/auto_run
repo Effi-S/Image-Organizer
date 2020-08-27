@@ -12,7 +12,7 @@ render-val() {
 	declare -i mid=60*$val/$size
 	declare -i per=100*$val/$size
 	for ((i=0; i<$mid; i++)); do printf "▇"; done
-	for ((i=$mid; i<60 i++)); do printf "-"; done
+	for i in $(seq $mid 60); do printf " "; done
 	printf "| %s%%\r" $per
 	
 }

@@ -7,6 +7,7 @@
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+const int MAX_IMG_SIZE = 1000;
 namespace MyUtils
 {
         static cv::Mat unicodeImgRead(const std::wstring &name, cv::ImreadModes mode = cv::ImreadModes::IMREAD_COLOR)
@@ -29,14 +30,28 @@ namespace MyUtils
 		// opencv removes noise when converting to different types
 		if (!img.empty())
 		{
-                        static std::mutex mutex;
-                        std::lock_guard<std::mutex> lk(mutex);
+			static std::mutex mutex;
+			std::lock_guard<std::mutex> lk(mutex);
 
-                        std::string tmp = "tmp.jpg";
+			std::string tmp = "tmp.jpg";
 
 			cv::imwrite(tmp, img);
 			img = cv::imread(tmp, mode);
+			
+
 		}
+		// make smaller if img too big
+		bool row_big = img.rows > MAX_IMG_SIZE;
+		bool col_big = img.cols > MAX_IMG_SIZE;
+		if (row_big || col_big)
+		{
+			int row = (row_big) ? MAX_IMG_SIZE : img.rows;
+			int col = (col_big) ? MAX_IMG_SIZE : img.cols;
+			cv::Mat dst(MAX_IMG_SIZE, MAX_IMG_SIZE, CV_8U);
+			cv::resize(img, dst, cv::Size(MAX_IMG_SIZE, MAX_IMG_SIZE));
+			return std::move(dst);
+		}
+		
 		return std::move(img);
 	}
 	static std::string getPath(const std::string& target)

@@ -1,6 +1,6 @@
 #include "addimgthread.h"
 
-size_t AddingImgThread::m_size_limit = 5;
+std::atomic_int AddingImgThread::m_size_limit = 1;
 AddingImgThread::AddingImgThread(MyStandardItemModel *model)
     {
 
@@ -9,7 +9,13 @@ AddingImgThread::AddingImgThread(MyStandardItemModel *model)
     emit clear();
 
 }
-void AddingImgThread::setGroupSizeLimit(size_t limit){
+
+int AddingImgThread::getGroupSizeLimit()
+{
+    return AddingImgThread::m_size_limit;
+
+}
+void AddingImgThread::setGroupSizeLimit(int limit){
    AddingImgThread::m_size_limit = limit;
 }
 void AddingImgThread::addStringList(const std::vector<std::wstring>  &l)
