@@ -24,7 +24,10 @@ FaceDetector::FaceDetector(const std::string& yml)
 FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
     : m_training_labels_csv(csv) {
     std::clock_t start(std::clock());
+        
         std::vector<cv::Mat> images;
+
+        std::ofstream(USER_LABELS, std::ofstream::out | std::ofstream::trunc);
 
         std::cout << "Reading from CSV file: " << m_training_labels_csv <<"..."<< std::endl;
         
@@ -46,6 +49,16 @@ FaceDetector::FaceDetector(const std::string& csv, const std::string& root_dir)
          std::cout << "...Done Training new model! Time: " << std::clock() - start << std::endl;
 };
 
+FaceDetector FaceDetector::loadFromYAML(const std::string& yml)
+{
+    return std::move(FaceDetector(yml)); 
+}
+
+FaceDetector FaceDetector::creatNew(const std::string& csv, const std::string& faces)
+{
+    return std::move(FaceDetector(csv, faces));
+}
+
 void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring label, std::string saveTo)
 {
     // (i) - create directory
@@ -62,11 +75,9 @@ void FaceDetector::addTrainingSet(std::vector<cv::Mat> images, std::wstring labe
         for (auto& x : images)
         {
             try {
-                cv::Mat img =x ;
-               
                 // convert to gray scale
-
-                cv::cvtColor(x, img, cv::ColorConversionCodes::COLOR_BGR2GRAY);
+                cv::imwrite("tmp.jpg", x);
+                cv::Mat img = cv::imread("tmp.jpg", cv::IMREAD_GRAYSCALE);
 
                // write image in directory 
                 std::string filename = label_path.string() + "/" + std::to_string(++num) + ".jpg";

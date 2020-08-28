@@ -24,13 +24,10 @@ class FaceDetector
 {
 public:
     ///< pre-trained model from yml
-    static FaceDetector loadFromYAML(const std::string& yml = YML) {
-        return std::move(FaceDetector(yml));  
-    }
+    static FaceDetector loadFromYAML(const std::string& yml = YML);
+
     ///< Load from csv and faces dir and save to saveTo (yml file).
-    static FaceDetector creatNew(const std::string& csv = CSV, const std::string &faces=FACES_DIR ) {
-        return std::move(FaceDetector(csv, faces)); 
-    }
+    static FaceDetector creatNew(const std::string& csv = CSV, const std::string& faces = FACES_DIR);
 
     void addTrainingSet(std::vector<cv::Mat> images, std::wstring label, std::string=FACES_DIR); ///< add new array of faces to train model on.
 

@@ -20,7 +20,8 @@ GetFaceDialog::GetFaceDialog(QWidget *parent) :
 
     // -- initializing options
     for(auto x: FaceDetector::getUserLabels())
-         addOption(x);
+        if(x.find(L'yaleB') != 0)
+            addOption(x);
 
     // -- new label requested
     connect(ui->pushButton_enter , &QPushButton::pressed , this, [=](){

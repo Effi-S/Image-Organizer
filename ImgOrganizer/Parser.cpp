@@ -63,8 +63,10 @@ std::string Parser::get_path() {
 			std::cout << "Searching path: " << _begin[i] << std::endl;
 			return _begin[i];
 		}
-	if (std::filesystem::is_directory(std::filesystem::path("../testing/tests/"))) {
+	/*if (std::filesystem::is_directory(std::filesystem::path("../testing/tests/"))) {
 		return std::filesystem::absolute("../testing/tests/").string();
 	}
-	return std::filesystem::absolute("../../../testing/tests/").string();
+	if (std::filesystem::is_directory("../../../testing/tests/"))
+		return std::filesystem::absolute("../../../testing/tests/").string();*/
+	return ".";
 }
