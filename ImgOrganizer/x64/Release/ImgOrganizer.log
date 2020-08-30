@@ -1,0 +1,19 @@
+﻿  BitExactImgFinder.cpp
+  FaceDetector.cpp
+C:\Users\effi\Desktop\Image-Organizer\ImgOrganizer\FaceDetection\FaceDetector.cpp(250,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  FacesCropped.cpp
+  ImgFileScanner.cpp
+  ImgMatchFinderBase.cpp
+  ImgSearch.cpp
+C:\Users\effi\Desktop\Image-Organizer\ImgOrganizer\ImgSearch.h(11,27): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+  OrbMatcher.cpp
+  Parser.cpp
+  SimilarImgFinder.cpp
+  SurfMatcher.cpp
+  _Main.cpp
+C:\Users\effi\Desktop\Image-Organizer\ImgOrganizer\ImgSearch.h(11,27): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 3802 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  ImgOrganizer.vcxproj -> C:\Users\effi\Desktop\Image-Organizer\ImgOrganizer\x64\Release\ImgOrganizer.exe
