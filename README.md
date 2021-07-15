@@ -44,8 +44,8 @@ The following Python distributions:  pillow, matplotlib, numpy, pandas. These al
 Manual testing
 ----------------
 Make sure you have a folder with images in it to test.
-Create duplicate or similar images to look for. You can generate these with one of the python scripts in ìtestingî folder or create 	them manually.
-Run: ì./ ImgOrganizer.exe ñb ñs <folder name>î in the folder: ImgOrganizer/x64/Release or go to ìtestingî folder and use ì./test_cmd <folder name>î which will run ImgOrganizer.exe for you.  
+Create duplicate or similar images to look for. You can generate these with one of the python scripts in ‚Äútesting‚Äù folder or create 	them manually.
+Run: ‚Äú./ ImgOrganizer.exe ‚Äìb ‚Äìs <folder name>‚Äù in the folder: ImgOrganizer/x64/Release or go to ‚Äútesting‚Äù folder and use ‚Äú./test_cmd <folder name>‚Äù which will run ImgOrganizer.exe for you.  
 Two .txt files are generated with the groups that were found. 
 You can use summarize.py to summarize the output into an excel file.
  You can use draw_chart.py to create a pdf with charts from the excel file.
@@ -55,8 +55,14 @@ Automated testing
 Since manually testing is a cumbersome task I created a script which automates the testing.
 This is by far the simplest way to test this application and get a clear performance overview.
 How to use it:
-Go to ìtestingî folder.
+Go to ‚Äútesting‚Äù folder.
 In your terminal use the command: auto_run <path to folder with images> <number of images to duplicate>
-A folder is generated with various tests with a timestamp with summary excel files and pdfís with charts. You can still view the 	raw data in the folder ìraw_output_dataî.
+A folder is generated with various tests with a timestamp with summary excel files and pdf‚Äôs with charts. You can still view the 	raw data in the folder ‚Äúraw_output_data‚Äù.
 
 
+Videos
+----------------
+https://youtu.be/CU6yEAYrcCE
+https://youtu.be/S83lezZL7fQ
+https://youtu.be/WIgs_fdcHVc
+https://youtu.be/AitqRuXbYOY
