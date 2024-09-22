@@ -5,7 +5,7 @@
 ############################################################################################
 
 !define APP_NAME "Image Organizer x32"
-!define COMP_NAME "EfrayimSztokman"
+!define COMP_NAME "EffiS"
 !define VERSION "01.00.00.00"
 !define COPYRIGHT ""
 !define DESCRIPTION ""
