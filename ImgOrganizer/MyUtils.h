@@ -3,17 +3,30 @@
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include <filesystem>
+
+#ifndef MAKELINUX
 #include <opencv2/core/core.hpp>
-#include <opencv2\highgui\highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#else
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#endif
 
 const int MAX_IMG_SIZE = 1000;
 namespace MyUtils
 {
         static cv::Mat unicodeImgRead(const std::wstring &name, cv::ImreadModes mode = cv::ImreadModes::IMREAD_COLOR)
 	{
-                // Open Unicode file with binary stream into file descriptor
+        // Open Unicode file with binary stream into file descriptor
+#ifdef MAKELINUX
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    auto name2 = converter.to_bytes(name);
+	std::ifstream fd(name2, std::iostream::binary);
+#else
 		std::ifstream fd(name, std::iostream::binary);
+#endif
 
 		// Getting img size from buffer 
 		std::filebuf* pbuf = fd.rdbuf();

@@ -185,7 +185,8 @@ std::vector<std::wstring> FaceDetector::getUserLabels(std::string path)
 
 void FaceDetector::read_csv(std::vector<cv::Mat>& images, std::vector<int>& labels) {
 
-    std::wifstream file(m_training_labels_csv.c_str(), std::wifstream::in, std::wifstream::binary);
+    // std::wifstream file(m_training_labels_csv.c_str(), std::wifstream::in, std::wifstream::binary);
+    std::wifstream file(m_training_labels_csv.c_str(), std::wifstream::in | std::wifstream::binary);
     file.imbue(std::locale("he_IL.UTF8"));
 
     std::vector<std::wstring> successfull, failed;
@@ -228,7 +229,8 @@ std::unordered_map<std::wstring, int> FaceDetector::_getUserLabelMap()
 {
     std::unordered_map<std::wstring, int> lblMap;
     // getting user labels from file
-    std::wifstream file(USER_LABELS, std::wifstream::in, std::wifstream::binary);
+    // std::wifstream file(USER_LABELS, std::wifstream::in, std::wifstream::binary);
+    std::wifstream file(USER_LABELS, std::wifstream::in | std::wifstream::binary);
     file.imbue(std::locale("he_IL.UTF8"));
 
     std::wstring line, name, number;

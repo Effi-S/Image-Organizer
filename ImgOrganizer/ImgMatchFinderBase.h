@@ -2,7 +2,11 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#ifndef MAKELINUX
 #include "opencv2/img_hash/block_mean_hash.hpp"
+#else
+#include <opencv2/img_hash/block_mean_hash.hpp>
+#endif
 #include "ImgFileScanner.h"
 #include "MyUtils.h"
 
